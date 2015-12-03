@@ -2,10 +2,10 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <FrameLayout
+    <example.com.virtualpet.DogView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/canvasHolder"></FrameLayout>
+        android:id="@+id/surfaceView" />
 
     <TableLayout
         android:layout_width="match_parent"

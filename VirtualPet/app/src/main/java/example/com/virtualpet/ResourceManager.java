@@ -3,7 +3,6 @@ package example.com.virtualpet;
 import android.app.Activity;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
 
 /**
  * Created by reneb_000 on 3-12-2015.
@@ -36,5 +35,9 @@ public final class ResourceManager {
     private void log(){
         String s = "Recoursemanager initialized. \nscreenwidth: "+screenWidth + "\nscreenheight: "+screenHeight;
         Log.d("RecourceManager", s);
+    }
+
+    public int getScreenwidht() {
+        return screenWidth;
     }
 }
