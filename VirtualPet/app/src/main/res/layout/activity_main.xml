@@ -12,4 +12,18 @@
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Speel"
+            android:id="@+id/main_playbutton"
+            android:layout_gravity="center_horizontal"
+            android:onClick="mainPlayClicked"
+            android:nestedScrollingEnabled="false" />
+    </LinearLayout>
 </FrameLayout>
