@@ -27,7 +27,6 @@ proguard/
 *.log
 
 *.iml
-VirtualPet/.idea/workspace.xml
-VirtualPet/.idea/libraries
+VirtualPet/.idea/*
 Virtual/.DS_Store
 VirtualPet/captures
