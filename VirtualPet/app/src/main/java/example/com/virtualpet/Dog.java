@@ -8,10 +8,25 @@ import android.content.Context;
 public class Dog {
 
     private DogView view;
+    private int x, y, screenwidth, speed;
 
-    public Dog(Context c){
-        view = new DogView(c, null);
+    public Dog(Context c, DogView view){
+        this.view = view;
+        x = (int) ResourceManager.INSTANCE.convertPixelsToDp(1);
+        y = (int) ResourceManager.INSTANCE.convertPixelsToDp(2000);
+        speed = 5;
+        screenwidth = ResourceManager.INSTANCE.getScreenwidht();
     }
+
+    public void update(){
+        if(x>screenwidth){
+            speed = -speed;
+        }else if(x<0){
+            speed = -speed;
+        }
+        x += speed;
+    }
+
 
     public DogView getView() {
         return view;

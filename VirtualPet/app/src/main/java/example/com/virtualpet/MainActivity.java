@@ -25,11 +25,8 @@ public class MainActivity extends Activity implements Runnable {
     public void mainPlayClicked(View v){
         setContentView(R.layout.game_layout);
         view = (DogView) findViewById(R.id.surfaceView);
-        Log.e("TEST", "value view:"+view);
-        /*
-        dog = new Dog(this);
+        dog = new Dog(this, view);
         view = dog.getView();
-        */
         running = true;
         new Thread(this).start();
     }
@@ -44,7 +41,9 @@ public class MainActivity extends Activity implements Runnable {
         long ticksPS = 1000 / FPS;
         long startTime;
         long sleepTime;
+        //TODO fix infinite framerate to capped at 30
         while (running) {
+            dog.update();
             if(view !=null) {
                 view.onDraw();
             }

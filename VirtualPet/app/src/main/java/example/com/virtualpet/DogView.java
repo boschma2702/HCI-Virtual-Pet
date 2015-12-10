@@ -16,18 +16,14 @@ import android.view.SurfaceView;
 public class DogView extends SurfaceView implements SurfaceHolder.Callback {
 
     private Bitmap test;
-    private int x, y, screenwidth, speed;
+    private int x, y;
 
 
     public DogView(Context context, AttributeSet attributeSet){
         super(context, attributeSet);
         getHolder().addCallback(this);
         test = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-        x = (int) ResourceManager.INSTANCE.convertPixelsToDp(1);
-        y = (int) ResourceManager.INSTANCE.convertPixelsToDp(2000);
-        speed = 5;
-        screenwidth = ResourceManager.INSTANCE.getScreenwidht();
-        Log.e("test", ""+screenwidth);
+        x = y = 0;
     }
 
     public void onDraw(){
@@ -37,13 +33,13 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback {
             c.drawBitmap(test, x, y, null);
             getHolder().unlockCanvasAndPost(c);
         }
-        if(x>screenwidth){
-            speed = -speed;
-        }else if(x<0){
-            speed = -speed;
-        }
-        x += speed;
     }
+
+    public void setXY(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
