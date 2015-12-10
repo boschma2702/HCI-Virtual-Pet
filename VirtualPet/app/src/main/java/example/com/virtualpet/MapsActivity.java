@@ -120,6 +120,8 @@ public class MapsActivity extends FragmentActivity implements
      */
     private void setUpMap() {
         mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+
     }
 
     private void handleNewLocation(Location location) {
@@ -132,11 +134,6 @@ public class MapsActivity extends FragmentActivity implements
 
         LatLng latLng = new LatLng(currentLatitude, currentLongitude);
 
-        MarkerOptions options = new MarkerOptions()
-                .position(latLng)
-                .title("I am here!");
-        mMap.addMarker(options);
-
         if (previouslocation != null) {
 
             double prevLatitude = previouslocation.getLatitude();
@@ -146,9 +143,9 @@ public class MapsActivity extends FragmentActivity implements
                     .add(new LatLng(prevLatitude, prevLongitude), new LatLng(currentLatitude, currentLongitude))
                     .width(5)
                     .color(Color.RED));
+            //TODO: get length of the line
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
         previouslocation = location;
     }
 
@@ -156,14 +153,11 @@ public class MapsActivity extends FragmentActivity implements
     public void onConnected(Bundle bundle) {
 
         location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (location == null) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        }
-        else {
-
-            handleNewLocation(location);
-        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        handleNewLocation(location);
     }
+
+
 
     @Override
     public void onConnectionSuspended(int i) {
