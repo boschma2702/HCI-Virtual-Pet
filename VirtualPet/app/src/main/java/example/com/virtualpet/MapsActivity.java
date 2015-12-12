@@ -6,6 +6,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -16,8 +17,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.text.DecimalFormat;
 
 public class MapsActivity extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks,
@@ -38,6 +42,9 @@ public class MapsActivity extends FragmentActivity implements
     private LocationRequest mLocationRequest;
     private Location previouslocation;
     private Location location;
+    private Marker currentlocationmarker;
+    private int DistanceToWalk = 500; //500 meter
+    private int distancewalked = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,9 +126,7 @@ public class MapsActivity extends FragmentActivity implements
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-
     }
 
     private void handleNewLocation(Location location) {
@@ -139,13 +144,30 @@ public class MapsActivity extends FragmentActivity implements
             double prevLatitude = previouslocation.getLatitude();
             double prevLongitude = previouslocation.getLongitude();
 
+
+            // draw line and marker from previous to current location
             mMap.addPolyline(new PolylineOptions()
                     .add(new LatLng(prevLatitude, prevLongitude), new LatLng(currentLatitude, currentLongitude))
                     .width(5)
                     .color(Color.RED));
-            //TODO: get length of the line
+            if (currentlocationmarker != null) {
+                currentlocationmarker.remove();
+            }
+
+            currentlocationmarker = mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(currentLatitude, currentLongitude))
+                    .title("Current location!"));
+
+           // distancewalked += CalculationByDistance((new LatLng(prevLatitude, prevLongitude)),(new LatLng(currentLatitude, currentLongitude)));
+
+             distancewalked += (int)location.distanceTo(previouslocation);
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+
+        TextView distancetowalktext_tv = (TextView)findViewById(R.id.distancetowalktext);
+        distancetowalktext_tv.setText("Je hebt al " +  distancewalked + " meter gelopen!" );
+
         previouslocation = location;
     }
 
@@ -198,5 +220,29 @@ public class MapsActivity extends FragmentActivity implements
     public void onLocationChanged(Location location) {
         Log.d(TAG, "ON LOCATION CHANGED");
         handleNewLocation(location);
+    }
+
+    public double CalculationByDistance(LatLng StartP, LatLng EndP) {
+        int Radius = 6371;// radius of earth in Km
+        double lat1 = StartP.latitude;
+        double lat2 = EndP.latitude;
+        double lon1 = StartP.longitude;
+        double lon2 = EndP.longitude;
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                + Math.cos(Math.toRadians(lat1))
+                * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)
+                * Math.sin(dLon / 2);
+        double c = 2 * Math.asin(Math.sqrt(a));
+        double valueResult = Radius * c;
+        double km = valueResult / 1;
+        DecimalFormat newFormat = new DecimalFormat("####");
+        int kmInDec = Integer.valueOf(newFormat.format(km));
+        double meter = valueResult / 1000;
+        int meterInDec = Integer.valueOf(newFormat.format(meter));
+
+
+        return meter;
     }
 }
