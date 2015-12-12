@@ -21,8 +21,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import java.text.DecimalFormat;
-
 public class MapsActivity extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -43,8 +41,9 @@ public class MapsActivity extends FragmentActivity implements
     private Location previouslocation;
     private Location location;
     private Marker currentlocationmarker;
-    private int DistanceToWalk = 500; //500 meter
-    private int distancewalked = 0;
+    private float TotalDistance = 1234; //500 meter
+    private float distancewalked = 0;
+    private float DistanceToWalk = TotalDistance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,12 +118,7 @@ public class MapsActivity extends FragmentActivity implements
         }
     }
 
-    /**
-     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
-     * just add a marker near Africa.
-     * <p/>
-     * This should only be called once and when we are sure that {@link #mMap} is not null.
-     */
+     //This should only be called once and when we are sure that {@link #mMap} is not null.
     private void setUpMap() {
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
     }
@@ -158,16 +152,27 @@ public class MapsActivity extends FragmentActivity implements
                     .position(new LatLng(currentLatitude, currentLongitude))
                     .title("Current location!"));
 
-           // distancewalked += CalculationByDistance((new LatLng(prevLatitude, prevLongitude)),(new LatLng(currentLatitude, currentLongitude)));
-
              distancewalked += (int)location.distanceTo(previouslocation);
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
-
+        // get textviews
         TextView distancetowalktext_tv = (TextView)findViewById(R.id.distancetowalktext);
-        distancetowalktext_tv.setText("Je hebt al " +  distancewalked + " meter gelopen!" );
+        TextView distance_m_or_km = (TextView)findViewById(R.id.m_or_km);
 
+        // get distance to walk
+        DistanceToWalk = TotalDistance - distancewalked;
+
+        // make nice notation (400 meter, 1.44 kilomter)
+        if (DistanceToWalk < 1000) {
+            distancetowalktext_tv.setText(String.valueOf(DistanceToWalk));
+            distance_m_or_km.setText("meter");
+        } else {
+            float dist_to_walk = DistanceToWalk/1000;
+            distancetowalktext_tv.setText(String.valueOf(dist_to_walk));
+            distance_m_or_km.setText("kilometer");
+        }
+        // store current location in previous location
         previouslocation = location;
     }
 
@@ -220,29 +225,5 @@ public class MapsActivity extends FragmentActivity implements
     public void onLocationChanged(Location location) {
         Log.d(TAG, "ON LOCATION CHANGED");
         handleNewLocation(location);
-    }
-
-    public double CalculationByDistance(LatLng StartP, LatLng EndP) {
-        int Radius = 6371;// radius of earth in Km
-        double lat1 = StartP.latitude;
-        double lat2 = EndP.latitude;
-        double lon1 = StartP.longitude;
-        double lon2 = EndP.longitude;
-        double dLat = Math.toRadians(lat2 - lat1);
-        double dLon = Math.toRadians(lon2 - lon1);
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
-                + Math.cos(Math.toRadians(lat1))
-                * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)
-                * Math.sin(dLon / 2);
-        double c = 2 * Math.asin(Math.sqrt(a));
-        double valueResult = Radius * c;
-        double km = valueResult / 1;
-        DecimalFormat newFormat = new DecimalFormat("####");
-        int kmInDec = Integer.valueOf(newFormat.format(km));
-        double meter = valueResult / 1000;
-        int meterInDec = Integer.valueOf(newFormat.format(meter));
-
-
-        return meter;
     }
 }
