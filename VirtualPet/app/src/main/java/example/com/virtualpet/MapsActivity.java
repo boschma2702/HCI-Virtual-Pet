@@ -13,6 +13,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -20,6 +21,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+
 
 public class MapsActivity extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks,
@@ -45,6 +47,7 @@ public class MapsActivity extends FragmentActivity implements
     private float distancewalked = 0;
     private float DistanceToWalk = TotalDistance;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +58,7 @@ public class MapsActivity extends FragmentActivity implements
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
+                .addApi(Places.PLACE_DETECTION_API)
                 .build();
 
         // Create the LocationRequest object
@@ -63,6 +67,9 @@ public class MapsActivity extends FragmentActivity implements
                 .setInterval(5 * 1000)        // 5 seconds, in milliseconds
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
         mLocationRequest.setSmallestDisplacement(1); //only trigger after 1 meter
+
+        // we will using AsyncTask during parsing
+        new AsyncTaskParseJson(this).execute();
 
     }
 
@@ -172,6 +179,11 @@ public class MapsActivity extends FragmentActivity implements
             distancetowalktext_tv.setText(String.valueOf(dist_to_walk));
             distance_m_or_km.setText("kilometer");
         }
+
+
+
+
+
         // store current location in previous location
         previouslocation = location;
     }
@@ -227,3 +239,4 @@ public class MapsActivity extends FragmentActivity implements
         handleNewLocation(location);
     }
 }
+
