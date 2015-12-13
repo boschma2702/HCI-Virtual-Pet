@@ -22,7 +22,7 @@ public class AsyncTaskParseJson extends AsyncTask<String, String, String> {
         TAG = "AsyncTaskParseJson.java";
 
         // set your json string url here
-         yourJsonStringUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670,151.1957&radius=500&types=food&name=cruise&key=" + context.getString(R.string.google_maps_key);
+         yourJsonStringUrl = "https://maps.googleapis.com/maps/api/place/radarsearch/json?location=48.859294,2.347589&radius=5000&types=food&key=AIzaSyBpgUXiJgnGDnfJ6eR-Nf_W3BzJX4jtcrg";
 
         // contacts JSONArray
          dataJsonArr = null;
@@ -42,6 +42,10 @@ public class AsyncTaskParseJson extends AsyncTask<String, String, String> {
 
             // get json string from url
             JSONObject json = jParser.getJSONFromUrl(yourJsonStringUrl);
+
+
+            Log.d("tag", json.toString(4));
+
 
             // get the array of users
             dataJsonArr = json.getJSONArray("results");
