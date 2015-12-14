@@ -38,34 +38,28 @@ public class MainActivity extends Activity implements Runnable {
 
     @Override
     public void run() {
-        long ticksPS = 1000 / FPS;
+        long ticksPS = (long)1000 / FPS;
+        Log.e("Main", "ticks ps: " + ticksPS);
         long startTime;
         long sleepTime;
-        //TODO fix infinite framerate to capped at 30
         while (running) {
+            startTime = System.nanoTime() / 1000000;
             dog.update();
             if(view !=null) {
                 view.onDraw();
             }
-            /*
-            startTime = System.currentTimeMillis();
             try {
-                c = view.getHolder().lockCanvas();
-                synchronized (view.getHolder()) {
-                    view.onDraw(c);
-                }
-            } finally {
-                if (c != null) {
-                    view.getHolder().unlockCanvasAndPost(c);
-                }
-            }
-            sleepTime = ticksPS-(System.currentTimeMillis() - startTime);
-            try {
-                if (sleepTime > 0)
+                sleepTime = ticksPS - (System.nanoTime() / 1000000-startTime);
+                if(sleepTime>0){
                     Thread.sleep(sleepTime);
-                else
+                }else{
                     Thread.sleep(10);
-            } catch (Exception e) {}*/
+                    Log.e("GameLoop", "Couldn't work through loop in less then 1/30 of a second");
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 }
