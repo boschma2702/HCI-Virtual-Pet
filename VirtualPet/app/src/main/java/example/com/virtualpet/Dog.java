@@ -25,6 +25,7 @@ public class Dog {
             speed = -speed;
         }
         x += speed;
+        view.setXY(x, y);
     }
 
 
