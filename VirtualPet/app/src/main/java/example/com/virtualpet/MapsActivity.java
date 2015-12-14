@@ -1,8 +1,10 @@
 package example.com.virtualpet;
 
+import android.content.Context;
 import android.content.IntentSender;
 import android.graphics.Color;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -17,10 +19,17 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 
 public class MapsActivity extends FragmentActivity implements
@@ -36,7 +45,7 @@ public class MapsActivity extends FragmentActivity implements
      */
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
-    private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+    public GoogleMap mMap; // Might be null if Google Play services APK is not available.
 
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
@@ -68,8 +77,7 @@ public class MapsActivity extends FragmentActivity implements
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
         mLocationRequest.setSmallestDisplacement(1); //only trigger after 1 meter
 
-        // we will using AsyncTask during parsing
-        new AsyncTaskParseJson(this).execute();
+
 
     }
 
@@ -125,7 +133,7 @@ public class MapsActivity extends FragmentActivity implements
         }
     }
 
-     //This should only be called once and when we are sure that {@link #mMap} is not null.
+    //This should only be called once and when we are sure that {@link #mMap} is not null.
     private void setUpMap() {
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
     }
@@ -159,13 +167,13 @@ public class MapsActivity extends FragmentActivity implements
                     .position(new LatLng(currentLatitude, currentLongitude))
                     .title("Current location!"));
 
-             distancewalked += (int)location.distanceTo(previouslocation);
+            distancewalked += (int) location.distanceTo(previouslocation);
         }
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
         // get textviews
-        TextView distancetowalktext_tv = (TextView)findViewById(R.id.distancetowalktext);
-        TextView distance_m_or_km = (TextView)findViewById(R.id.m_or_km);
+        TextView distancetowalktext_tv = (TextView) findViewById(R.id.distancetowalktext);
+        TextView distance_m_or_km = (TextView) findViewById(R.id.m_or_km);
 
         // get distance to walk
         DistanceToWalk = TotalDistance - distancewalked;
@@ -175,13 +183,10 @@ public class MapsActivity extends FragmentActivity implements
             distancetowalktext_tv.setText(String.valueOf(DistanceToWalk));
             distance_m_or_km.setText("meter");
         } else {
-            float dist_to_walk = DistanceToWalk/1000;
+            float dist_to_walk = DistanceToWalk / 1000;
             distancetowalktext_tv.setText(String.valueOf(dist_to_walk));
             distance_m_or_km.setText("kilometer");
         }
-
-
-
 
 
         // store current location in previous location
@@ -193,9 +198,12 @@ public class MapsActivity extends FragmentActivity implements
 
         location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        handleNewLocation(location);
-    }
+        // we will using AsyncTask during parsing
 
+        new AsyncTaskParseJson(this, mMap).execute();
+        handleNewLocation(location);
+
+    }
 
 
     @Override
@@ -237,6 +245,97 @@ public class MapsActivity extends FragmentActivity implements
     public void onLocationChanged(Location location) {
         Log.d(TAG, "ON LOCATION CHANGED");
         handleNewLocation(location);
+    }
+
+    public void setMarkers(LatLng loc, String id) {
+        mMap.addMarker(new MarkerOptions()
+                .position(loc)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                .title(id));
+    }
+
+    // you can make this class as another java file so it will be separated from your main activity.
+    public class AsyncTaskParseJson extends AsyncTask<String, String, String> {
+
+        String yourJsonStringUrl;
+        final String TAG;
+        JSONArray dataJsonArr;
+        JSONArray GeometryJsonArr;
+        GoogleMap map;
+        String location_lat, location_lng, id;
+        ArrayList<LatLng> locations = new ArrayList<LatLng>();
+
+        public AsyncTaskParseJson(Context context, GoogleMap map) {
+            TAG = "AsyncTaskParseJson.java";
+
+            this.map = map;
+
+            // set your json string url here
+            yourJsonStringUrl = "https://maps.googleapis.com/maps/api/place/radarsearch/json?location="+ String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude()) + "&radius=5000&types=grocery_or_supermarket&key=AIzaSyBpgUXiJgnGDnfJ6eR-Nf_W3BzJX4jtcrg";
+
+            // results JSONArray
+            dataJsonArr = null;
+            GeometryJsonArr = null;
+
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected String doInBackground(String... arg0) {
+
+            try {
+                // instantiate our json parser
+                JsonParser jParser = new JsonParser();
+
+                // get json string from url
+                JSONObject json = jParser.getJSONFromUrl(yourJsonStringUrl);
+                Log.d("tag", json.toString(4));
+
+                // get the array of users
+                dataJsonArr = json.getJSONArray("results");
+
+                // loop through all results
+                for (int i = 0; i < dataJsonArr.length(); i++) {
+
+                    JSONObject c = dataJsonArr.getJSONObject(i);
+
+                    JSONObject geo_object = c.getJSONObject("geometry");
+                    JSONObject location_object = geo_object.getJSONObject("location");
+
+                    // Storing each json item in variable
+                    location_lat = location_object.getString("lat");
+                    location_lng = location_object.getString("lng");
+
+
+                    id = c.getString("id");
+
+                    // show the values in our logcat
+                    Log.i(TAG, "id: " + id
+                            + ", lat: " + location_lat
+                            + ", lng: " + location_lng
+                    );
+                    locations.add((new LatLng(Double.parseDouble(location_lat), Double.parseDouble(location_lng))));
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String strFromDoInBg) {
+
+            for(int i = 0; i<locations.size(); i++) {
+                MapsActivity.this.setMarkers(locations.get(i), "test");
+            }
+
+        }
     }
 }
 
