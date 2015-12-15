@@ -14,6 +14,7 @@ public class SpriteSheet {
     private Bitmap sheet;
     private int frameCount;
     private int counter = 0;
+    private boolean horizontal;
 
     private Paint paint = new Paint();
 
@@ -21,11 +22,17 @@ public class SpriteSheet {
 
     private Rect dst;
 
-    public SpriteSheet(Bitmap spritesheet, int frameCount){
-        frameHeight = spritesheet.getHeight();
-        frameWidth = spritesheet.getWidth()/frameCount;
+    public SpriteSheet(Bitmap spritesheet, int frameCount, boolean horizontal){
+        if(horizontal){
+            frameHeight = spritesheet.getHeight();
+            frameWidth = spritesheet.getWidth()/frameCount;
+        }else{
+            frameHeight = spritesheet.getHeight()/frameCount;
+            frameWidth = spritesheet.getWidth();
+        }
         this.sheet = spritesheet;
         this.frameCount = frameCount;
+        this.horizontal = horizontal;
     }
 
     public void update(){
@@ -43,8 +50,13 @@ public class SpriteSheet {
     }
 
     public void draw(Canvas c){
-        Rect src = new Rect(frameCount*frameWidth, 0, frameCount*frameWidth+frameWidth, frameHeight);
-
+        Rect src;
+        if(horizontal) {
+            src = new Rect(counter * frameWidth, 0, counter * frameWidth + frameWidth, frameHeight);
+        }else{
+            src = new Rect(0, counter * frameHeight, frameWidth, counter * frameHeight + frameHeight);
+        }
         c.drawBitmap(sheet, src, dst,paint);
+        update();
     }
 }

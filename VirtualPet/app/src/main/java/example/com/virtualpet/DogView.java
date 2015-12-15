@@ -10,23 +10,27 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import example.com.virtualpet.Util.SpriteSheet;
+
 
 /**
  * Created by reneb_000 on 3-12-2015.
  */
 public class DogView extends SurfaceView implements SurfaceHolder.Callback {
 
-    private Bitmap test;
+    //private Bitmap test;
     private int x, y;
     private SurfaceHolder holder;
     private Paint paint = new Paint();
+    private SpriteSheet test;
 
 
     public DogView(Context context, AttributeSet attributeSet){
         super(context, attributeSet);
         holder = getHolder();
         holder.addCallback(this);
-        test = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        //test = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        test = new SpriteSheet(ResourceManager.INSTANCE.testSheet, 36, false);
         x = y = 0;
 
     }
@@ -36,7 +40,8 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback {
             Canvas c = holder.lockCanvas();
             if(c!=null) {
                 c.drawARGB(255, 0,0,0);
-                c.drawBitmap(test, x, y, paint);
+                //c.drawBitmap(test, x, y, paint);
+                test.draw(c);
                 holder.unlockCanvasAndPost(c);
             }
         }
@@ -46,6 +51,7 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback {
     public void setXY(int x, int y){
         this.x = x;
         this.y = y;
+        test.setXY(x, y);
     }
 
 

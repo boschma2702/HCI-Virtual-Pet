@@ -33,10 +33,13 @@ public class Dog {
 
     public Dog(Context c, DogView view){
         this.view = view;
-        x = (int) ResourceManager.INSTANCE.convertPixelsToDp(1);
-        y = (int) ResourceManager.INSTANCE.convertPixelsToDp(2000);
+//        x = (int) ResourceManager.INSTANCE.convertPixelsToDp(500);
+//        y = (int) ResourceManager.INSTANCE.convertPixelsToDp(2000);
         speed = 5;
-        screenwidth = ResourceManager.INSTANCE.getScreenwidht();
+        screenwidth = ResourceManager.INSTANCE.getScreenWidth();
+        x = screenwidth/2;
+        y = ResourceManager.INSTANCE.getScreenHeight();
+        view.setXY(x, y);
         initialize();
     }
 

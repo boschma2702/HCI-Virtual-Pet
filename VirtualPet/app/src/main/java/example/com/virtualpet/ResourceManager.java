@@ -1,6 +1,8 @@
 package example.com.virtualpet;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -14,12 +16,15 @@ public final class ResourceManager {
     private int screenWidth, screenHeight;
     private DisplayMetrics metrics;
 
+    public Bitmap testSheet;
+
     public ResourceManager(Activity a){
         DisplayMetrics metrics = new DisplayMetrics();
         a.getWindowManager().getDefaultDisplay().getMetrics(metrics);
         this.metrics = metrics;
         screenWidth = metrics.widthPixels;
         screenHeight = metrics.heightPixels;
+        testSheet = BitmapFactory.decodeResource(a.getResources(), R.drawable.dead_normal);
         log();
         INSTANCE = this;
     }
@@ -37,7 +42,11 @@ public final class ResourceManager {
         Log.d("RecourceManager", s);
     }
 
-    public int getScreenwidht() {
+    public int getScreenWidth() {
         return screenWidth;
+    }
+
+    public int getScreenHeight(){
+        return screenHeight;
     }
 }
