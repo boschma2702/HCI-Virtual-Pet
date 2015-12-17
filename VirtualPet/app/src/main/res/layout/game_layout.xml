@@ -43,7 +43,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:text="New Button"
+                android:text="Speel"
+                android:onClick="playClicked"
                 android:id="@+id/button4" />
         </TableRow>
 

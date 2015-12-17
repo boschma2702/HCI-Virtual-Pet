@@ -7,11 +7,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import example.com.virtualpet.flapdog.FlapDogActivity;
+
 
 public class MainActivity extends Activity implements Runnable {
 
     private boolean running = false;
-    private static final int FPS = 30;
+    public static final int FPS = 30;
     private DogView view;
     private Dog dog;
 
@@ -33,6 +35,11 @@ public class MainActivity extends Activity implements Runnable {
 
     public void mapsClicked(View v){
         Intent intent = new Intent(this, MapsActivity.class);
+        startActivity(intent);
+    }
+
+    public void playClicked(View v){
+        Intent intent = new Intent(this, FlapDogActivity.class);
         startActivity(intent);
     }
 
