@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+import example.com.virtualpet.Util.ResourceManager;
+
 
 /**
  * Created by reneb_000 on 3-12-2015.

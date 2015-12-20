@@ -2,11 +2,11 @@ package example.com.virtualpet;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import example.com.virtualpet.Util.ResourceManager;
 import example.com.virtualpet.flapdog.FlapDogActivity;
 
 
