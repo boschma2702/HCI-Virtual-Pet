@@ -1,4 +1,4 @@
-package example.com.virtualpet;
+package example.com.virtualpet.maps;
 
 import android.content.Context;
 import android.content.IntentSender;
@@ -32,6 +32,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import example.com.virtualpet.R;
 
 
 public class MapsActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {

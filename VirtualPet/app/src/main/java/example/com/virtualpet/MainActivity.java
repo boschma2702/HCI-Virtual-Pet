@@ -8,6 +8,7 @@ import android.view.View;
 
 import example.com.virtualpet.Util.ResourceManager;
 import example.com.virtualpet.flapdog.FlapDogActivity;
+import example.com.virtualpet.maps.MapsActivity;
 
 
 public class MainActivity extends Activity implements Runnable {

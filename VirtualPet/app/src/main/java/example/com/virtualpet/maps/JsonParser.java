@@ -1,4 +1,4 @@
-package example.com.virtualpet;
+package example.com.virtualpet.maps;
 
 /**
  * Created by mrlukasbos on 13/12/15.

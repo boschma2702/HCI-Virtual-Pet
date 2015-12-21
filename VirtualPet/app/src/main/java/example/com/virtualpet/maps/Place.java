@@ -1,4 +1,4 @@
-package example.com.virtualpet;
+package example.com.virtualpet.maps;
 
 import com.google.android.gms.maps.model.LatLng;
 
