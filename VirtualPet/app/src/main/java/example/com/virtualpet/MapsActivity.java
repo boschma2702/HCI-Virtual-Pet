@@ -8,6 +8,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -199,6 +201,16 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
                 .title(id));
     }
 
+    public void HideProgressCircle() {
+        ProgressBar p = (ProgressBar) findViewById(R.id.marker_progress);
+        p.setVisibility(View.INVISIBLE);;
+    }
+
+    public void ShowProgressCircle() {
+        ProgressBar p = (ProgressBar) findViewById(R.id.marker_progress);
+        p.setVisibility(View.VISIBLE);;
+    }
+
     private void startAPIclient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -296,6 +308,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
 
         @Override
         protected void onPreExecute() {
+            MapsActivity.this.ShowProgressCircle();
         }
 
         @Override
@@ -317,6 +330,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
                 //set locations and id's in markers
                 MapsActivity.this.setMarkers(myPlace.getLocation(), myPlace.getName());
             }
+            MapsActivity.this.HideProgressCircle();
 
         }
 
