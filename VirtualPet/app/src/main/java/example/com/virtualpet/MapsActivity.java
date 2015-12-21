@@ -48,6 +48,8 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
     private float distancewalked = 0;
     int radius = 3000;
     private float DistanceToWalk = TotalDistance;
+    float checkdistance = 0;
+    boolean firstLoad = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         super.onStart();
         setUpMapIfNeeded();
         mGoogleApiClient.connect();
+
     }
 
     @Override
@@ -107,6 +110,8 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
                 setUpMap();
+                firstLoad = true;
+
             }
         }
     }
@@ -134,11 +139,11 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
 
         // not update every time the supermarkets locations, but only when user significanlty moves
 
-        if (distancewalked > radius/2) {
-
+        if (distancewalked > checkdistance + (radius/2) || firstLoad) {
             // we will using AsyncTask during parsing
             new AsyncTaskParseJson(this, mMap).execute();
-
+            checkdistance = distancewalked;
+            firstLoad = false;
         }
 
 
@@ -270,7 +275,6 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         String detailsUrl;
         final String TAG;
         JSONArray dataJsonArr;
-        JSONArray detailsJsonArr;
 
         JSONArray GeometryJsonArr;
         GoogleMap map;
