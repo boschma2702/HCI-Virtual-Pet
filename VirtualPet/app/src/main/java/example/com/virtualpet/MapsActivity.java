@@ -46,6 +46,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
     private Marker currentlocationmarker;
     private float TotalDistance = 1234; //500 meter
     private float distancewalked = 0;
+    int radius = 3000;
     private float DistanceToWalk = TotalDistance;
 
     @Override
@@ -129,9 +130,18 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
 
         location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        // we will using AsyncTask during parsing
 
-        new AsyncTaskParseJson(this, mMap).execute();
+
+        // not update every time the supermarkets locations, but only when user significanlty moves
+
+        if (distancewalked > radius/2) {
+
+            // we will using AsyncTask during parsing
+            new AsyncTaskParseJson(this, mMap).execute();
+
+        }
+
+
         handleNewLocation(location);
 
     }
@@ -256,21 +266,22 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
 
     public class AsyncTaskParseJson extends AsyncTask<String, String, String> {
 
-        String yourJsonStringUrl;
+        String supermarketUrl;
+        String detailsUrl;
         final String TAG;
         JSONArray dataJsonArr;
+        JSONArray detailsJsonArr;
+
         JSONArray GeometryJsonArr;
         GoogleMap map;
-        String location_lat, location_lng, id;
-        ArrayList<LatLng> locations = new ArrayList<LatLng>();
+        String location_lat, location_lng, place_id;
+        ArrayList<Place> places = new ArrayList<Place>();
+        private String key = "AIzaSyBpgUXiJgnGDnfJ6eR-Nf_W3BzJX4jtcrg";
 
         public AsyncTaskParseJson(Context context, GoogleMap map) {
             TAG = "AsyncTaskParseJson.java";
 
             this.map = map;
-
-            // set your json string url here
-            yourJsonStringUrl = "https://maps.googleapis.com/maps/api/place/radarsearch/json?location="+ String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude()) + "&radius=5000&types=grocery_or_supermarket&key=AIzaSyBpgUXiJgnGDnfJ6eR-Nf_W3BzJX4jtcrg";
 
             // results JSONArray
             dataJsonArr = null;
@@ -285,14 +296,44 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
 
         @Override
         protected String doInBackground(String... arg0) {
+            parseGroceryStore();
 
+            for(int i = 0; i<places.size(); i++) {
+                parseGroceryDetails(places.get(i).getId(), i);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String strFromDoInBg) {
+
+            for(int i = 0; i<places.size(); i++) {
+                Place myPlace = places.get(i);
+                //set locations and id's in markers
+                MapsActivity.this.setMarkers(myPlace.getLocation(), myPlace.getName());
+            }
+
+        }
+
+        private void parseGroceryStore() {
             try {
-                // instantiate our json parser
-                JsonParser jParser = new JsonParser();
+
+                // set your json string url here
+                supermarketUrl = "https://maps.googleapis.com/maps/api/place/radarsearch/json?location="
+                        + String.valueOf(location.getLatitude())
+                        + ","
+                        + String.valueOf(location.getLongitude())
+                        + "&radius="
+                         + String.valueOf(radius)
+                        + "&types=grocery_or_supermarket&key="
+                        + key;
+
+                JsonParser jParser = new JsonParser();                 // instantiate our json parser
 
                 // get json string from url
-                JSONObject json = jParser.getJSONFromUrl(yourJsonStringUrl);
-                Log.d("tag", json.toString(4));
+                JSONObject json = jParser.getJSONFromUrl(supermarketUrl);
+                //Log.d("tag", json.toString(4));
 
                 // get the array of users
                 dataJsonArr = json.getJSONArray("results");
@@ -308,33 +349,55 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
                     // Storing each json item in variable
                     location_lat = location_object.getString("lat");
                     location_lng = location_object.getString("lng");
-
-
-                    id = c.getString("id");
+                    place_id = c.getString("place_id");
 
                     // show the values in our logcat
-                    Log.i(TAG, "id: " + id
-                            + ", lat: " + location_lat
-                            + ", lng: " + location_lng
-                    );
-                    locations.add((new LatLng(Double.parseDouble(location_lat), Double.parseDouble(location_lng))));
-                }
+                    Log.i(TAG, "id: " + place_id + ", lat: " + location_lat + ", lng: " + location_lng);
+
+
+                    // check if place exists. if it does do not add place.
+                    boolean placeExists = false;
+                    for (Place place : places) {
+                        if (place.place_id == place_id) {
+                            placeExists = true;
+                        }
+                    }
+                    if (!placeExists) {
+                        //add values to a place object
+                        places.add((new Place(new LatLng(Double.parseDouble(location_lat), Double.parseDouble(location_lng)), place_id)));
+                    }
+
+                  }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        void parseGroceryDetails(String place_id, int index) {
+            try {
+                detailsUrl = "https://maps.googleapis.com/maps/api/place/details/json?placeid="
+                        + place_id
+                        + "&key="
+                        + key;
+
+                JsonParser detailsParser = new JsonParser();                 // instantiate our json parser
+
+                // get json string from url
+                JSONObject details_json = detailsParser.getJSONFromUrl(detailsUrl);
+               // Log.d("tag", details_json.toString(4));
+
+                    JSONObject c = details_json.getJSONObject("result");
+                    String name = c.getString("name");
+                    String address = c.getString("formatted_address");
+
+                    places.get(index).setName(name);
+                    places.get(index).setAddress(address);
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-            return null;
         }
 
-        @Override
-        protected void onPostExecute(String strFromDoInBg) {
-
-            for(int i = 0; i<locations.size(); i++) {
-                MapsActivity.this.setMarkers(locations.get(i), "test");
-            }
-
-        }
     }
 }
 
