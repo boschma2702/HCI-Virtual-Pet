@@ -32,21 +32,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class MapsActivity extends FragmentActivity implements
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+public class MapsActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     public static final String TAG = MapsActivity.class.getSimpleName();
-
-    /*
-     * Define a request code to send to Google Play services
-     * This code is returned in Activity.onActivityResult
-     */
+     /* Define a request code to send to Google Play services
+     * This code is returned in Activity.onActivityResult */
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-
     public GoogleMap mMap; // Might be null if Google Play services APK is not available.
-
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private Location previouslocation;
@@ -56,29 +48,13 @@ public class MapsActivity extends FragmentActivity implements
     private float distancewalked = 0;
     private float DistanceToWalk = TotalDistance;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         setUpMapIfNeeded();
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .addApi(Places.PLACE_DETECTION_API)
-                .build();
-
-        // Create the LocationRequest object
-        mLocationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(5 * 1000)        // 5 seconds, in milliseconds
-                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
-        mLocationRequest.setSmallestDisplacement(1); //only trigger after 1 meter
-
-
-
+        startAPIclient();
+        createLocationRequest();
     }
 
     @Override
@@ -120,6 +96,7 @@ public class MapsActivity extends FragmentActivity implements
      * stopped or paused), {@link #onCreate(Bundle)} may not be called again so we should call this
      * method in {@link #onResume()} to guarantee that it will be called.
      */
+
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
@@ -139,55 +116,9 @@ public class MapsActivity extends FragmentActivity implements
     }
 
     private void handleNewLocation(Location location) {
-        Log.d(TAG, location.toString());
 
-
-        double currentLatitude = location.getLatitude();
-        double currentLongitude = location.getLongitude();
-
-
-        LatLng latLng = new LatLng(currentLatitude, currentLongitude);
-
-        if (previouslocation != null) {
-
-            double prevLatitude = previouslocation.getLatitude();
-            double prevLongitude = previouslocation.getLongitude();
-
-
-            // draw line and marker from previous to current location
-            mMap.addPolyline(new PolylineOptions()
-                    .add(new LatLng(prevLatitude, prevLongitude), new LatLng(currentLatitude, currentLongitude))
-                    .width(5)
-                    .color(Color.RED));
-            if (currentlocationmarker != null) {
-                currentlocationmarker.remove();
-            }
-
-            currentlocationmarker = mMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(currentLatitude, currentLongitude))
-                    .title("Current location!"));
-
-            distancewalked += (int) location.distanceTo(previouslocation);
-        }
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-
-        // get textviews
-        TextView distancetowalktext_tv = (TextView) findViewById(R.id.distancetowalktext);
-        TextView distance_m_or_km = (TextView) findViewById(R.id.m_or_km);
-
-        // get distance to walk
-        DistanceToWalk = TotalDistance - distancewalked;
-
-        // make nice notation (400 meter, 1.44 kilomter)
-        if (DistanceToWalk < 1000) {
-            distancetowalktext_tv.setText(String.valueOf(DistanceToWalk));
-            distance_m_or_km.setText("meter");
-        } else {
-            float dist_to_walk = DistanceToWalk / 1000;
-            distancetowalktext_tv.setText(String.valueOf(dist_to_walk));
-            distance_m_or_km.setText("kilometer");
-        }
-
+        drawCurrentLocation(location);
+        updateDistance();
 
         // store current location in previous location
         previouslocation = location;
@@ -204,7 +135,6 @@ public class MapsActivity extends FragmentActivity implements
         handleNewLocation(location);
 
     }
-
 
     @Override
     public void onConnectionSuspended(int i) {
@@ -337,5 +267,76 @@ public class MapsActivity extends FragmentActivity implements
 
         }
     }
+
+    private void startAPIclient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .addApi(Places.PLACE_DETECTION_API)
+                .build();
+    }
+
+    private void createLocationRequest() {
+        mLocationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(5 * 1000)        // 5 seconds, in milliseconds
+                .setFastestInterval(1 * 1000); // 1 second, in milliseconds
+        mLocationRequest.setSmallestDisplacement(5); //only trigger after 5 meter
+    }
+
+    private void drawCurrentLocation(Location location) {
+
+        // Log.d(TAG, location.toString());
+
+        double currentLatitude = location.getLatitude();
+        double currentLongitude = location.getLongitude();
+
+        LatLng latLng = new LatLng(currentLatitude, currentLongitude);
+
+        if (previouslocation != null) {
+
+            double prevLatitude = previouslocation.getLatitude();
+            double prevLongitude = previouslocation.getLongitude();
+
+
+            // draw line and marker from previous to current location
+            mMap.addPolyline(new PolylineOptions()
+                    .add(new LatLng(prevLatitude, prevLongitude), new LatLng(currentLatitude, currentLongitude))
+                    .width(5)
+                    .color(Color.RED));
+            if (currentlocationmarker != null) {
+                currentlocationmarker.remove();
+            }
+
+            currentlocationmarker = mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(currentLatitude, currentLongitude))
+                    .title("Current location!"));
+
+            distancewalked += (int) location.distanceTo(previouslocation);
+        }
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+    }
+
+    private void updateDistance() {
+        DistanceToWalk = TotalDistance - distancewalked;
+
+        // get textviews
+        TextView distancetowalktext_tv = (TextView) findViewById(R.id.distancetowalktext);
+        TextView distance_m_or_km = (TextView) findViewById(R.id.m_or_km);
+
+        // make nice notation (400 meter, 1.44 kilomter)
+        if (DistanceToWalk < 1000) {
+            distancetowalktext_tv.setText(String.valueOf(DistanceToWalk));
+            distance_m_or_km.setText("meter");
+        } else {
+            float dist_to_walk = DistanceToWalk / 1000;
+            distancetowalktext_tv.setText(String.valueOf(dist_to_walk));
+            distance_m_or_km.setText("kilometer");
+        }
+
+
+    }
+
 }
 
