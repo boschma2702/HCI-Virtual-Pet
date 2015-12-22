@@ -76,17 +76,19 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
     protected void onResume() {
         super.onResume();
         setUpMapIfNeeded();
-        mGoogleApiClient.connect();
+         if (!mGoogleApiClient.isConnected()) {
+             mGoogleApiClient.connect();
+         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        if (mGoogleApiClient.isConnected()) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-            mGoogleApiClient.disconnect();
-        }
+       // if (mGoogleApiClient.isConnected()) {
+         //   LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+          //  mGoogleApiClient.disconnect();
+      //  }
     }
 
     /**
@@ -419,5 +421,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         }
 
     }
+
 }
+
 
