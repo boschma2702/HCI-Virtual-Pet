@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -21,7 +22,6 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import example.com.virtualpet.R;
 
 
-public class MapsActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class MapsActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnMarkerClickListener {
 
     public static final String TAG = MapsActivity.class.getSimpleName();
      /* Define a request code to send to Google Play services
@@ -197,11 +197,23 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         handleNewLocation(location);
     }
 
-    public void setMarkers(LatLng loc, String id) {
-        mMap.addMarker(new MarkerOptions()
-                .position(loc)
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-                .title(id));
+    public void setMarkers(Place place) {
+        place.setPlaceMarker(mMap);
+        mMap.setOnMarkerClickListener(this);
+    }
+
+    @Override
+    public boolean onMarkerClick(final Marker marker) {
+
+        for (Place place : places) { // look in all places
+            if (marker.equals(place.getPlaceMarker())) { // check for the place where this marker belongs to
+                //handle click here
+                new AsyncTaskParseJson(this, mMap, place).execute(); //parse request with a place so it knows to get details instead of place. (otherwise we could not have known te place)
+                Log.i(TAG, "onmarkerclick is called, and a asynctask has been requested with the place with id: " + place.getId());
+                return true;
+            }
+        }
+        return false;
     }
 
     public void HideProgressCircle() {
@@ -239,7 +251,14 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
                 place_loc.setLongitude(place.getLocation().longitude);
 
                 if(location.distanceTo(place_loc) < 50) { // if within range of 50 meters of a known place
-                    //TODO trigger things. but hey! you are at a grocery store. Awesome!
+                    //TODO trigger things. but hey! you are at a grocery store. Awesome! Lets show a toast instead.
+
+                    Context context = getApplicationContext();
+                    CharSequence text = "you are close to a supermarket!";
+                    int duration = Toast.LENGTH_LONG;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
                 }
             }
         }
@@ -309,17 +328,27 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         GoogleMap map;
         String location_lat, location_lng, place_id;
         private String key = "AIzaSyBpgUXiJgnGDnfJ6eR-Nf_W3BzJX4jtcrg";
+        Place place;
 
         public AsyncTaskParseJson(Context context, GoogleMap map) {
             TAG = "AsyncTaskParseJson.java";
-
             this.map = map;
 
             // results JSONArray
             dataJsonArr = null;
             GeometryJsonArr = null;
-
         }
+
+        public AsyncTaskParseJson(Context context, GoogleMap map, Place place) {
+            TAG = "AsyncTaskParseJson.java";
+            this.map = map;
+
+            // results JSONArray
+            dataJsonArr = null;
+            GeometryJsonArr = null;
+            this.place = place;
+        }
+
 
 
         @Override
@@ -329,25 +358,30 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
 
         @Override
         protected String doInBackground(String... arg0) {
-            parseGroceryStore();
 
-            for(int i = 0; i<places.size(); i++) {
-                parseGroceryDetails(places.get(i).getId(), i);
+            if (place != null) {
+                parseGroceryDetails(place);
+                Log.i(TAG, "the place is not null and we try to do the function parsegrocerydetails");
+            } else {
+                parseGroceryStore();
+                Log.i(TAG, "the place is null and we try to do the function paresgrocerystore");
+
             }
-
             return null;
         }
 
         @Override
         protected void onPostExecute(String strFromDoInBg) {
-
-            for(int i = 0; i<places.size(); i++) {
-                Place myPlace = places.get(i);
-                //set locations and id's in markers
-                MapsActivity.this.setMarkers(myPlace.getLocation(), myPlace.getName());
+            if (place != null) {
+                place.updatePlaceMarker();
+            } else {
+                for (int i = 0; i < places.size(); i++) {
+                    Place myPlace = places.get(i);
+                    //set locations and id's in markers
+                    MapsActivity.this.setMarkers(myPlace);
+                }
             }
             MapsActivity.this.HideProgressCircle();
-
         }
 
         private void parseGroceryStore() {
@@ -407,7 +441,8 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
             }
         }
 
-        void parseGroceryDetails(String place_id, int index) {
+        void parseGroceryDetails(Place place) {
+            String place_id = place.getId();
             try {
                 detailsUrl = "https://maps.googleapis.com/maps/api/place/details/json?placeid="
                         + place_id
@@ -424,8 +459,12 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
                     String name = c.getString("name");
                     String address = c.getString("formatted_address");
 
-                    places.get(index).setName(name);
-                    places.get(index).setAddress(address);
+                    place.setName(name);
+                    place.setAddress(address);
+
+                    //now we know more data of the place so we could update its marker
+
+
 
             } catch (JSONException e) {
                 e.printStackTrace();
