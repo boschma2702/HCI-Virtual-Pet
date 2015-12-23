@@ -132,6 +132,14 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         drawCurrentLocation(location);
         updateDistance();
 
+        // not update every time the supermarkets locations, but only when user significanlty moves
+        if (distancewalked > checkdistance + (radius/2) || firstLoad) {
+            // we will using AsyncTask during parsing
+            new AsyncTaskParseJson(this, mMap).execute();
+            checkdistance = distancewalked;
+            firstLoad = false;
+        }
+
         // store current location in previous location
         previouslocation = location;
     }
@@ -141,18 +149,6 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
 
         location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-
-
-        // not update every time the supermarkets locations, but only when user significanlty moves
-
-        if (distancewalked > checkdistance + (radius/2) || firstLoad) {
-            // we will using AsyncTask during parsing
-            new AsyncTaskParseJson(this, mMap).execute();
-            checkdistance = distancewalked;
-            firstLoad = false;
-        }
-
-
         handleNewLocation(location);
 
     }
