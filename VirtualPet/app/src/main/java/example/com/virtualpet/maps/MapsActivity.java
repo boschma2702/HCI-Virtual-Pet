@@ -54,6 +54,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
     private float DistanceToWalk = TotalDistance;
     float checkdistance = 0;
     boolean firstLoad = true;
+    ArrayList<Place> places = new ArrayList<Place>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,6 +152,8 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         handleNewLocation(location);
 
+
+        checkIfAtGroceryStore();
     }
 
     @Override
@@ -228,6 +231,20 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         mLocationRequest.setSmallestDisplacement(5); //only trigger after 5 meter
     }
 
+    private void checkIfAtGroceryStore() {
+        if (places != null) {
+            for (Place place : places) {
+                Location place_loc = new Location("placelocation");
+                place_loc.setLatitude(place.getLocation().latitude);
+                place_loc.setLongitude(place.getLocation().longitude);
+
+                if(location.distanceTo(place_loc) < 50) { // if within range of 50 meters of a known place
+                    //TODO trigger things. but hey! you are at a grocery store. Awesome!
+                }
+            }
+        }
+    }
+
     private void drawCurrentLocation(Location location) {
 
         // Log.d(TAG, location.toString());
@@ -291,7 +308,6 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         JSONArray GeometryJsonArr;
         GoogleMap map;
         String location_lat, location_lng, place_id;
-        ArrayList<Place> places = new ArrayList<Place>();
         private String key = "AIzaSyBpgUXiJgnGDnfJ6eR-Nf_W3BzJX4jtcrg";
 
         public AsyncTaskParseJson(Context context, GoogleMap map) {
