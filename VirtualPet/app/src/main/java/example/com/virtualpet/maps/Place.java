@@ -17,7 +17,7 @@ public class Place {
     LatLng latlng;
     Marker place_marker;
     GoogleMap mMap;
-    boolean details_updated;
+    boolean details_updated, open, unknown;
 
     Place() {
     }
@@ -36,11 +36,7 @@ public class Place {
     }
 
     void updatePlaceMarker() {
-        place_marker.setTitle(name);
-        place_marker.setSnippet(address);
-
         details_updated = true;
-
         place_marker.showInfoWindow();
     }
 
@@ -73,8 +69,18 @@ public class Place {
     }
 
     void setAddress(String address) {
-
         this.address = address;
     }
 
+    String getAddress() {
+        return address;
+    }
+
+    void setOpen(String open) {
+        this.open = Boolean.valueOf(open);
+    }
+
+    Boolean isOpen() {
+        return this.open;
+    }
 }

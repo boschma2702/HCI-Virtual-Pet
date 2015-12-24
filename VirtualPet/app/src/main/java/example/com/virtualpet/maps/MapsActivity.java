@@ -63,6 +63,52 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         setUpMapIfNeeded();
         startAPIclient();
         createLocationRequest();
+
+        // Setting a custom info window adapter for the google map
+        mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+
+            // Use default InfoWindow frame
+            @Override
+            public View getInfoWindow(Marker arg0) {
+                return null;
+            }
+
+            // Defines the contents of the InfoWindow
+            @Override
+            public View getInfoContents(Marker marker) {
+
+                // Getting view from the layout file info_window_layout
+                View v = getLayoutInflater().inflate(R.layout.infowindowlayout, null);
+
+                // Getting reference to the TextView to set latitude
+                TextView tvaddress = (TextView) v.findViewById(R.id.tv_address);
+                TextView tvopen = (TextView) v.findViewById(R.id.tv_open);
+                TextView tvtitle = (TextView) v.findViewById(R.id.tv_title);
+
+                for (Place place : places) {
+                    if (marker.getId().equals(place.getPlaceMarker().getId())) {
+
+                        if (place.isOpen()) {
+                            tvopen.setText("Open now");
+                            tvopen.setTextColor(Color.GREEN);
+                        } else if(place.isOpen() == false) {
+                            tvopen.setText("closed now");
+                            tvopen.setTextColor(Color.RED);
+                        } else {
+                            tvopen.setText("openingstimes unknown");
+                            tvopen.setTextColor(Color.GRAY);
+                        }
+                        tvtitle.setText(place.getName());
+                        tvaddress.setText(place.getAddress());
+                    }
+                }
+
+                // Returning the view containing InfoWindow contents
+                return v;
+
+            }
+        });
+
     }
 
     @Override
@@ -118,7 +164,6 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
             if (mMap != null) {
                 setUpMap();
                 firstLoad = true;
-
             }
         }
     }
@@ -197,6 +242,9 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         handleNewLocation(location);
     }
 
+
+
+
     public void setMarkers(Place place) {
         place.setPlaceMarker(mMap);
         mMap.setOnMarkerClickListener(this);
@@ -258,7 +306,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
                 place_loc.setLatitude(place.getLocation().latitude);
                 place_loc.setLongitude(place.getLocation().longitude);
 
-                if(location.distanceTo(place_loc) < 50) { // if within range of 50 meters of a known place
+                if(location.distanceTo(place_loc) < 50 && place.isOpen()) { // if within range of 50 meters of a known place, and if the place is open off course haha!
                     //TODO trigger things. but hey! you are at a grocery store. Awesome! Lets show a toast instead.
 
                     Context context = getApplicationContext();
@@ -461,18 +509,22 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
 
                 // get json string from url
                 JSONObject details_json = detailsParser.getJSONFromUrl(detailsUrl);
-               // Log.d("tag", details_json.toString(4));
+                Log.d(TAG, details_json.toString(4));
 
                     JSONObject c = details_json.getJSONObject("result");
                     String name = c.getString("name");
                     String address = c.getString("formatted_address");
 
-                    place.setName(name);
-                    place.setAddress(address);
+                    try {
+                        JSONObject openinghours = c.getJSONObject("opening_hours");
+                        String open = openinghours.getString("open_now");
+                        place.setOpen(open);
+                    } catch(JSONException e) {
+                        place.setOpen(null);
+                    }
 
-                    //now we know more data of the place so we could update its marker
-
-
+                place.setName(name);
+                place.setAddress(address);
 
             } catch (JSONException e) {
                 e.printStackTrace();
