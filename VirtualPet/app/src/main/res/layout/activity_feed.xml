@@ -9,4 +9,16 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="example.com.virtualpet.FeedActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="SHAKE IT BABY"
+        android:id="@+id/textView3"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="40dp"
+        android:textStyle="bold"
+        android:textColor="#FF1493"/>
+
 </RelativeLayout>
