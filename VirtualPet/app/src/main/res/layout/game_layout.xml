@@ -28,7 +28,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:text="Feed"
-                android:id="@+id/button2" />
+                android:id="@+id/button2"
+                android:onClick="FeedClicked"/>
         </TableRow>
 
         <TableRow>

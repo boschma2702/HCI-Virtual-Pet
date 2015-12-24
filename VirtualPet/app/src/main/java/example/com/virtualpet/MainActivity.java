@@ -44,6 +44,11 @@ public class MainActivity extends Activity implements Runnable {
         startActivity(intent);
     }
 
+    public void FeedClicked(View v){
+        Intent intent = new Intent(this, FeedActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public void run() {
         long ticksPS = (long)1000 / FPS;

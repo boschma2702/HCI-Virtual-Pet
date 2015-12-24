@@ -306,7 +306,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
                 place_loc.setLatitude(place.getLocation().latitude);
                 place_loc.setLongitude(place.getLocation().longitude);
 
-                if(location.distanceTo(place_loc) < 50 && place.isOpen()) { // if within range of 50 meters of a known place, and if the place is open off course haha!
+                if(location.distanceTo(place_loc) < 50 && place.isOpen()) { // if within range of 50 meters of a known place, and if the place is open off course muhaha!
                     //TODO trigger things. but hey! you are at a grocery store. Awesome! Lets show a toast instead.
 
                     Context context = getApplicationContext();
