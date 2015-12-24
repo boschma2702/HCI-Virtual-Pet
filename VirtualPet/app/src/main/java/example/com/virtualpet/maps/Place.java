@@ -1,7 +1,5 @@
 package example.com.virtualpet.maps;
 
-import android.util.Log;
-
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -19,14 +17,15 @@ public class Place {
     LatLng latlng;
     Marker place_marker;
     GoogleMap mMap;
+    boolean details_updated;
 
     Place() {
-
     }
 
     Place(LatLng latlng, String place_id) {
         this.latlng = latlng;
         this.place_id = place_id;
+        details_updated = false;
     }
 
     void setPlaceMarker(GoogleMap mMap) {
@@ -37,14 +36,12 @@ public class Place {
     }
 
     void updatePlaceMarker() {
-        place_marker = mMap.addMarker(new MarkerOptions()
-                .position(latlng)
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-                .title(name)
-                .snippet(address));
-        place_marker.showInfoWindow();
-          Log.i(TAG, name);
+        place_marker.setTitle(name);
+        place_marker.setSnippet(address);
 
+        details_updated = true;
+
+        place_marker.showInfoWindow();
     }
 
     Marker getPlaceMarker() {

@@ -204,16 +204,24 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
 
     @Override
     public boolean onMarkerClick(final Marker marker) {
+        Log.i(TAG, "onmarkerclick is called. now try to find the place where it is attached to");
 
         for (Place place : places) { // look in all places
-            if (marker.equals(place.getPlaceMarker())) { // check for the place where this marker belongs to
+
+            Log.i(TAG, "the ids that are compared are: " + marker.getId() + " " + place.getPlaceMarker().getId());
+
+            if (marker.getId().equals(place.getPlaceMarker().getId())) { // check for the place where this marker belongs to
                 //handle click here
-                new AsyncTaskParseJson(this, mMap, place).execute(); //parse request with a place so it knows to get details instead of place. (otherwise we could not have known te place)
-                Log.i(TAG, "onmarkerclick is called, and a asynctask has been requested with the place with id: " + place.getId());
-                return true;
+                if (place.details_updated) {
+                    marker.showInfoWindow(); // if we already know the details there is no need to parse Json
+                } else {
+                    new AsyncTaskParseJson(this, mMap, place).execute(); //parse request with a place so it knows to get details instead of place. (otherwise we could not have known te place)
+                    Log.i(TAG, "onmarkerclick is called, and a asynctask has been requested with the place with id: " + place.getId());
+                    return true; // returning true means the normal behaviour is overwritten
+                }
             }
         }
-        return false;
+        return false; // returning false means the normal behaviour is not overwritten.
     }
 
     public void HideProgressCircle() {
