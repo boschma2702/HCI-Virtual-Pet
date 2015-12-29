@@ -18,7 +18,7 @@ import example.com.virtualpet.Util.ResourceManager;
 /**
  * Created by reneb_000 on 16-12-2015.
  */
-public class FlapDogView extends SurfaceView implements View.OnTouchListener {
+public class FlapDogView extends SurfaceView implements View.OnTouchListener, Runnable {
 
     private SurfaceHolder holder;
     private ArrayList<Pipe> pipes = new ArrayList();
@@ -41,42 +41,50 @@ public class FlapDogView extends SurfaceView implements View.OnTouchListener {
         font.setTextSize(ResourceManager.INSTANCE.convertDpToPixel(100));
     }
 
-    public void start(FlapDogActivity flapDogActivity){
+    public void start(FlapDogActivity flapDogActivity) {
         this.flapDogActivity = flapDogActivity;
         pipes.add(new Pipe(this));
     }
 
 
-    public void onDraw(){
-        if(holder.getSurface().isValid()){
-            Canvas c = holder.lockCanvas();
-            if(c!=null) {
-                //c.drawARGB(255, 255, 255, 255);
-                c.drawBitmap(background, 0, 0, null);
-                //c.drawBitmap(test, x, y, paint);
-                flapDog.draw(c);
-                for(Pipe p:pipes){
-                    p.draw(c);
-                }
-                c.drawText(String.valueOf(score), scorex, scorey,font);
-                holder.unlockCanvasAndPost(c);
+    public void onDraw(Canvas c) {
+//        if(holder.getSurface().isValid()){
+//            Canvas c = holder.lockCanvas();
+//            if(c!=null) {
+//                //c.drawARGB(255, 255, 255, 255);
+//                c.drawBitmap(background, 0, 0, null);
+//                //c.drawBitmap(test, x, y, paint);
+//                flapDog.draw(c);
+//                for(Pipe p:pipes){
+//                    p.draw(c);
+//                }
+//                c.drawText(String.valueOf(score), scorex, scorey,font);
+//                holder.unlockCanvasAndPost(c);
+//            }
+//        }
+        if(c!=null) {
+            c.drawBitmap(background, 0, 0, null);
+            flapDog.draw(c);
+            for (Pipe p : pipes) {
+                p.draw(c);
             }
+            c.drawText(String.valueOf(score), scorex, scorey, font);
         }
-
     }
 
-    public void update(){
+    public void update() {
         flapDog.update();
         updatePipes();
-        if(checkCollisions()){
+        if (checkCollisions()) {
             flapDogActivity.gameOver(score);
+            this.running = false;
         }
     }
 
     private boolean checkCollisions() {
         Rect flapdogRect = flapDog.getCollisionRect();
-        for(Pipe p: pipes){
-            if(p.collide(flapdogRect)){
+        for (Pipe p : pipes) {
+            if (p.collide(flapdogRect)) {
 //                Log.e("collision", "Colission");
                 return true;
             }
@@ -84,11 +92,11 @@ public class FlapDogView extends SurfaceView implements View.OnTouchListener {
         return false;
     }
 
-    private void updatePipes(){
+    private void updatePipes() {
         int flapx = flapDog.getX();
         ArrayList<Pipe> toRemove = new ArrayList<>();
-        for(Pipe p:pipes){
-            if(p.update(flapx)){
+        for (Pipe p : pipes) {
+            if (p.update(flapx)) {
                 toRemove.add(p);
             }
         }
@@ -98,7 +106,7 @@ public class FlapDogView extends SurfaceView implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if(event.getAction()==MotionEvent.ACTION_DOWN){
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
 //            Log.e("Flapdog", "clicked");
             flapDog.jump();
         }
@@ -106,7 +114,7 @@ public class FlapDogView extends SurfaceView implements View.OnTouchListener {
     }
 
     public void addScore() {
-        score ++;
+        score++;
     }
 
     public void reset() {
@@ -121,5 +129,73 @@ public class FlapDogView extends SurfaceView implements View.OnTouchListener {
         pipes.add(new Pipe(this));
     }
 
+    // desired fps
+    private final static int MAX_FPS = 30;
+    // maximum number of frames to be skipped
+    private final static int MAX_FRAME_SKIPS = 5;
+    // the frame period
+    private final static int FRAME_PERIOD = 1000 / MAX_FPS;
+    private boolean running = false;
 
+
+    @Override
+    public void run() {
+        Canvas canvas;
+        running = true;
+        long beginTime;        // the time when the cycle begun
+        long timeDiff;        // the time it took for the cycle to execute
+        int sleepTime;        // ms to sleep (<0 if we're behind)
+        int framesSkipped;    // number of frames being skipped
+
+        sleepTime = 0;
+
+        while (running) {
+            canvas = null;
+            // try locking the canvas for exclusive pixel editing
+            // in the surface
+            try {
+                canvas = this.holder.lockCanvas();
+                synchronized (holder) {
+                    beginTime = System.currentTimeMillis();
+                    framesSkipped = 0;    // resetting the frames skipped
+                    // update game state
+                    update();
+
+                    //draw
+                    onDraw(canvas);
+                    // calculate how long did the cycle take
+                    timeDiff = System.currentTimeMillis() - beginTime;
+                    // calculate sleep time
+                    sleepTime = (int) (FRAME_PERIOD - timeDiff);
+
+                    if (sleepTime > 0) {
+                        // if sleepTime > 0 we're OK
+                        try {
+                            // send the thread to sleep for a short period
+                            // very useful for battery saving
+                            Thread.sleep(sleepTime);
+                        } catch (InterruptedException e) {
+                        }
+                    }
+
+                    while (sleepTime < 0 && framesSkipped < MAX_FRAME_SKIPS) {
+                        // we need to catch up
+                        // update without rendering
+                        update();
+                        // add frame period to check if in next frame
+                        sleepTime += FRAME_PERIOD;
+                        framesSkipped++;
+                    }
+                }
+            } finally {
+                // in case of an exception the surface is not left in
+                // an inconsistent state
+                if (canvas != null) {
+                    holder.unlockCanvasAndPost(canvas);
+                }
+            }    // end finally
+        }
+
+
+    }
 }
