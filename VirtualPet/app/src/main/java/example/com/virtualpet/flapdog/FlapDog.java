@@ -14,7 +14,7 @@ public class FlapDog {
 
     //TODO values screen independed
     private int x, y, yspeed, screenHeight;
-    private final int width = (int) ResourceManager.INSTANCE.convertDpToPixel(60);
+    private final int width = (int) ResourceManager.INSTANCE.getPercentageLength(10, true);
     private final int jumpSpeed = (int)ResourceManager.INSTANCE.convertDpToPixel(10);
     private final double gravity = ResourceManager.INSTANCE.convertDpToPixel(1);
     private Paint paint = new Paint();

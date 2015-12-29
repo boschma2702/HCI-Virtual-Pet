@@ -1,6 +1,7 @@
 package example.com.virtualpet.flapdog;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -28,6 +29,8 @@ public class FlapDogView extends SurfaceView implements View.OnTouchListener {
     private int scorex = (int) ResourceManager.INSTANCE.getPercentageLength(25, true);
     private int scorey = (int) ResourceManager.INSTANCE.getPercentageLength(50, false);
 
+    private Bitmap background = ResourceManager.INSTANCE.flapdogBackground;
+
     private FlapDogActivity flapDogActivity;
 
     public FlapDogView(Context context, AttributeSet attrs) {
@@ -40,7 +43,7 @@ public class FlapDogView extends SurfaceView implements View.OnTouchListener {
 
     public void start(FlapDogActivity flapDogActivity){
         this.flapDogActivity = flapDogActivity;
-        pipes.add(new Pipe());
+        pipes.add(new Pipe(this));
     }
 
 
@@ -48,7 +51,8 @@ public class FlapDogView extends SurfaceView implements View.OnTouchListener {
         if(holder.getSurface().isValid()){
             Canvas c = holder.lockCanvas();
             if(c!=null) {
-                c.drawARGB(255, 255, 255, 255);
+                //c.drawARGB(255, 255, 255, 255);
+                c.drawBitmap(background, 0, 0, null);
                 //c.drawBitmap(test, x, y, paint);
                 flapDog.draw(c);
                 for(Pipe p:pipes){
@@ -82,12 +86,13 @@ public class FlapDogView extends SurfaceView implements View.OnTouchListener {
 
     private void updatePipes(){
         int flapx = flapDog.getX();
+        ArrayList<Pipe> toRemove = new ArrayList<>();
         for(Pipe p:pipes){
-            if(p.update(flapx, this)){
-                pipes.remove(p);
-                pipes.add(new Pipe());
+            if(p.update(flapx)){
+                toRemove.add(p);
             }
         }
+        pipes.removeAll(toRemove);
     }
 
 
@@ -108,6 +113,13 @@ public class FlapDogView extends SurfaceView implements View.OnTouchListener {
         score = 0;
         pipes.clear();
         flapDog.reset();
-        pipes.add(new Pipe());
+        pipes.add(new Pipe(this));
     }
+
+
+    public void addPipe() {
+        pipes.add(new Pipe(this));
+    }
+
+
 }

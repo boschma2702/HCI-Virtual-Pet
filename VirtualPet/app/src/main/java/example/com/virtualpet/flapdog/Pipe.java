@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+import java.util.Random;
+
 import example.com.virtualpet.Util.ResourceManager;
 
 /**
@@ -12,47 +14,60 @@ import example.com.virtualpet.Util.ResourceManager;
  */
 public class Pipe {
 
-    private int x, speed = 5;
+    private int x, speed = (int) ResourceManager.INSTANCE.getPercentageLength(0.6, false);
     private Paint paint = new Paint();
-    private final static int widht = (int) ResourceManager.INSTANCE.convertDpToPixel(60);;
-    private int screenHeight;
-    private int gapHalfWidth = 500;
+    private final static int widht = (int) ResourceManager.INSTANCE.convertDpToPixel(60);
+    private int screenHeight, screenWidth;
+    private int gapHalfWidth = (int) ResourceManager.INSTANCE.getPercentageLength(15, true);
+    private int type;
 
     private boolean added = false;
 
+    private FlapDogView controller;
+
     private Rect bottom, top;
 
-    public Pipe(){
-        this(ResourceManager.INSTANCE.getScreenWidth()+widht/2);
+    public Pipe(FlapDogView controller){
+        this(ResourceManager.INSTANCE.getScreenWidth()+widht/2, controller);
     }
 
-    public Pipe(int x){
+    public Pipe(int x, FlapDogView controller){
         screenHeight = ResourceManager.INSTANCE.getScreenHeight();
+        screenWidth = ResourceManager.INSTANCE.getScreenWidth();
         this.x = x;
         paint.setColor(Color.GREEN);
         top = new Rect(this.x-widht/2, 0, this.x+widht/2, screenHeight/2-gapHalfWidth);
         bottom = new Rect(this.x-widht/2, screenHeight/2+gapHalfWidth, this.x+widht/2, screenHeight);
+        this.controller = controller;
+        Random random = new Random();
+        type = random.nextInt(3);
     }
 
     /**
      *
      * @return true if x of pipe is bigger then 0 otherwise returns false.
      */
-    public boolean update(int flapx, FlapDogView v){
+    public boolean update(int flapx){
         this.x -= speed;
-        top.set(x - widht / 2, 0, x + widht / 2, screenHeight / 2 - gapHalfWidth);
-        bottom.set(x - widht / 2, screenHeight / 2 + gapHalfWidth, x + widht / 2, screenHeight);
+        top.set(x - widht / 2, 0, x + widht / 2, screenHeight / 2 - gapHalfWidth*type);
+        bottom.set(x - widht / 2, screenHeight / 2 + gapHalfWidth*(2-type), x + widht / 2, screenHeight);
 
         if(!added&&this.x<flapx){
-            v.addScore();
+            controller.addScore();
             added = true;
+            controller.addPipe();
         }
-
-        if(x<-widht/2){
+        if(x<-widht){
             return true;
-        }else{
-            return false;
         }
+        return false;
+
+
+//        if(x<=screenWidth/2){
+//            return true;
+//        }else{
+//            return false;
+//        }
     }
 
     //TODO not really good collision checking.

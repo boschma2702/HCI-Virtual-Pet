@@ -18,6 +18,8 @@ public class MainActivity extends Activity implements Runnable {
     private DogView view;
     private Dog dog;
 
+    private boolean inGame = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +28,7 @@ public class MainActivity extends Activity implements Runnable {
     }
 
     public void mainPlayClicked(View v){
+        inGame = true;
         setContentView(R.layout.game_layout);
         view = (DogView) findViewById(R.id.surfaceView);
         dog = new Dog(this, view);
@@ -47,6 +50,23 @@ public class MainActivity extends Activity implements Runnable {
     public void FeedClicked(View v){
         Intent intent = new Intent(this, FeedActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(inGame) {
+            running = true;
+            new Thread(this).start();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(inGame) {
+            running = false;
+        }
     }
 
     @Override
