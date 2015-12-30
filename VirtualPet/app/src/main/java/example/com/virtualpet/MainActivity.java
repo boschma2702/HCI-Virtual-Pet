@@ -25,6 +25,8 @@ public class MainActivity extends Activity implements Runnable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         new ResourceManager(this);
+        Intent intent = new Intent(this, DogService.class);
+        startService(intent);
     }
 
     public void mainPlayClicked(View v){
