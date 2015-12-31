@@ -1,5 +1,6 @@
 package example.com.virtualpet.flapdog;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -14,12 +15,14 @@ public class FlapDog {
 
     //TODO values screen independed
     private int x, y, yspeed, screenHeight;
-    private final int width = (int) ResourceManager.INSTANCE.getPercentageLength(10, true);
+    public static final int width = (int) ResourceManager.INSTANCE.getPercentageLength(10, true);
     private final int jumpSpeed = (int)ResourceManager.INSTANCE.convertDpToPixel(10);
     private final double gravity = ResourceManager.INSTANCE.convertDpToPixel(1);
     private Paint paint = new Paint();
     private Rect rect;
     private Paint debug = new Paint();
+
+    private Bitmap flapHead = ResourceManager.INSTANCE.flapdog_head;
 
 
     public FlapDog(){
@@ -34,7 +37,8 @@ public class FlapDog {
 
     public void draw(Canvas c){
 //        c.drawRect(rect, debug);
-        c.drawCircle(x, y, width/2, paint);
+        //c.drawCircle(x, y, width/2, paint);
+        c.drawBitmap(flapHead, x-width/2, y-width/2, paint);
     }
 
     public void jump(){

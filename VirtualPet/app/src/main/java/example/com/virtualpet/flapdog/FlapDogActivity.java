@@ -1,6 +1,8 @@
 package example.com.virtualpet.flapdog;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -38,44 +40,22 @@ public class FlapDogActivity extends Activity {
     }
 
 
-
-//
-//    @Override
-//    public void run() {
-//        long ticksPS = (long)1000 / MainActivity.FPS;
-//        Log.e("Main", "ticks ps: " + ticksPS);
-//        long startTime;
-//        long sleepTime;
-//        while (running) {
-//            startTime = System.nanoTime() / 1000000;
-//            //update
-//            view.update();
-//
-//            //draw
-//            view.onDraw();
-//            try {
-//                sleepTime = ticksPS - (System.nanoTime() / 1000000-startTime);
-//                if(sleepTime>0){
-//                    Thread.sleep(sleepTime);
-//                }else{
-//                    Thread.sleep(10);
-////                    Log.e("GameLoop", "Couldn't work through loop in less then 1/30 of a second");
-//                }
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//    }
-
-
     public void gameOver(final int score) {
         running = false;
+        final SharedPreferences sp = getPreferences(Context.MODE_PRIVATE);
+        final int prevHighscore = sp.getInt("flapdog_highscore", 0);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 scoreField.setText(String.valueOf(score));
-                bestField.setText("TODO");
+                if(prevHighscore<score){
+                    bestField.setText(String.valueOf(score));
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putInt("flapdog_highscore", score);
+                    editor.apply();
+                }else{
+                    bestField.setText(String.valueOf(prevHighscore));
+                }
                 gameoverScreen.setVisibility(View.VISIBLE);
             }
         });

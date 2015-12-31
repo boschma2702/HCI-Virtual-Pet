@@ -44,7 +44,7 @@ public class DogService extends Service implements Runnable {
 //                Toast.makeText(this, "Still running", Toast.LENGTH_SHORT).show();
 //                Log.e("Service", "Still running");
                 showNotification("Running", "Still running");
-                
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
