@@ -37,7 +37,7 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback {
         if(holder.getSurface().isValid()){
             Canvas c = holder.lockCanvas();
             if(c!=null) {
-                c.drawARGB(255, 0,0,0);
+                c.drawARGB(255, 200,200,200);
                 //c.drawBitmap(test, x, y, paint);
                 test.draw(c);
                 holder.unlockCanvasAndPost(c);

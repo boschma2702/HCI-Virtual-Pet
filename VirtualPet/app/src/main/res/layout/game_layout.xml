@@ -11,58 +11,67 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:stretchColumns="0,1">
+        android:stretchColumns="0,1"
+        android:padding="10dp"
+        >
 
-        <TableRow>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+        <TableRow android:paddingBottom="20dp">
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_gravity="left"
-                android:text="Maps"
+                android:src="@drawable/map"
+                android:scaleType="fitStart"
+                android:background="@null"
                 android:id="@+id/button"
                 android:onClick="mapsClicked"
                 />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_gravity="right"
-                android:text="Feed"
                 android:id="@+id/button2"
+                android:background="@null"
+                android:scaleType="fitEnd"
+                android:src="@drawable/bowl"
                 android:onClick="FeedClicked"/>
+
         </TableRow>
 
-        <TableRow>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+        <TableRow android:paddingBottom="20dp">
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_gravity="left"
-                android:text="New Button"
+                android:background="@null"
+                android:scaleType="fitStart"
+                android:src="@drawable/shower"
                 android:id="@+id/button3" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_gravity="right"
-                android:text="Speel"
+                android:src="@drawable/play"
+                android:background="@null"
+                android:scaleType="fitEnd"
+
                 android:onClick="playClicked"
                 android:id="@+id/button4" />
         </TableRow>
 
-        <TableRow>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+        <TableRow android:paddingBottom="20dp">
+
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_gravity="left"
-                android:text="New Button"
+                android:background="@null"
+                android:scaleType="fitStart"
+                android:src="@drawable/stack"
                 android:id="@+id/button5" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:text="New Button"
-                android:id="@+id/button6" />
         </TableRow>
 
 
