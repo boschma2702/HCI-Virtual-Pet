@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -41,26 +40,19 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
         running = false;
     }
 
-<<<<<<< HEAD
-    public void onDraw(){
-        if(holder.getSurface().isValid()){
+    public void onDraw() {
+        if (holder.getSurface().isValid()) {
             Canvas c = holder.lockCanvas();
-            if(c!=null) {
-                c.drawARGB(255, 200,200,200);
-                //c.drawBitmap(test, x, y, paint);
-                test.draw(c);
-                holder.unlockCanvasAndPost(c);
-            }
+            holder.unlockCanvasAndPost(c);
         }
-=======
+    }
     public void resume(){
         new Thread(this).start();
     }
->>>>>>> origin/master
 
     public void onDraw(Canvas c){
         if(c!=null) {
-            c.drawARGB(255, 0, 0, 0);
+            c.drawARGB(255, 200, 200, 200);
             test.draw(c);
         }
     }
