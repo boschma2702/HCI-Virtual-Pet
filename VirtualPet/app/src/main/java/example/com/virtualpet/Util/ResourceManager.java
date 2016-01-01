@@ -8,6 +8,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 
 import example.com.virtualpet.R;
+import example.com.virtualpet.flapdog.FlapDog;
 
 /**
  * Created by reneb_000 on 3-12-2015.
@@ -22,6 +23,7 @@ public final class ResourceManager {
 
     public Bitmap testSheet;
     public Bitmap flapdogBackground;
+    public Bitmap flapdog_head;
 
     public ResourceManager(Activity a){
         DisplayMetrics metrics = new DisplayMetrics();
@@ -32,7 +34,10 @@ public final class ResourceManager {
         dpscreenWidth = screenWidth/metrics.density;
         dpscreenHeight = screenHeight/metrics.density;
         testSheet = BitmapFactory.decodeResource(a.getResources(), R.drawable.dead_normal);
+
         flapdogBackground = getResizedBitmap(BitmapFactory.decodeResource(a.getResources(), R.drawable.flapdog_bg), screenWidth, screenHeight);
+        int flapdog_width = (int)getPercentageLength(10, true);
+        flapdog_head = getResizedBitmap(BitmapFactory.decodeResource(a.getResources(), R.drawable.flapdog_head), flapdog_width, flapdog_width);
         log();
         INSTANCE = this;
     }
