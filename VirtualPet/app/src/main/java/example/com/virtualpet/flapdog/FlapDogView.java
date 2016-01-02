@@ -48,20 +48,6 @@ public class FlapDogView extends SurfaceView implements View.OnTouchListener, Ru
 
 
     public void onDraw(Canvas c) {
-//        if(holder.getSurface().isValid()){
-//            Canvas c = holder.lockCanvas();
-//            if(c!=null) {
-//                //c.drawARGB(255, 255, 255, 255);
-//                c.drawBitmap(background, 0, 0, null);
-//                //c.drawBitmap(test, x, y, paint);
-//                flapDog.draw(c);
-//                for(Pipe p:pipes){
-//                    p.draw(c);
-//                }
-//                c.drawText(String.valueOf(score), scorex, scorey,font);
-//                holder.unlockCanvasAndPost(c);
-//            }
-//        }
         if(c!=null) {
             c.drawBitmap(background, 0, 0, null);
             flapDog.draw(c);

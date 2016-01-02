@@ -17,7 +17,6 @@ import example.com.virtualpet.R;
  */
 public class FlapDogActivity extends Activity {
 
-    private boolean running;
     private FlapDogView view;
     private View gameoverScreen;
     private TextView scoreField;
@@ -27,6 +26,7 @@ public class FlapDogActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainActivity.setFullScreen(this);
         setContentView(R.layout.flapdog);
         view = (FlapDogView) findViewById(R.id.flapdogView);
 
@@ -35,13 +35,11 @@ public class FlapDogActivity extends Activity {
         gameoverScreen = findViewById(R.id.flapdogGameoverScreen);
         gameoverScreen.setVisibility(View.INVISIBLE);
         view.start(this);
-        running = true;
         new Thread(view).start();
     }
 
 
     public void gameOver(final int score) {
-        running = false;
         final SharedPreferences sp = getPreferences(Context.MODE_PRIVATE);
         final int prevHighscore = sp.getInt("flapdog_highscore", 0);
         runOnUiThread(new Runnable() {
@@ -72,7 +70,6 @@ public class FlapDogActivity extends Activity {
             public void run() {
                 gameoverScreen.setVisibility(View.INVISIBLE);
                 view.reset();
-                running = true;
                 new Thread(view).start();
             }
         });
