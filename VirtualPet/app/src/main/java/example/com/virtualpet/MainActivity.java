@@ -26,7 +26,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         new ResourceManager(this);
         Intent intent = new Intent(this, DogService.class);
-        //startService(intent); //commond out for not running unecesary service
+        //startService(intent); //commented out for not running unnecessary service
     }
 
     public void mainPlayClicked(View v){

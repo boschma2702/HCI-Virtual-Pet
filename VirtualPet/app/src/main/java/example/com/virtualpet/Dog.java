@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.TimeZone;
 
 import example.com.virtualpet.Util.ResourceManager;
@@ -33,7 +34,7 @@ public class Dog {
     private boolean dirty;
 
 
-    public Dog(Context c, DogView view){
+    public Dog(Context c, DogView view) {
         this.view = view;
 //        x = (int) ResourceManager.INSTANCE.convertPixelsToDp(500);
 //        y = (int) ResourceManager.INSTANCE.convertPixelsToDp(2000);
@@ -68,7 +69,7 @@ public class Dog {
     }
 
     public void initialize() {
-        Log.e("dog", "Initializing...");
+        Log.e("Dog", "Initializing...");
         updateSatisfaction(60);
         now.setTimeZone(TimeZone.getTimeZone("Europe/Amsterdam"));
         setEatTimes();
@@ -81,6 +82,9 @@ public class Dog {
         }
         if (getDirty()) {
 //            TODO: Show animation dirty
+        }
+        if ((getTime() - getTimeLastEaten()) > 6*THIRTYMINUTES) {
+//            TODO: Show animation hungry
         }
     }
 
@@ -175,6 +179,14 @@ public class Dog {
 
     public long getTimeLastEaten() {
         return lastEaten;
+    }
+
+    public void setTimeLastEaten(Date date) {
+        this.lastEaten = date.getTime();
+    }
+
+    public void setTimeLastPlayed(Date date) {
+        this.lastPlayed = date.getTime();
     }
 
     public boolean getDirty() {
