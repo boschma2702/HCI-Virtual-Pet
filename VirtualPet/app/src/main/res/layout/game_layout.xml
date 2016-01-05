@@ -17,64 +17,126 @@
 
         <TableRow android:paddingBottom="20dp">
             <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="66dp"
+                android:layout_height="66dp"
                 android:layout_gravity="left"
                 android:src="@drawable/icon_map"
                 android:scaleType="fitStart"
                 android:adjustViewBounds="true"
                 android:id="@+id/button"
                 android:onClick="mapsClicked"
+                android:background="@drawable/selectable_button"
+                android:padding="16dp"
+
                 />
 
             <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="66dp"
+                android:layout_height="66dp"
                 android:layout_gravity="right"
                 android:id="@+id/button2"
                 android:adjustViewBounds="true"
                 android:scaleType="fitEnd"
+<<<<<<< HEAD
                 android:src="@drawable/icon_bowl"
+=======
+                android:src="@drawable/bowl"
+                android:background="@drawable/selectable_button"
+                android:padding="12dp"
+
+>>>>>>> origin/master
                 android:onClick="FeedClicked"/>
 
         </TableRow>
 
         <TableRow android:paddingBottom="20dp">
             <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="66dp"
+                android:layout_height="66dp"
                 android:layout_gravity="left"
                 android:scaleType="fitStart"
                 android:src="@drawable/shower"
                 android:id="@+id/button3"
                 android:adjustViewBounds="true"
+                android:background="@drawable/selectable_button"
+                android:padding="16dp"
+
                 />
 
             <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="66dp"
+                android:layout_height="66dp"
                 android:layout_gravity="right"
                 android:src="@drawable/icon_play"
                 android:scaleType="fitEnd"
                 android:adjustViewBounds="true"
                 android:onClick="playClicked"
+                android:background="@drawable/selectable_button"
+                android:padding="12dp"
+
                 android:id="@+id/button4" />
         </TableRow>
 
         <TableRow android:paddingBottom="20dp">
 
             <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="66dp"
+                android:layout_height="66dp"
+                android:padding="16dp"
                 android:layout_gravity="left"
                 android:adjustViewBounds="true"
                 android:scaleType="fitStart"
+<<<<<<< HEAD
                 android:src="@drawable/icon_stack"
+=======
+                android:src="@drawable/stack"
+                android:background="@drawable/selectable_button"
+>>>>>>> origin/master
                 android:id="@+id/button5" />
 
         </TableRow>
 
 
     </TableLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal|bottom">
+
+
+        <ImageView
+
+            android:id="@+id/imageView"
+            android:src="@drawable/sad"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:background="@null"
+            android:scaleType="fitCenter"/>
+
+        <ProgressBar
+            android:layout_width="1dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_height="14dp"
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:progressDrawable="@drawable/custom_progressbar"
+            />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:src="@drawable/happy"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:background="@null"
+            android:scaleType="fitCenter" />
+    </LinearLayout>
+
 
 </FrameLayout>
