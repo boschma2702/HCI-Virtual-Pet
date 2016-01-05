@@ -40,18 +40,18 @@ public class Dog {
         speed = 5;
         screenwidth = ResourceManager.INSTANCE.getScreenWidth();
         x = screenwidth/2;
-        y = ResourceManager.INSTANCE.getScreenHeight();
+        y = (int) (ResourceManager.INSTANCE.getScreenHeight()-ResourceManager.INSTANCE.getPercentageLength(20, true));
         view.setXY(x, y);
         initialize();
     }
 
     public void update(){
-        if(x>screenwidth){
-            speed = -speed;
-        }else if(x<0){
-            speed = -speed;
-        }
-        x += speed;
+//        if(x>screenwidth){
+//            speed = -speed;
+//        }else if(x<0){
+//            speed = -speed;
+//        }
+//        x += speed;
         view.setXY(x, y);
 
 //      Update every given interval

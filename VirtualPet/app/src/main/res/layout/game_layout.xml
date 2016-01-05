@@ -20,7 +20,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="left"
-                android:src="@drawable/map"
+                android:src="@drawable/icon_map"
                 android:scaleType="fitStart"
                 android:adjustViewBounds="true"
                 android:id="@+id/button"
@@ -34,7 +34,7 @@
                 android:id="@+id/button2"
                 android:adjustViewBounds="true"
                 android:scaleType="fitEnd"
-                android:src="@drawable/bowl"
+                android:src="@drawable/icon_bowl"
                 android:onClick="FeedClicked"/>
 
         </TableRow>
@@ -54,7 +54,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="right"
-                android:src="@drawable/play"
+                android:src="@drawable/icon_play"
                 android:scaleType="fitEnd"
                 android:adjustViewBounds="true"
                 android:onClick="playClicked"
@@ -69,7 +69,7 @@
                 android:layout_gravity="left"
                 android:adjustViewBounds="true"
                 android:scaleType="fitStart"
-                android:src="@drawable/stack"
+                android:src="@drawable/icon_stack"
                 android:id="@+id/button5" />
 
         </TableRow>

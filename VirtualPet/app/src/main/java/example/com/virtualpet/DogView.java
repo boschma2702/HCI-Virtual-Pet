@@ -20,7 +20,7 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
     private int x, y;
     private SurfaceHolder holder;
     private Paint paint = new Paint();
-    private SpriteSheet test;
+    private SpriteSheet currentSheet;
 
     private Dog dog;
 
@@ -30,7 +30,7 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
         holder = getHolder();
         holder.addCallback(this);
         //test = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-        test = new SpriteSheet(ResourceManager.INSTANCE.testSheet, 36, false);
+        currentSheet = ResourceManager.INSTANCE.dogHappy;
         x = y = 0;
         dog = new Dog(context, this);
         //new Thread(this).start();
@@ -53,14 +53,19 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
     public void onDraw(Canvas c){
         if(c!=null) {
             c.drawARGB(255, 200, 200, 200);
-            test.draw(c);
+            currentSheet.draw(c);
         }
     }
 
     public void setXY(int x, int y){
         this.x = x;
         this.y = y;
-        test.setXY(x, y);
+        currentSheet.setXY(x, y);
+    }
+
+    public void setAnimation(SpriteSheet sheet){
+        currentSheet = sheet;
+        currentSheet.setXY(x, y);
     }
 
     // desired fps
