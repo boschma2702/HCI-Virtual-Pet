@@ -17,8 +17,8 @@
 
         <TableRow android:paddingBottom="20dp">
             <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
                 android:layout_gravity="left"
                 android:src="@drawable/map"
                 android:scaleType="fitStart"
@@ -28,8 +28,8 @@
                 />
 
             <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
                 android:layout_gravity="right"
                 android:id="@+id/button2"
                 android:adjustViewBounds="true"
@@ -41,8 +41,8 @@
 
         <TableRow android:paddingBottom="20dp">
             <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
                 android:layout_gravity="left"
                 android:scaleType="fitStart"
                 android:src="@drawable/shower"
@@ -51,8 +51,8 @@
                 />
 
             <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
                 android:layout_gravity="right"
                 android:src="@drawable/play"
                 android:scaleType="fitEnd"
@@ -64,8 +64,8 @@
         <TableRow android:paddingBottom="20dp">
 
             <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
                 android:layout_gravity="left"
                 android:adjustViewBounds="true"
                 android:scaleType="fitStart"
@@ -76,5 +76,45 @@
 
 
     </TableLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal|bottom">
+
+
+        <ImageView
+
+            android:id="@+id/imageView"
+            android:src="@drawable/sad"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:background="@null"
+            android:scaleType="fitCenter"/>
+
+        <ProgressBar
+            android:layout_width="1dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_height="14dp"
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:progressDrawable="@drawable/custom_progressbar"
+            />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:src="@drawable/happy"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:background="@null"
+            android:scaleType="fitCenter" />
+    </LinearLayout>
+
 
 </FrameLayout>

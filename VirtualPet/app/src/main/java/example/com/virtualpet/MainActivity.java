@@ -3,10 +3,11 @@ package example.com.virtualpet;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ProgressBar;
 
 import example.com.virtualpet.Util.ResourceManager;
 import example.com.virtualpet.flapdog.FlapDogActivity;
@@ -27,11 +28,21 @@ public class MainActivity extends Activity {
         new ResourceManager(this);
         Intent intent = new Intent(this, DogService.class);
         //startService(intent); //commond out for not running unecesary service
+
+
+
     }
 
     public void mainPlayClicked(View v){
         inGame = true;
         setContentView(R.layout.game_layout);
+
+        // Get the Drawable custom_progressbar
+        ProgressBar progressBar= (ProgressBar) findViewById(R.id.progressBar);
+
+        // set the drawable as progress drawable
+        progressBar.setProgressDrawable(ContextCompat.getDrawable(this, R.drawable.custom_progressbar));
+
         view = (DogView) findViewById(R.id.surfaceView);
         new Thread(view).start();
     }
