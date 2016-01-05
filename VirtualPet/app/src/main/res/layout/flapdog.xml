@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffffff"
+        android:background="#6c3600"
         android:layout_margin="25dp"
         android:id="@+id/flapdogGameoverScreen">
 
