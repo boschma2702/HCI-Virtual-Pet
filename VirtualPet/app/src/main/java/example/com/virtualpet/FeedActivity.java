@@ -1,13 +1,13 @@
 package example.com.virtualpet;
 
+import android.app.Activity;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.widget.Toast;
 
-public class FeedActivity extends ActionBarActivity {
+public class FeedActivity extends Activity {
 
     // The following are used for the shake detection
     private SensorManager mSensorManager;
