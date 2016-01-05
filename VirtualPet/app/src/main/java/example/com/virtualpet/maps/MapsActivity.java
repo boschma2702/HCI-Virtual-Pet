@@ -22,6 +22,7 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -299,7 +300,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         mLocationRequest.setSmallestDisplacement(5); //only trigger after 5 meter
     }
 
-    private void checkIfAtGroceryStore() {
+    public boolean checkIfAtGroceryStore() {
         if (places != null) {
             for (Place place : places) {
                 Location place_loc = new Location("placelocation");
@@ -307,7 +308,6 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
                 place_loc.setLongitude(place.getLocation().longitude);
 
                 if(location.distanceTo(place_loc) < 50 && place.isOpen()) { // if within range of 50 meters of a known place, and if the place is open off course muhaha!
-                    //TODO trigger things. but hey! you are at a grocery store. Awesome! Lets show a toast instead.
 
                     Context context = getApplicationContext();
                     CharSequence text = "you are close to a supermarket!";
@@ -315,9 +315,12 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
 
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
+
+                    return true;
                 }
             }
         }
+        return false;
     }
 
     private void drawCurrentLocation(Location location) {
@@ -346,7 +349,8 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
 
             currentlocationmarker = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(currentLatitude, currentLongitude))
-                    .title("Current location!"));
+                    .title("Current location!")
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.dog_head_small)));
 
             distancewalked += (int) location.distanceTo(previouslocation);
         }
