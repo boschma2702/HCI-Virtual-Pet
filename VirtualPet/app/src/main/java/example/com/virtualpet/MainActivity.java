@@ -1,13 +1,16 @@
 package example.com.virtualpet;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import example.com.virtualpet.Util.ResourceManager;
 import example.com.virtualpet.flapdog.FlapDogActivity;
@@ -52,9 +55,29 @@ public class MainActivity extends Activity {
     }
 
     public void mapsClicked(View v){
-        Intent intent = new Intent(this, MapsActivity.class);
-        startActivity(intent);
+
+        // if gps is disabled
+        if (!((LocationManager) this.getSystemService(Context.LOCATION_SERVICE))
+                .isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+
+            Context context = getApplicationContext();
+            CharSequence text = "Je moet locatie op 'zeer nauwkeurig' instellen.";
+            int duration = Toast.LENGTH_LONG;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+
+            Intent gpsOptionsIntent = new Intent(
+                    android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(gpsOptionsIntent);
+        } else {
+            Intent maps = new Intent(this, MapsActivity.class);
+            startActivity(maps);
+        }
+
     }
+
+
 
     public void playClicked(View v){
         Intent intent = new Intent(this, FlapDogActivity.class);
