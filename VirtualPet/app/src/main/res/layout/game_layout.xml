@@ -22,7 +22,7 @@
                 android:layout_gravity="left"
                 android:src="@drawable/map"
                 android:scaleType="fitStart"
-                android:background="@null"
+                android:adjustViewBounds="true"
                 android:id="@+id/button"
                 android:onClick="mapsClicked"
                 />
@@ -32,7 +32,7 @@
                 android:layout_height="50dp"
                 android:layout_gravity="right"
                 android:id="@+id/button2"
-                android:background="@null"
+                android:adjustViewBounds="true"
                 android:scaleType="fitEnd"
                 android:src="@drawable/bowl"
                 android:onClick="FeedClicked"/>
@@ -44,19 +44,19 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="left"
-                android:background="@null"
                 android:scaleType="fitStart"
                 android:src="@drawable/shower"
-                android:id="@+id/button3" />
+                android:id="@+id/button3"
+                android:adjustViewBounds="true"
+                />
 
             <ImageButton
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="right"
                 android:src="@drawable/play"
-                android:background="@null"
                 android:scaleType="fitEnd"
-
+                android:adjustViewBounds="true"
                 android:onClick="playClicked"
                 android:id="@+id/button4" />
         </TableRow>
@@ -67,7 +67,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="left"
-                android:background="@null"
+                android:adjustViewBounds="true"
                 android:scaleType="fitStart"
                 android:src="@drawable/stack"
                 android:id="@+id/button5" />
