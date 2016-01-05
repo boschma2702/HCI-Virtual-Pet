@@ -37,16 +37,10 @@
                 android:id="@+id/button2"
                 android:adjustViewBounds="true"
                 android:scaleType="fitEnd"
-<<<<<<< HEAD
                 android:src="@drawable/icon_bowl"
-=======
-                android:src="@drawable/bowl"
                 android:background="@drawable/selectable_button"
                 android:padding="12dp"
-
->>>>>>> origin/master
                 android:onClick="FeedClicked"/>
-
         </TableRow>
 
         <TableRow android:paddingBottom="20dp">
@@ -86,12 +80,8 @@
                 android:layout_gravity="left"
                 android:adjustViewBounds="true"
                 android:scaleType="fitStart"
-<<<<<<< HEAD
                 android:src="@drawable/icon_stack"
-=======
-                android:src="@drawable/stack"
                 android:background="@drawable/selectable_button"
->>>>>>> origin/master
                 android:id="@+id/button5" />
 
         </TableRow>
@@ -109,7 +99,7 @@
         <ImageView
 
             android:id="@+id/imageView"
-            android:src="@drawable/sad"
+            android:src="@drawable/icon_sad"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
@@ -129,7 +119,7 @@
 
         <ImageView
             android:id="@+id/imageView2"
-            android:src="@drawable/happy"
+            android:src="@drawable/icon_happy"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
