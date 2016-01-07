@@ -22,7 +22,7 @@ public class SpriteSheet implements Runnable {
 
     private Paint paint = new Paint();
 
-    private int frameHeight, frameWidth;
+    private int frameHeight, frameWidth, x, y;
 
     private Rect dst;
 
@@ -54,6 +54,10 @@ public class SpriteSheet implements Runnable {
         }
     }
 
+    public int[] getPosition(){
+        return new int[]{x, y};
+    }
+
     /**
      * Sets the posistion of the sprite to wich it needs to be drawn to. De origin of the sprite is
      * middle x and y bottom. Needs to be called before the draw function gets calleld.
@@ -62,8 +66,10 @@ public class SpriteSheet implements Runnable {
      */
     public void setXY(int x, int y){
         synchronized (this) {
-            dst = new Rect(x - frameWidth / 2, y - frameHeight, x + frameWidth / 2, y);
+            this.x = x;
+            this.y = y;
         }
+        dst = new Rect(this.x - frameWidth / 2, this.y - frameHeight, this.x + frameWidth / 2, this.y);
     }
 
     public void draw(Canvas c){

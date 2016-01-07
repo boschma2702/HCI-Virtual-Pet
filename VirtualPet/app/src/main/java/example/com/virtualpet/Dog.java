@@ -44,7 +44,6 @@ public class Dog {
 //            speed = -speed;
 //        }
 //        x += speed;
-        Log.e("Dog", "Time: " + new Date(DogService.INSTANCE.getTime()).toString());
         view.setXY(x, y);
 
         checkUpdates();
@@ -156,4 +155,8 @@ public class Dog {
         view.setSprite(mood);
     }
 
+
+    public void setDirty(){
+        view.setDirty();
+    }
 }

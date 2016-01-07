@@ -2,11 +2,15 @@ package example.com.virtualpet;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 import example.com.virtualpet.Util.ResourceManager;
 import example.com.virtualpet.Util.SpriteSheet;
@@ -15,7 +19,7 @@ import example.com.virtualpet.Util.SpriteSheet;
 /**
  * Created by reneb_000 on 3-12-2015.
  */
-public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
+public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runnable, View.OnTouchListener {
 
     //private Bitmap test;
     private int x, y;
@@ -25,14 +29,25 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
 
     private Dog dog;
 
+    private boolean drawDirty = true;
+    private Paint dirtyPaint = new Paint();
+    private int dirtyRadius = (int) ResourceManager.INSTANCE.getPercentageLength(5, false);
+
+    private int[] dirtyPosition;
+    private Rect dirtyHitbox = new Rect();
+
+
 
     public DogView(Context context, AttributeSet attributeSet){
         super(context, attributeSet);
+        this.setOnTouchListener(this);
         holder = getHolder();
         holder.addCallback(this);
         //test = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
         currentSheet = ResourceManager.INSTANCE.dogHappy;
         x = y = 0;
+        dirtyPaint.setColor(Color.BLACK);
+
         dog = new Dog(context, this);
         //new Thread(this).start();
     }
@@ -41,12 +56,6 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
         running = false;
     }
 
-    public void onDraw() {
-        if (holder.getSurface().isValid()) {
-            Canvas c = holder.lockCanvas();
-            holder.unlockCanvasAndPost(c);
-        }
-    }
     public void resume(){
         new Thread(this).start();
     }
@@ -55,6 +64,9 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
         if(c!=null) {
             c.drawARGB(255, 200, 200, 200);
             currentSheet.draw(c);
+            if(drawDirty){
+                c.drawCircle(dirtyPosition[0], dirtyPosition[1], dirtyRadius, dirtyPaint);
+            }
         }
     }
 
@@ -151,4 +163,35 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
     public void surfaceDestroyed(SurfaceHolder holder) {
 
     }
+
+    public void setDirty() {
+        drawDirty = true;
+        dirtyPosition = currentSheet.getPosition();
+        dirtyPosition[1] -= ResourceManager.INSTANCE.dogHeight/3;
+        dirtyHitbox.set(dirtyPosition[0]-dirtyRadius, dirtyPosition[1]-dirtyRadius, dirtyPosition[0]+dirtyRadius, dirtyPosition[1]+dirtyRadius);
+        dirtyPaint.setAlpha(255);
+    }
+
+    public void decreaseDirtyAplpha(){
+        if(dirtyPaint.getAlpha()-5>0){
+            dirtyPaint.setAlpha(dirtyPaint.getAlpha()-5);
+        }else{
+            drawDirty = false;
+        }
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if(drawDirty&&event.getAction()==MotionEvent.ACTION_MOVE&&dirtyHitbox.contains((int)event.getX(), (int)event.getY())){
+            decreaseDirtyAplpha();
+        }
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+
 }
