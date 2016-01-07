@@ -57,10 +57,10 @@ public final class ResourceManager {
 
         b = BitmapFactory.decodeResource(r, R.drawable.dog_happy_f30, options);
         dogHappy = new SpriteSheet(getResizedBitmap(b, (int)(b.getWidth()*(height*30)/b.getHeight()), (int) (height*30)), 30, false);
-//        b.recycle();
-//        b = BitmapFactory.decodeResource(r, R.drawable.dog_barking_f30, options);
-//        dogBarking = new SpriteSheet(getResizedBitmap(b, (int)(b.getWidth()*(height*30)/b.getHeight()), (int) (height*30)), 30, false);
-//        b.recycle();
+        b.recycle();
+        b = BitmapFactory.decodeResource(r, R.drawable.dog_barking_f30, options);
+        dogBarking = new SpriteSheet(getResizedBitmap(b, (int)(b.getWidth()*(height*30)/b.getHeight()), (int) (height*30)), 30, false);
+        b.recycle();
 //        b = BitmapFactory.decodeResource(r, R.drawable.dog_playfull_f30, options);
 //        dogPlayfull = new SpriteSheet(getResizedBitmap(b, (int)(b.getWidth()*(height*30)/b.getHeight()), (int) (height*30)), 30, false);
 //        b.recycle();

@@ -21,6 +21,8 @@ import java.util.Date;
  */
 public class DogService extends Service implements Runnable {
 
+    public static DogService INSTANCE;
+
     private int satisfaction;
     private static final int MAXSATISFACTION = 100;
     private static final int MINSATISFACTION = 0;
@@ -38,6 +40,7 @@ public class DogService extends Service implements Runnable {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        INSTANCE = this;
         Toast.makeText(this, "Service started", Toast.LENGTH_SHORT).show();
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         new Thread(this).start();
@@ -54,10 +57,10 @@ public class DogService extends Service implements Runnable {
 
     @Override
     public void run() {
-        intent.addCategory("DogService");
-        startService(intent);
+        //intent.addCategory("DogService");
+        //startService(intent);
 
-        onBind(intent);
+        //onBind(intent);
 
         initialize();
         while (true){
@@ -65,7 +68,7 @@ public class DogService extends Service implements Runnable {
                 Thread.sleep(5000);
 //                Toast.makeText(this, "Still running", Toast.LENGTH_SHORT).show();
                 Log.e("DogService", "Still running!");
-                showNotification("DogService", "Still running!");
+                //showNotification("DogService", "Still running!");
 
                 update();
 

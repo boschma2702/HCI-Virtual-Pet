@@ -53,6 +53,7 @@ public class Dog {
 //            speed = -speed;
 //        }
 //        x += speed;
+        Log.e("dog", "time: "+DogService.INSTANCE.getTime());
         view.setXY(x, y);
 
 //      Update every given interval

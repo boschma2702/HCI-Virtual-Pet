@@ -26,19 +26,12 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setFullScreen(this);
-       // setContentView(R.layout.activity_main);
+        startService(new Intent(this, DogService.class));
+        setContentView(R.layout.activity_main);
         new ResourceManager(this);
-        Intent intent = new Intent(this, DogService.class);
-
-        //startService(intent); //commented out for not running unnecessary service
-
-
-        //code for bypassing the welcome screen.
-        mainPlayClicked(null);
-
-
     }
+
+
 
     public void mainPlayClicked(View v){
         inGame = true;
