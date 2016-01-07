@@ -6,10 +6,12 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+import example.com.virtualpet.Dog;
+
 /**
  * Created by reneb_000 on 14-12-2015.
  */
-public class SpriteSheet {
+public class SpriteSheet implements Runnable {
 
 
     private Bitmap sheet;
@@ -24,6 +26,9 @@ public class SpriteSheet {
 
     private Rect dst;
 
+    private Dog.DogMood moodToSet;
+    private int frameCountToSet;
+
     public SpriteSheet(Bitmap spritesheet, int frameCount, boolean horizontal){
         if(horizontal){
             frameHeight = spritesheet.getHeight();
@@ -37,12 +42,16 @@ public class SpriteSheet {
         this.horizontal = horizontal;
     }
 
-    public void setSheet(String name, int frameCount){
-
+    public void setSheet(Dog.DogMood mood){
+        this.moodToSet = mood;
+        this.frameCountToSet = mood.getFrames();
+        new Thread(this).start();
     }
 
     public void update(){
-        counter = (counter+1)%frameCount;
+        synchronized (this) {
+            counter = (counter + 1) % frameCount;
+        }
     }
 
     /**
@@ -52,17 +61,32 @@ public class SpriteSheet {
      * @param y of the position
      */
     public void setXY(int x, int y){
-        dst = new Rect(x-frameWidth/2, y-frameHeight, x+frameWidth/2, y);
+        synchronized (this) {
+            dst = new Rect(x - frameWidth / 2, y - frameHeight, x + frameWidth / 2, y);
+        }
     }
 
     public void draw(Canvas c){
-        Rect src;
-        if(horizontal) {
-            src = new Rect(counter * frameWidth, 0, counter * frameWidth + frameWidth, frameHeight);
-        }else{
-            src = new Rect(0, counter * frameHeight, frameWidth, counter * frameHeight + frameHeight);
+        synchronized (this) {
+            Rect src;
+            if (horizontal) {
+                src = new Rect(counter * frameWidth, 0, counter * frameWidth + frameWidth, frameHeight);
+            } else {
+                src = new Rect(0, counter * frameHeight, frameWidth, counter * frameHeight + frameHeight);
+            }
+            c.drawBitmap(sheet, src, dst, paint);
+            update();
         }
-        c.drawBitmap(sheet, src, dst,paint);
-        update();
+    }
+
+    @Override
+    public void run() {
+        Bitmap b = BitmapLoader.loadBitmap(moodToSet, frameCountToSet);
+        synchronized (this){
+            this.sheet = b;
+            this.frameCount = frameCountToSet;
+            this.counter = 0;
+        }
+//        b.recycle();
     }
 }

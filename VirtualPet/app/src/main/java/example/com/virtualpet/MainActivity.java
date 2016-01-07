@@ -82,6 +82,10 @@ public class MainActivity extends Activity {
         startActivity(intent);
     }
 
+    public void shopClicked(View v){
+        view.setSprite(Dog.DogMood.SAD);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();

@@ -117,7 +117,6 @@ public class Dog {
         BARKING, HAPPY, PLAYFULL, SAD, DEAD;
 
         public int getRes(){
-            Resources r = ResourceManager.a.getResources();
             switch (this){
                 case BARKING:
                     return R.drawable.dog_barking_f30;
@@ -133,10 +132,28 @@ public class Dog {
                     return -1;
             }
         }
+
+        public int getFrames(){
+            switch (this){
+                case BARKING:
+                    return 30;
+                case HAPPY:
+                    return 30;
+                case PLAYFULL:
+                    return 30;
+                case SAD:
+                    return 30;
+                case DEAD:
+                    return -1;
+                default:
+                    return -1;
+            }
+        }
+
     }
 
     public void setView(DogMood mood) {
-        
+        view.setSprite(mood);
     }
 
 }

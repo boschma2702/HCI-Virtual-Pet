@@ -82,7 +82,8 @@
                 android:scaleType="fitStart"
                 android:src="@drawable/icon_stack"
                 android:background="@drawable/selectable_button"
-                android:id="@+id/button5" />
+                android:id="@+id/button5"
+                android:onClick="shopClicked" />
 
         </TableRow>
 

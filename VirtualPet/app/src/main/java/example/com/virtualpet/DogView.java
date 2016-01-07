@@ -65,7 +65,7 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
     }
 
     public void setSprite(Dog.DogMood mood){
-        //TODO actually changing the sprite.
+        currentSheet.setSheet(mood);
     }
 
     // desired fps
