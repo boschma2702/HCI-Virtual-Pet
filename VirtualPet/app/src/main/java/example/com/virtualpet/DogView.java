@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -63,9 +64,8 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
         currentSheet.setXY(x, y);
     }
 
-    public void setAnimation(SpriteSheet sheet){
-        currentSheet = sheet;
-        currentSheet.setXY(x, y);
+    public void setSprite(Dog.DogMood mood){
+        //TODO actually changing the sprite.
     }
 
     // desired fps

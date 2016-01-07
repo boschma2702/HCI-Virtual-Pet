@@ -1,6 +1,8 @@
 package example.com.virtualpet;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -111,12 +113,30 @@ public class Dog {
         return view;
     }
 
-    public enum dogMood {
-        BARKING, HAPPY, PLAYFULL, SAD, DEAD
+    public enum DogMood {
+        BARKING, HAPPY, PLAYFULL, SAD, DEAD;
+
+        public int getRes(){
+            Resources r = ResourceManager.a.getResources();
+            switch (this){
+                case BARKING:
+                    return R.drawable.dog_barking_f30;
+                case HAPPY:
+                    return R.drawable.dog_happy_f30;
+                case PLAYFULL:
+                    return R.drawable.dog_playfull_f30;
+                case SAD:
+                    return R.drawable.dog_sad_f30;
+                case DEAD:
+                    return -1;
+                default:
+                    return -1;
+            }
+        }
     }
 
-    public void setView(dogMood mood) {
-
+    public void setView(DogMood mood) {
+        
     }
 
 }
