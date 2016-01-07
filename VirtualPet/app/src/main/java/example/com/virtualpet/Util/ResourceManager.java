@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.LruCache;
 
 import example.com.virtualpet.R;
 import example.com.virtualpet.flapdog.FlapDog;
@@ -17,6 +18,7 @@ import example.com.virtualpet.flapdog.FlapDog;
 public final class ResourceManager {
 
     public static ResourceManager INSTANCE;
+    public static Activity a;
 
     private int screenWidth, screenHeight;
     private float dpscreenWidth, dpscreenHeight;
@@ -26,7 +28,10 @@ public final class ResourceManager {
     public Bitmap flapdogBackground;
     public Bitmap flapdog_head;
 
-    public SpriteSheet dogBarking, dogHappy, dogPlayfull, dogSad;
+    //public SpriteSheet dogBarking, dogHappy, dogPlayfull, dogSad;
+    public SpriteSheet dogHappy;
+    public double dogHeight;
+
 
     public ResourceManager(Activity a){
         DisplayMetrics metrics = new DisplayMetrics();
@@ -36,7 +41,11 @@ public final class ResourceManager {
         screenHeight = metrics.heightPixels;
         dpscreenWidth = screenWidth/metrics.density;
         dpscreenHeight = screenHeight/metrics.density;
+        this.a = a;
 //        testSheet = BitmapFactory.decodeResource(a.getResources(), R.drawable.dead_normal);
+
+
+
 
         initBitmaps(a.getResources());
 
@@ -49,25 +58,33 @@ public final class ResourceManager {
 
     private void initBitmaps(Resources r) {
         Bitmap b;
-        double height = getPercentageLength(50, true);
-        Log.e("heihgt", "Height is: "+height);
+        dogHeight = getPercentageLength(50, true);
+        Log.e("heihgt", "Height is: "+dogHeight);
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.RGB_565;
         options.inDither = true;
 
         b = BitmapFactory.decodeResource(r, R.drawable.dog_happy_f30, options);
-        dogHappy = new SpriteSheet(getResizedBitmap(b, (int)(b.getWidth()*(height*30)/b.getHeight()), (int) (height*30)), 30, false);
+//        addBitmapToMemoryCache("dogHappy", getResizedBitmap(b, (int) (b.getWidth() * (height * 30) / b.getHeight()), (int) (height * 30)));
+        dogHappy = new SpriteSheet(getResizedBitmap(b, (int)(b.getWidth()*(dogHeight*30)/b.getHeight()), (int) (dogHeight*30)), 30, false);
         b.recycle();
-        b = BitmapFactory.decodeResource(r, R.drawable.dog_barking_f30, options);
-        dogBarking = new SpriteSheet(getResizedBitmap(b, (int)(b.getWidth()*(height*30)/b.getHeight()), (int) (height*30)), 30, false);
-        b.recycle();
-//        b = BitmapFactory.decodeResource(r, R.drawable.dog_playfull_f30, options);
-//        dogPlayfull = new SpriteSheet(getResizedBitmap(b, (int)(b.getWidth()*(height*30)/b.getHeight()), (int) (height*30)), 30, false);
+//
+//        b = BitmapFactory.decodeResource(r, R.drawable.dog_barking_f30, options);
+//        addBitmapToMemoryCache("dogBarking", getResizedBitmap(b, (int) (b.getWidth() * (height * 30) / b.getHeight()), (int) (height * 30)));
+//        //dogBarking = new SpriteSheet(getResizedBitmap(b, (int)(b.getWidth()*(height*30)/b.getHeight()), (int) (height*30)), 30, false);
 //        b.recycle();
+//
+//        b = BitmapFactory.decodeResource(r, R.drawable.dog_playfull_f30, options);
+//        addBitmapToMemoryCache("dogPlayfull", getResizedBitmap(b, (int) (b.getWidth() * (height * 30) / b.getHeight()), (int) (height * 30)));
+//        //dogPlayfull = new SpriteSheet(getResizedBitmap(b, (int)(b.getWidth()*(height*30)/b.getHeight()), (int) (height*30)), 30, false);
+//        b.recycle();
+//
 //        b = BitmapFactory.decodeResource(r, R.drawable.dog_sad_f30, options);
-//        dogSad = new SpriteSheet(getResizedBitmap(b, (int)(b.getWidth()*(height*30)/b.getHeight()), (int) (height*30)), 30, false);
-
+//        //dogSad = new SpriteSheet(getResizedBitmap(b, (int)(b.getWidth()*(height*30)/b.getHeight()), (int) (height*30)), 30, false);
+//        addBitmapToMemoryCache("dogSad", getResizedBitmap(b, (int)(b.getWidth()*(height*30)/b.getHeight()), (int) (height*30)));
+//        b.recycle();
     }
+
 
     public float convertDpToPixel(float dp){
         return dp * (metrics.densityDpi / 160f);

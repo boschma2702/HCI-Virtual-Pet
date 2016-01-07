@@ -1,5 +1,6 @@
 package example.com.virtualpet.Util;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -15,6 +16,7 @@ public class SpriteSheet {
     private int frameCount;
     private int counter = 0;
     private boolean horizontal;
+    private Activity a;
 
     private Paint paint = new Paint();
 
@@ -33,6 +35,10 @@ public class SpriteSheet {
         this.sheet = spritesheet;
         this.frameCount = frameCount;
         this.horizontal = horizontal;
+    }
+
+    public void setSheet(String name, int frameCount){
+
     }
 
     public void update(){

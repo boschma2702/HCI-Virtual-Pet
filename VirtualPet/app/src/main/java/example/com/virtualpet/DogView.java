@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -30,7 +31,8 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
         holder = getHolder();
         holder.addCallback(this);
         //test = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-        currentSheet = ResourceManager.INSTANCE.dogHappy;
+        Log.e("Sheet", "value of sheet: "+ResourceManager.INSTANCE.getBitmapFromMemCache("dogHappy"));
+        currentSheet = new SpriteSheet(ResourceManager.INSTANCE.getBitmapFromMemCache("dogHappy"), 30, false);
         x = y = 0;
         dog = new Dog(context, this);
         //new Thread(this).start();
