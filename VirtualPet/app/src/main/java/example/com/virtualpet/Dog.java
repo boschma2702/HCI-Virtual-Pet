@@ -50,16 +50,19 @@ public class Dog {
 
     public void checkUpdates() {
         if (DogService.INSTANCE.getDirty()) {
-//            TODO show dirty dog
+//            TODO show DIRTY
             DogService.INSTANCE.updateSatisfaction(-5, 40);
         }
         if (DogService.INSTANCE.getWantsToWalk() || DogService.INSTANCE.getWantsToPlay()) {
-//            TODO show dog that wants to go outside
+//            TODO show PLAYFULL
             DogService.INSTANCE.updateSatisfaction(-10);
         }
         if (DogService.INSTANCE.getHungry()) {
-//            TODO show dog that is hungry
+//            TODO show HUNGRY
             DogService.INSTANCE.updateSatisfaction(-20);
+        }
+        if (Math.random() >= 0.7) {
+//            TODO show BARKING
         }
     }
 
@@ -113,7 +116,7 @@ public class Dog {
     }
 
     public void setView(dogMood mood) {
-        
+
     }
 
 }
