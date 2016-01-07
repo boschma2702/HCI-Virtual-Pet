@@ -35,6 +35,10 @@ public class DogService extends Service implements Runnable {
     private long lastWalked;
     private long lastEaten;
     private Intent intent;
+    private boolean dirty;
+    private boolean hungry;
+    private boolean wantsToWalk;
+    private boolean wantsToPlay;
 
     NotificationManager mNotificationManager;
 
@@ -44,7 +48,7 @@ public class DogService extends Service implements Runnable {
         Toast.makeText(this, "Service started", Toast.LENGTH_SHORT).show();
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         new Thread(this).start();
-
+        initialize();
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -62,12 +66,9 @@ public class DogService extends Service implements Runnable {
 
         //onBind(intent);
 
-        initialize();
         while (true){
             try {
                 Thread.sleep(5000);
-//                Toast.makeText(this, "Still running", Toast.LENGTH_SHORT).show();
-                Log.e("DogService", "Still running!");
                 //showNotification("DogService", "Still running!");
 
                 update();
@@ -80,9 +81,13 @@ public class DogService extends Service implements Runnable {
     }
 
     public void initialize() {
-        lastPlayed = getTime();
-        lastWalked = getTime();
-        lastEaten = getTime();
+        setTimeLastEaten(new Date(getTime()));
+        setTimeLastPlayed(new Date(getTime()));
+        setTimeLastWalked(new Date(getTime()));
+        setDirty(false);
+        setHungry(false);
+        setWantsToPlay(true);
+        setWantsToWalk(false);
         setEatTimes();
         setWalkTimes();
     }
@@ -97,10 +102,14 @@ public class DogService extends Service implements Runnable {
         if ((getTime() - getTimeLastPlayed()) > 5*THIRTYMINUTES) {
             showNotification("Bark bark!", "I am bored!");
             updateSatisfaction(-5);
+            setWantsToPlay(true);
+            setWantsToWalk(false);
         }
         if ((getTime() - getTimeLastWalked()) > 5*THIRTYMINUTES) {
             showNotification("Bark bark!", "I want to walk!");
             updateSatisfaction(-10);
+            setWantsToWalk(true);
+            setWantsToPlay(true);
         }
     }
 
@@ -122,6 +131,7 @@ public class DogService extends Service implements Runnable {
             if (eatTimes.get(i).get(Calendar.HOUR_OF_DAY) == now.get(Calendar.HOUR_OF_DAY)) {
                 showNotification("Bark bark!", "I am hungry!");
                 updateSatisfaction(-5);
+                setHungry(true);
             }
         }
     }
@@ -144,50 +154,144 @@ public class DogService extends Service implements Runnable {
 
     public void checkForWalkTime() {
         for (int i = 0; i < walkTimes.size(); i++) {
-            if (walkTimes.get(i).get(Calendar.HOUR_OF_DAY) == now.get(Calendar.HOUR_OF_DAY)) {
+            if (walkTimes.get(i).get(Calendar.HOUR_OF_DAY) == now.get(Calendar.HOUR_OF_DAY) && getTime() - getTimeLastWalked() > THIRTYMINUTES) {
                 showNotification("Bark bark!", "I want to go outside for a walk!");
+                setWantsToWalk(true);
             }
         }
     }
 
     // Satisfaction
     public void updateSatisfaction(int satisfaction) {
-        if (this.satisfaction + satisfaction > MAXSATISFACTION) {
-            this.satisfaction = MAXSATISFACTION;
-        } else if (this.satisfaction - satisfaction < MINSATISFACTION){
-            this.satisfaction = MINSATISFACTION;
-        } else {
-            this.satisfaction += satisfaction;
+        synchronized (this) {
+            if (this.satisfaction + satisfaction > MAXSATISFACTION) {
+                this.satisfaction = MAXSATISFACTION;
+            } else if (this.satisfaction - satisfaction < MINSATISFACTION) {
+                this.satisfaction = MINSATISFACTION;
+            } else {
+                this.satisfaction += satisfaction;
+            }
         }
     }
 
-    // Getters & Setters
-    public int getSatisfaction() {
-        return satisfaction;
+    public void updateSatisfaction(int satisfaction, long chance) {
+        if (Math.random() * 100 <= chance) {
+            synchronized (this) {
+                if (this.satisfaction + satisfaction > MAXSATISFACTION) {
+                    this.satisfaction = MAXSATISFACTION;
+                } else if (this.satisfaction - satisfaction < MINSATISFACTION) {
+                    this.satisfaction = MINSATISFACTION;
+                } else {
+                    this.satisfaction += satisfaction;
+                }
+            }
+        }
     }
 
-    public void setSatisfaction(int satisfaction) {
-        this.satisfaction = satisfaction;
-    }
+//    Getters
 
-    public long getTimeLastPlayed() {
-        return lastPlayed;
+    public boolean getHungry() {
+        synchronized (this) {
+            return this.hungry;
+        }
     }
 
     public long getTimeLastWalked() {
-        return lastWalked;
+        synchronized (this) {
+            return lastWalked;
+        }
     }
 
-    public void setTimeLastEaten(Date date) {
-        this.lastEaten = date.getTime();
+    public boolean getDirty() {
+        synchronized (this) {
+            return this.dirty;
+        }
     }
 
-    public void setTimeLastPlayed(Date date) {
-        this.lastPlayed = date.getTime();
+    public int getSatisfaction() {
+        synchronized (this) {
+            return satisfaction;
+        }
+    }
+
+    public long getTimeLastPlayed() {
+        synchronized(this) {
+            return lastPlayed;
+        }
+    }
+
+    public long getTimeLastEaten() {
+        synchronized(this) {
+            return lastEaten;
+        }
     }
 
     public long getTime(){
-        return now.getTimeInMillis();
+        synchronized (this) {
+            return now.getTimeInMillis();
+        }
+    }
+
+    public boolean getWantsToWalk() {
+        synchronized (this) {
+            return wantsToWalk;
+        }
+    }
+
+    public boolean getWantsToPlay() {
+        synchronized (this) {
+            return wantsToPlay;
+        }
+    }
+
+    //    Setters
+
+    public void setHungry(boolean hungry) {
+        synchronized (this) {
+            this.hungry = hungry;
+        }
+    }
+
+    public void setDirty(boolean dirty) {
+    synchronized (this) {
+        this.dirty = dirty;
+    }
+}
+
+    public void setSatisfaction(int satisfaction) {
+        synchronized (this) {
+            this.satisfaction = satisfaction;
+        }
+    }
+
+    public void setTimeLastEaten(Date date) {
+        synchronized (this) {
+            this.lastEaten = date.getTime();
+        }
+    }
+
+    public void setTimeLastPlayed(Date date) {
+        synchronized (this) {
+            this.lastPlayed = date.getTime();
+        }
+    }
+
+    public void setTimeLastWalked(Date date) {
+        synchronized (this) {
+            this.lastWalked = date.getTime();
+        }
+    }
+
+    public void setWantsToWalk(boolean wantsToWalk) {
+        synchronized (this) {
+            this.wantsToWalk = wantsToWalk;
+        }
+    }
+
+    public void setWantsToPlay(boolean wantsToPlay) {
+        synchronized (this) {
+            this.wantsToPlay = wantsToPlay;
+        }
     }
 
     private void showNotification(String title, String content){
