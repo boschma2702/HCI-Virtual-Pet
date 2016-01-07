@@ -31,8 +31,7 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
         holder = getHolder();
         holder.addCallback(this);
         //test = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-        Log.e("Sheet", "value of sheet: "+ResourceManager.INSTANCE.getBitmapFromMemCache("dogHappy"));
-        currentSheet = new SpriteSheet(ResourceManager.INSTANCE.getBitmapFromMemCache("dogHappy"), 30, false);
+        currentSheet = ResourceManager.INSTANCE.dogHappy;
         x = y = 0;
         dog = new Dog(context, this);
         //new Thread(this).start();
@@ -65,9 +64,8 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
         currentSheet.setXY(x, y);
     }
 
-    public void setAnimation(SpriteSheet sheet){
-        currentSheet = sheet;
-        currentSheet.setXY(x, y);
+    public void setSprite(Dog.DogMood mood){
+        //TODO actually changing the sprite.
     }
 
     // desired fps
