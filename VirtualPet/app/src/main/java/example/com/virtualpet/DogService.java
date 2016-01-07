@@ -18,6 +18,7 @@ import java.util.Date;
 
 /**
  * Created by reneb_000 on 30-12-2015.
+ * Last updated by Gijs on 07-Jan-2016.
  */
 public class DogService extends Service implements Runnable {
 
@@ -27,6 +28,7 @@ public class DogService extends Service implements Runnable {
     private static final int MAXSATISFACTION = 100;
     private static final int MINSATISFACTION = 0;
     public static final long THIRTYMINUTES = 1800000; // thirty minutes in milliseconds
+    public static final long QUICKTIME = 1; // decrease to make time go faster
 
     protected ArrayList<Calendar> eatTimes = new ArrayList<Calendar>();
     protected ArrayList<Calendar> walkTimes = new ArrayList<Calendar>();
@@ -99,13 +101,13 @@ public class DogService extends Service implements Runnable {
     }
 
     public void checkStatus() {
-        if ((getTime() - getTimeLastPlayed()) > 5*THIRTYMINUTES) {
+        if ((getTime() - getTimeLastPlayed()) > (5*THIRTYMINUTES * QUICKTIME)) {
             showNotification("Bark bark!", "I am bored!");
             updateSatisfaction(-5);
             setWantsToPlay(true);
             setWantsToWalk(false);
         }
-        if ((getTime() - getTimeLastWalked()) > 5*THIRTYMINUTES) {
+        if ((getTime() - getTimeLastWalked()) > (5*THIRTYMINUTES * QUICKTIME)) {
             showNotification("Bark bark!", "I want to walk!");
             updateSatisfaction(-10);
             setWantsToWalk(true);
@@ -154,7 +156,7 @@ public class DogService extends Service implements Runnable {
 
     public void checkForWalkTime() {
         for (int i = 0; i < walkTimes.size(); i++) {
-            if (walkTimes.get(i).get(Calendar.HOUR_OF_DAY) == now.get(Calendar.HOUR_OF_DAY) && getTime() - getTimeLastWalked() > THIRTYMINUTES) {
+            if (walkTimes.get(i).get(Calendar.HOUR_OF_DAY) == now.get(Calendar.HOUR_OF_DAY) && getTime() - getTimeLastWalked() > THIRTYMINUTES * QUICKTIME) {
                 showNotification("Bark bark!", "I want to go outside for a walk!");
                 setWantsToWalk(true);
             }
@@ -253,9 +255,9 @@ public class DogService extends Service implements Runnable {
     }
 
     public void setDirty(boolean dirty) {
-    synchronized (this) {
-        this.dirty = dirty;
-    }
+        synchronized (this) {
+          this.dirty = dirty;
+        }
 }
 
     public void setSatisfaction(int satisfaction) {

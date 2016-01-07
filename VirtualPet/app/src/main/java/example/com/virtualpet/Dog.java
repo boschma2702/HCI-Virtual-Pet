@@ -26,6 +26,7 @@ public class Dog {
     public static final long THIRTYMINUTES = 1800000; // thirty minutes in milliseconds
 
 
+
     public Dog(Context c, DogView view) {
         this.view = view;
 //        x = (int) ResourceManager.INSTANCE.convertPixelsToDp(500);
@@ -47,37 +48,74 @@ public class Dog {
         view.setXY(x, y);
 
         checkUpdates();
+        randomBark();
     }
 
     public void checkUpdates() {
         if (DogService.INSTANCE.getDirty()) {
-//            TODO show DIRTY
+            setView(DogMood.DIRTY);
             DogService.INSTANCE.updateSatisfaction(-5, 40);
         }
         if (DogService.INSTANCE.getWantsToWalk() || DogService.INSTANCE.getWantsToPlay()) {
-//            TODO show PLAYFULL
+            setView(DogMood.PLAYFULL);
             DogService.INSTANCE.updateSatisfaction(-10);
         }
         if (DogService.INSTANCE.getHungry()) {
-//            TODO show HUNGRY
+            setView(DogMood.HUNGRY);
             DogService.INSTANCE.updateSatisfaction(-20);
-        }
-        if (Math.random() >= 0.7) {
-//            TODO show BARKING
         }
     }
 
+    public void randomBark() {
+        if (Math.random() >= 0.7) {
+            setView(DogMood.BARKING);
+        }
+    }
 
-    public void playWithDog(boolean gettingDirty) {
-        if((getTime() - getTimeLastEaten()) > 2*THIRTYMINUTES) {
+//    Start activity:
+
+    
+
+
+
+
+//      Actions from other activities:
+
+    public void playedWithDog(boolean gettingDirty) {
+        if((getTime() - getTimeLastEaten()) > (THIRTYMINUTES * DogService.QUICKTIME)) {
             DogService.INSTANCE.updateSatisfaction(15, 80);
+            setView(DogMood.HAPPY);
         } else {
             DogService.INSTANCE.updateSatisfaction(-5, 60);
+            setView(DogMood.SAD);
         }
         if(Math.random() < 0.75 && gettingDirty) {
             setDirty(true);
+            setView(DogMood.DIRTY);
         }
     }
+
+    public void cleanedDog() {
+        DogService.INSTANCE.updateSatisfaction(10);
+        DogService.INSTANCE.setDirty(false);
+        setView(DogMood.HAPPY);
+    }
+
+    public void walkedWithDog(boolean gettingDirty) {
+        if((getTime() - DogService.INSTANCE.getTimeLastWalked()) > (THIRTYMINUTES * DogService.QUICKTIME)) {
+            DogService.INSTANCE.updateSatisfaction(10, 75);
+            setView(DogMood.HAPPY);
+        } else {
+            DogService.INSTANCE.updateSatisfaction(-5, 60);
+            setView(DogMood.SAD);
+        }
+        if(Math.random() < 0.75 && gettingDirty) {
+            setDirty(true);
+            setView(DogMood.DIRTY);
+        }
+    }
+
+
 
     // Getters & Setters
     public long getTimeLastPlayed() {
@@ -113,7 +151,7 @@ public class Dog {
     }
 
     public enum DogMood {
-        BARKING, HAPPY, PLAYFULL, SAD, DEAD;
+        BARKING, HAPPY, PLAYFULL, SAD, DEAD, DIRTY, HUNGRY;
 
         public int getRes(){
             switch (this){
@@ -127,6 +165,12 @@ public class Dog {
                     return R.drawable.dog_sad_f30;
                 case DEAD:
                     return -1;
+                case HUNGRY:
+                    return -1; // TODO, remove "return -1"
+//                  TODO return R.drawable.dog.
+                case DIRTY:
+                    return -1; // TODO, remove "return -1"
+//                  TODO return R.drawable.dog.
                 default:
                     return -1;
             }
@@ -142,13 +186,16 @@ public class Dog {
                     return 30;
                 case SAD:
                     return 30;
+                case DIRTY:
+                    return 30;
+                case HUNGRY:
+                    return 30;
                 case DEAD:
                     return -1;
                 default:
                     return -1;
             }
         }
-
     }
 
     public void setView(DogMood mood) {
