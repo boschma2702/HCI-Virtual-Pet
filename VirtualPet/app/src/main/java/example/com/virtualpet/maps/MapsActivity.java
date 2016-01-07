@@ -86,6 +86,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
                 TextView tvopen = (TextView) v.findViewById(R.id.tv_open);
                 TextView tvtitle = (TextView) v.findViewById(R.id.tv_title);
 
+                tvtitle.setText("Woef, WAF!");
                 for (Place place : places) {
                     if (marker.getId().equals(place.getPlaceMarker().getId())) {
 
