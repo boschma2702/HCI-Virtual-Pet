@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.Toast;
 
 import example.com.virtualpet.Util.ResourceManager;
 import example.com.virtualpet.Util.SpriteSheet;
@@ -61,12 +62,14 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
     }
 
     public void onDraw(Canvas c){
-        if(c!=null) {
+        try{
             c.drawARGB(255, 200, 200, 200);
             currentSheet.draw(c);
             if(drawDirty){
                 c.drawCircle(dirtyPosition[0], dirtyPosition[1], dirtyRadius, dirtyPaint);
             }
+        } catch (NullPointerException e) {
+            Log.e("NullPointerException", e.getMessage());
         }
     }
 
