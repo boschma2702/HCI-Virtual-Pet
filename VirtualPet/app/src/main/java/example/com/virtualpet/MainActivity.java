@@ -106,6 +106,8 @@ public class MainActivity extends Activity {
         startActivityForResult(intent, 1);
 //        view.setSprite(Dog.DogMood.SAD);
 
+//        view.setSprite(Dog.DogMood.SAD);
+      //  view.setDirty();
     }
 
     public void showerClicked(View v) {
