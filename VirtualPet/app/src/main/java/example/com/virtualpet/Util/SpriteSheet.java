@@ -3,6 +3,7 @@ package example.com.virtualpet.Util;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
@@ -21,8 +22,10 @@ public class SpriteSheet implements Runnable {
     private Activity a;
 
     private Paint paint = new Paint();
+    private Paint debug = new Paint();
 
-    private int frameHeight, frameWidth, x, y;
+    private int x, y, desFrameHeight, desFrameWidth;
+    private double frameHeight, frameWidth;
 
     private Rect dst;
 
@@ -32,14 +35,17 @@ public class SpriteSheet implements Runnable {
     public SpriteSheet(Bitmap spritesheet, int frameCount, boolean horizontal){
         if(horizontal){
             frameHeight = spritesheet.getHeight();
-            frameWidth = spritesheet.getWidth()/frameCount;
+            frameWidth = (double)spritesheet.getWidth()/frameCount;
         }else{
-            frameHeight = spritesheet.getHeight()/frameCount;
+            frameHeight = (double)spritesheet.getHeight()/frameCount;
             frameWidth = spritesheet.getWidth();
         }
+        desFrameHeight = (int) (frameHeight*ResourceManager.SCALE);
+        desFrameWidth = (int) (frameWidth*ResourceManager.SCALE);
         this.sheet = spritesheet;
         this.frameCount = frameCount;
         this.horizontal = horizontal;
+        debug.setColor(Color.RED);
     }
 
     public void setSheet(Dog.DogMood mood){
@@ -69,18 +75,19 @@ public class SpriteSheet implements Runnable {
             this.x = x;
             this.y = y;
         }
-        dst = new Rect(this.x - frameWidth / 2, this.y - frameHeight, this.x + frameWidth / 2, this.y);
+        dst = new Rect(this.x - desFrameWidth/2, this.y - desFrameHeight, this.x + desFrameWidth/2, this.y);
     }
 
     public void draw(Canvas c){
         synchronized (this) {
             Rect src;
             if (horizontal) {
-                src = new Rect(counter * frameWidth, 0, counter * frameWidth + frameWidth, frameHeight);
+                src = new Rect((int)(counter * frameWidth), 0, (int)(counter * frameWidth + frameWidth), (int)frameHeight);
             } else {
-                src = new Rect(0, counter * frameHeight, frameWidth, counter * frameHeight + frameHeight);
+                src = new Rect(0, (int)(counter * frameHeight), (int)frameWidth, (int)(counter * frameHeight + frameHeight));
             }
             c.drawBitmap(sheet, src, dst, paint);
+            //c.drawRect(dst, debug);
             update();
         }
     }
@@ -92,6 +99,15 @@ public class SpriteSheet implements Runnable {
             this.sheet = b;
             this.frameCount = frameCountToSet;
             this.counter = 0;
+            if(horizontal){
+                frameHeight = b.getHeight();
+                frameWidth = (double)b.getWidth()/frameCount;
+            }else{
+                frameHeight = (double)b.getHeight()/frameCount;
+                frameWidth = b.getWidth();
+            }
+            desFrameHeight = (int) (frameHeight*ResourceManager.SCALE);
+            desFrameWidth = (int) (frameWidth*ResourceManager.SCALE);
         }
 //        b.recycle();
     }

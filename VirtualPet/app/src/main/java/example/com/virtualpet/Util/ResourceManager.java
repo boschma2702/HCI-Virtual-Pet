@@ -31,6 +31,7 @@ public final class ResourceManager {
     public Bitmap flapdog_head;
 
     public SpriteSheet dogHappy;
+    public static double SCALE;
     public double dogHeight;
 
 
@@ -63,8 +64,11 @@ public final class ResourceManager {
         Bitmap b;
         dogHeight = getPercentageLength(50, true);
         b = BitmapFactory.decodeResource(r, R.drawable.dog_happy_f30, options);
-        dogHappy = new SpriteSheet(getResizedBitmap(b, (int)(b.getWidth()*(dogHeight*30)/b.getHeight()), (int) (dogHeight*30)), 30, false);
-        b.recycle();
+        SCALE = (double)((dogHeight*30)/b.getHeight());
+        Log.e("Scale", "Scale is: "+SCALE);
+//        dogHappy = new SpriteSheet(getResizedBitmap(b, (int)(b.getWidth()*(dogHeight*30)/b.getHeight()), (int) (dogHeight*30)), 30, false);
+        dogHappy = new SpriteSheet(b, 30, false);
+        //b.recycle();
     }
 
 

@@ -199,7 +199,8 @@ public class Dog {
     }
 
     public void setView(DogMood mood) {
-        view.setSprite(mood);
+        //view.setSprite(mood);
+        //TODO niet elke loop nieuwe sprite zetten Gijs. Kan telefoontje niet aan.
     }
 
 

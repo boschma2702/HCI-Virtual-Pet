@@ -62,14 +62,12 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
     }
 
     public void onDraw(Canvas c){
-        try{
+        if(c!=null) {
             c.drawARGB(255, 200, 200, 200);
             currentSheet.draw(c);
-            if(drawDirty){
+            if (drawDirty) {
                 c.drawCircle(dirtyPosition[0], dirtyPosition[1], dirtyRadius, dirtyPaint);
             }
-        } catch (NullPointerException e) {
-            Log.e("NullPointerException", e.getMessage());
         }
     }
 
