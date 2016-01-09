@@ -36,7 +36,6 @@ public class MainActivity extends Activity {
         startService(new Intent(this, DogService.class));
         setContentView(R.layout.activity_main);
         new ResourceManager(this);
-
     }
 
     public void mainPlayClicked(View v){

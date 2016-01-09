@@ -1,5 +1,6 @@
 package example.com.virtualpet;
 
+import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -9,8 +10,9 @@ import android.os.Parcelable;
 public class StoreItem implements Parcelable {
 
     private int cost = 0;
-    private String name, drawablePath;
+    private String name;
     private int id;
+    private Drawable itemImg;
 
     // some strange functions needed for the parcelable. Parcelable is needed to pass an arraylist to another activity.
     public int describeContents() {
@@ -38,11 +40,11 @@ public class StoreItem implements Parcelable {
     //end of strange functions
 
 
-    public StoreItem(String name, int id, int cost, String drawable_path) {
+    public StoreItem(String name, int id, int cost, Drawable drawable) {
         this.name = name;
         this.id = id;
         this.cost = cost;
-        this.drawablePath = drawable_path;
+        this.itemImg = drawable;
     }
 
     //standard getters and setters
@@ -70,12 +72,12 @@ public class StoreItem implements Parcelable {
         return id;
     }
 
-    public void setDrawablePath(String path) {
-        this.drawablePath = path;
+    public void setDrawablePath(Drawable drawable) {
+        this.itemImg = drawable;
     }
 
-    public String getDrawablePath() {
-        return drawablePath;
+    public Drawable getDrawable() {
+        return itemImg;
     }
 
 }
