@@ -9,8 +9,13 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import example.com.virtualpet.Util.ResourceManager;
 import example.com.virtualpet.flapdog.FlapDogActivity;
@@ -20,8 +25,15 @@ import example.com.virtualpet.maps.MapsActivity;
 public class MainActivity extends Activity {
 
     private DogView view;
-
     private boolean inGame = false;
+
+    StoreItemList storeitemlist;
+    ArrayList<StoreItem> all_items;
+
+    //init a list of items we already have
+    private ArrayList<StoreItem> buyed_items = new ArrayList<StoreItem>();
+    private int money = 20;
+    TextView moneyTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +43,15 @@ public class MainActivity extends Activity {
         new ResourceManager(this);
     }
 
-
-
     public void mainPlayClicked(View v){
         inGame = true;
         setContentView(R.layout.game_layout);
+
+        moneyTV = (TextView) findViewById(R.id.moneyTV);
+        updateMoneyTextView();
+
+        storeitemlist = new StoreItemList(this);
+        all_items = storeitemlist.getAllItems();
 
         // Get the Drawable custom_progressbar
         ProgressBar progressBar= (ProgressBar) findViewById(R.id.progressBar);
@@ -70,8 +86,6 @@ public class MainActivity extends Activity {
 
     }
 
-
-
     public void playClicked(View v){
         Intent intent = new Intent(this, FlapDogActivity.class);
         startActivity(intent);
@@ -83,9 +97,43 @@ public class MainActivity extends Activity {
     }
 
     public void shopClicked(View v){
+        //view.setSprite(Dog.DogMood.SAD);
+        //now lets do something useful with this button!
+
+        Intent intent = new Intent(this, StoreActivity.class);
+        intent.putExtra("money", money);
+
+        startActivityForResult(intent, 1);
 //        view.setSprite(Dog.DogMood.SAD);
-        view.setDirty();
+
+//        view.setSprite(Dog.DogMood.SAD);
+      //  view.setDirty();
     }
+
+    public void showerClicked(View v) {
+
+        view.setDirty();
+
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                StoreItem item =data.getParcelableExtra("item");
+                buyed_items.add(item);
+                money = money - item.getCost();
+                updateMoneyTextView();
+                updateItemsShowing(item);
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+                // we are very sad to hear you did not buy anything :(
+            }
+        }
+    }//onActivityResult
 
     @Override
     protected void onResume() {
@@ -117,4 +165,26 @@ public class MainActivity extends Activity {
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 
+    private void updateMoneyTextView() {
+        moneyTV.setText("€ " + money);
+    }
+
+    private void updateItemsShowing(StoreItem item) {
+
+        LinearLayout ll = (LinearLayout) findViewById(R.id.money_items_layout);
+
+        //the problem is that we can't parse a drawable, so i check for the object that has it with comparing id's. a bit dirty actually.
+            for(StoreItem full_item : all_items) {
+                if (item.getId() == full_item.getId()) {
+                    ImageView iv = new ImageView(this);
+                    iv.setImageDrawable(full_item.getDrawable());
+                    iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                    iv.setLayoutParams(new LinearLayout.LayoutParams(50, 50));
+                    ll.addView(iv);
+                }
+            }
+
+    }
+
 }
+

@@ -2,16 +2,12 @@ package example.com.virtualpet;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.Toast;
 
 import example.com.virtualpet.Util.ResourceManager;
 import example.com.virtualpet.Util.SpriteSheet;
@@ -36,9 +32,12 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
 //    private Paint dirtyPaint = new Paint();
 //    private int dirtyRadius = (int) ResourceManager.INSTANCE.getPercentageLength(5, false);
 
+
 //    private int[] dirtyPosition = new int[2];
 //    private Rect dirtyHitbox = new Rect();
 
+//    private int[] dirtyPosition = new int[2];
+//    private Rect dirtyHitbox = new Rect();
 
 
     public DogView(Context context, AttributeSet attributeSet){
@@ -186,6 +185,8 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
         }
         return true;
     }
+
+
 
 
 }
