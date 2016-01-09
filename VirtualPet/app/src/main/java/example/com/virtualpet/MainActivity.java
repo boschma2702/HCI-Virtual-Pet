@@ -27,6 +27,9 @@ public class MainActivity extends Activity {
     private DogView view;
     private boolean inGame = false;
 
+    StoreItemList storeitemlist;
+    ArrayList<StoreItem> all_items;
+
     //init a list of items we already have
     private ArrayList<StoreItem> buyed_items = new ArrayList<StoreItem>();
     private int money = 20;
@@ -46,6 +49,9 @@ public class MainActivity extends Activity {
 
         moneyTV = (TextView) findViewById(R.id.moneyTV);
         updateMoneyTextView();
+
+        storeitemlist = new StoreItemList(this);
+        all_items = storeitemlist.getAllItems();
 
         // Get the Drawable custom_progressbar
         ProgressBar progressBar= (ProgressBar) findViewById(R.id.progressBar);
@@ -110,7 +116,7 @@ public class MainActivity extends Activity {
                 buyed_items.add(item);
                 money = money - item.getCost();
                 updateMoneyTextView();
-                updateItemsShowing();
+                updateItemsShowing(item);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result
@@ -153,17 +159,21 @@ public class MainActivity extends Activity {
         moneyTV.setText("€ " + money);
     }
 
-    private void updateItemsShowing() {
+    private void updateItemsShowing(StoreItem item) {
 
         LinearLayout ll = (LinearLayout) findViewById(R.id.money_items_layout);
 
-        for (StoreItem item : buyed_items) {
-            ImageView iv = new ImageView(this);
-            iv.setImageDrawable(item.getDrawable());
-            iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            iv.setLayoutParams(new LinearLayout.LayoutParams(40,40));
-            ll.addView(iv);
-        }
+        //the problem is that we can't parse a drawable, so i check for the object that has it with comparing id's. a bit dirty actually.
+            for(StoreItem full_item : all_items) {
+                if (item.getId() == full_item.getId()) {
+                    ImageView iv = new ImageView(this);
+                    iv.setImageDrawable(full_item.getDrawable());
+                    iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                    iv.setLayoutParams(new LinearLayout.LayoutParams(50, 50));
+                    ll.addView(iv);
+                }
+            }
+
     }
 
 }

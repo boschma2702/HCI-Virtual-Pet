@@ -14,13 +14,18 @@ public class StoreItem implements Parcelable {
     private int id;
     private Drawable itemImg;
 
-    // some strange functions needed for the parcelable. Parcelable is needed to pass an arraylist to another activity.
+    // some functions needed for the parcelable. Parcelable is needed to pass an arraylist to another activity.
     public int describeContents() {
         return 0;
     }
 
     public void writeToParcel(Parcel out, int flags) {
+
         out.writeInt(cost);
+        out.writeInt(id);
+        out.writeString(name);
+
+
     }
 
     public static final Parcelable.Creator<StoreItem> CREATOR
@@ -35,9 +40,11 @@ public class StoreItem implements Parcelable {
     };
 
     private StoreItem(Parcel in) {
+
         cost = in.readInt();
+        id = in.readInt();
+        name = in.readString();
     }
-    //end of strange functions
 
 
     public StoreItem(String name, int id, int cost, Drawable drawable) {
