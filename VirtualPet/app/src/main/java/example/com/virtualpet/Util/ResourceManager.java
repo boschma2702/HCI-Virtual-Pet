@@ -1,6 +1,7 @@
 package example.com.virtualpet.Util;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -46,13 +47,14 @@ public final class ResourceManager {
         options.inPreferredConfig = Bitmap.Config.RGB_565;
         options.inDither = true;
 
-
-
+        printMemoryUsage();
         initBitmaps(a.getResources());
+        printMemoryUsage();
 
         flapdogBackground = getResizedBitmap(BitmapFactory.decodeResource(a.getResources(), R.drawable.flapdog_bg, options), screenWidth, screenHeight);
         int flapdog_width = (int)getPercentageLength(10, true);
         flapdog_head = getResizedBitmap(BitmapFactory.decodeResource(a.getResources(), R.drawable.flapdog_head, options), flapdog_width, flapdog_width);
+        printMemoryUsage();
         log();
         INSTANCE = this;
     }
@@ -60,27 +62,9 @@ public final class ResourceManager {
     private void initBitmaps(Resources r) {
         Bitmap b;
         dogHeight = getPercentageLength(50, true);
-        Log.e("heihgt", "Height is: "+dogHeight);
-
         b = BitmapFactory.decodeResource(r, R.drawable.dog_happy_f30, options);
-//        addBitmapToMemoryCache("dogHappy", getResizedBitmap(b, (int) (b.getWidth() * (height * 30) / b.getHeight()), (int) (height * 30)));
         dogHappy = new SpriteSheet(getResizedBitmap(b, (int)(b.getWidth()*(dogHeight*30)/b.getHeight()), (int) (dogHeight*30)), 30, false);
         b.recycle();
-//
-//        b = BitmapFactory.decodeResource(r, R.drawable.dog_barking_f30, options);
-//        addBitmapToMemoryCache("dogBarking", getResizedBitmap(b, (int) (b.getWidth() * (height * 30) / b.getHeight()), (int) (height * 30)));
-//        //dogBarking = new SpriteSheet(getResizedBitmap(b, (int)(b.getWidth()*(height*30)/b.getHeight()), (int) (height*30)), 30, false);
-//        b.recycle();
-//
-//        b = BitmapFactory.decodeResource(r, R.drawable.dog_playfull_f30, options);
-//        addBitmapToMemoryCache("dogPlayfull", getResizedBitmap(b, (int) (b.getWidth() * (height * 30) / b.getHeight()), (int) (height * 30)));
-//        //dogPlayfull = new SpriteSheet(getResizedBitmap(b, (int)(b.getWidth()*(height*30)/b.getHeight()), (int) (height*30)), 30, false);
-//        b.recycle();
-//
-//        b = BitmapFactory.decodeResource(r, R.drawable.dog_sad_f30, options);
-//        //dogSad = new SpriteSheet(getResizedBitmap(b, (int)(b.getWidth()*(height*30)/b.getHeight()), (int) (height*30)), 30, false);
-//        addBitmapToMemoryCache("dogSad", getResizedBitmap(b, (int)(b.getWidth()*(height*30)/b.getHeight()), (int) (height*30)));
-//        b.recycle();
     }
 
 
@@ -135,5 +119,13 @@ public final class ResourceManager {
 
     public int getScreenHeight(){
         return screenHeight;
+    }
+
+    private void printMemoryUsage(){
+        ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
+        ActivityManager activityManager = (ActivityManager) a.getSystemService(a.ACTIVITY_SERVICE);
+        activityManager.getMemoryInfo(mi);
+        double percentAvail = ((double)mi.availMem / mi.totalMem*100);
+        Log.e("Memory", "Memory left: "+percentAvail +"%");
     }
 }
