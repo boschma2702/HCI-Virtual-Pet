@@ -92,6 +92,10 @@ public class SpriteSheet implements Runnable {
         }
     }
 
+    public Bitmap getBitmap(){
+        return sheet;
+    }
+
     @Override
     public void run() {
         Bitmap b = BitmapLoader.loadBitmap(moodToSet, frameCountToSet);
@@ -110,5 +114,9 @@ public class SpriteSheet implements Runnable {
             desFrameWidth = (int) (frameWidth*ResourceManager.SCALE);
         }
 //        b.recycle();
+    }
+
+    public int getFramecount() {
+        return frameCount;
     }
 }

@@ -83,7 +83,8 @@ public class MainActivity extends Activity {
     }
 
     public void shopClicked(View v){
-        view.setSprite(Dog.DogMood.SAD);
+//        view.setSprite(Dog.DogMood.SAD);
+        view.setDirty();
     }
 
     @Override
