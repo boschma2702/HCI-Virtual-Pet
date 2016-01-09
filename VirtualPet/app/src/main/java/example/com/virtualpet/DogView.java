@@ -13,6 +13,8 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import example.com.virtualpet.Util.ResourceManager;
 import example.com.virtualpet.Util.SpriteSheet;
 
@@ -36,7 +38,6 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
 
     private int[] dirtyPosition = new int[2];
     private Rect dirtyHitbox = new Rect();
-
 
 
     public DogView(Context context, AttributeSet attributeSet){
@@ -193,6 +194,8 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
         }
         return true;
     }
+
+
 
 
 }

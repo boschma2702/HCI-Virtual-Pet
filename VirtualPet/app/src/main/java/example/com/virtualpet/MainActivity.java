@@ -9,6 +9,8 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,7 +29,7 @@ public class MainActivity extends Activity {
 
     //init a list of items we already have
     private ArrayList<StoreItem> buyed_items = new ArrayList<StoreItem>();
-    private int money = 0;
+    private int money = 20;
     TextView moneyTV;
 
     @Override
@@ -43,11 +45,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.game_layout);
 
         moneyTV = (TextView) findViewById(R.id.moneyTV);
-        moneyTV.setText("€ " + money);
-
-        //StoreItem ball = new StoreItem("ball", 2, 0);
-        //StoreItem dogFood = new StoreItem("dog bowl", 4, 0);
-        //StoreItem bone = new StoreItem("bone", 2, 0);
+        updateMoneyTextView();
 
         // Get the Drawable custom_progressbar
         ProgressBar progressBar= (ProgressBar) findViewById(R.id.progressBar);
@@ -82,7 +80,6 @@ public class MainActivity extends Activity {
 
     }
 
-
     public void playClicked(View v){
         Intent intent = new Intent(this, FlapDogActivity.class);
         startActivity(intent);
@@ -98,12 +95,29 @@ public class MainActivity extends Activity {
         //now lets do something useful with this button!
 
         Intent intent = new Intent(this, StoreActivity.class);
-
         intent.putExtra("money", money);
-        intent.putExtra("buyed_items", buyed_items);
 
-        startActivity(intent);
+        startActivityForResult(intent, 1);
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                StoreItem item =data.getParcelableExtra("item");
+                buyed_items.add(item);
+                money = money - item.getCost();
+                updateMoneyTextView();
+                updateItemsShowing();
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+                // we are very sad to hear you did not buy anything :(
+            }
+        }
+    }//onActivityResult
 
     @Override
     protected void onResume() {
@@ -135,14 +149,22 @@ public class MainActivity extends Activity {
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 
-    //create function to add an item to the buyed items.
-    public void updateItems(StoreItem item) {
-        buyed_items.add(item);
+    private void updateMoneyTextView() {
+        moneyTV.setText("€ " + money);
     }
 
+    private void updateItemsShowing() {
 
-    public int getMoney() {
-        return money;
+        LinearLayout ll = (LinearLayout) findViewById(R.id.money_items_layout);
+
+        for (StoreItem item : buyed_items) {
+            ImageView iv = new ImageView(this);
+            iv.setImageDrawable(item.getDrawable());
+            iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            iv.setLayoutParams(new LinearLayout.LayoutParams(40,40));
+            ll.addView(iv);
+        }
     }
 
 }
+
