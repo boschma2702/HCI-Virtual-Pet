@@ -30,11 +30,11 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
 
     private Dog dog;
 
-    private boolean drawDirty = true;
+    private boolean drawDirty = false;
     private Paint dirtyPaint = new Paint();
     private int dirtyRadius = (int) ResourceManager.INSTANCE.getPercentageLength(5, false);
 
-    private int[] dirtyPosition;
+    private int[] dirtyPosition = new int[2];
     private Rect dirtyHitbox = new Rect();
 
 
