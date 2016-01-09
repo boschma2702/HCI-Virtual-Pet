@@ -46,12 +46,16 @@ public class DogService extends Service implements Runnable {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public void onCreate() {
         INSTANCE = this;
-        Toast.makeText(this, "Service started", Toast.LENGTH_SHORT).show();
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         new Thread(this).start();
         initialize();
-        return super.onStartCommand(intent, flags, startId);
+        super.onCreate();
     }
 
     @Nullable
