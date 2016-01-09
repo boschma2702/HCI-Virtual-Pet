@@ -10,7 +10,10 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import example.com.virtualpet.Util.ResourceManager;
 import example.com.virtualpet.flapdog.FlapDogActivity;
@@ -20,8 +23,12 @@ import example.com.virtualpet.maps.MapsActivity;
 public class MainActivity extends Activity {
 
     private DogView view;
-
     private boolean inGame = false;
+
+    //init a list of items we already have
+    private ArrayList<StoreItem> buyed_items = new ArrayList<StoreItem>();
+    private int money = 0;
+    TextView moneyTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +36,19 @@ public class MainActivity extends Activity {
         startService(new Intent(this, DogService.class));
         setContentView(R.layout.activity_main);
         new ResourceManager(this);
+
     }
-
-
 
     public void mainPlayClicked(View v){
         inGame = true;
         setContentView(R.layout.game_layout);
+
+        moneyTV = (TextView) findViewById(R.id.moneyTV);
+        moneyTV.setText("€ " + money);
+
+        //StoreItem ball = new StoreItem("ball", 2, 0);
+        //StoreItem dogFood = new StoreItem("dog bowl", 4, 0);
+        //StoreItem bone = new StoreItem("bone", 2, 0);
 
         // Get the Drawable custom_progressbar
         ProgressBar progressBar= (ProgressBar) findViewById(R.id.progressBar);
@@ -71,7 +84,6 @@ public class MainActivity extends Activity {
     }
 
 
-
     public void playClicked(View v){
         Intent intent = new Intent(this, FlapDogActivity.class);
         startActivity(intent);
@@ -83,7 +95,15 @@ public class MainActivity extends Activity {
     }
 
     public void shopClicked(View v){
-        view.setSprite(Dog.DogMood.SAD);
+        //view.setSprite(Dog.DogMood.SAD);
+        //now lets do something useful with this button!
+
+        Intent intent = new Intent(this, StoreActivity.class);
+
+        intent.putExtra("money", money);
+        intent.putExtra("buyed_items", buyed_items);
+
+        startActivity(intent);
     }
 
     @Override
@@ -114,6 +134,16 @@ public class MainActivity extends Activity {
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+    }
+
+    //create function to add an item to the buyed items.
+    public void updateItems(StoreItem item) {
+        buyed_items.add(item);
+    }
+
+
+    public int getMoney() {
+        return money;
     }
 
 }

@@ -108,15 +108,27 @@
             android:background="@null"
             android:scaleType="fitCenter"/>
 
-        <ProgressBar
-            android:layout_width="1dp"
+        <LinearLayout
             android:layout_weight="1"
+            android:layout_width="1dp"
             android:layout_gravity="center"
             android:layout_height="14dp"
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:progressDrawable="@drawable/custom_progressbar"
-            />
+            android:orientation="vertical">
+
+
+            <ProgressBar
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:layout_height="14dp"
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:progressDrawable="@drawable/custom_progressbar"
+                ></ProgressBar>
+
+
+
+        </LinearLayout>
+
 
         <ImageView
             android:id="@+id/imageView2"
@@ -128,6 +140,15 @@
             android:background="@null"
             android:scaleType="fitCenter" />
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+
+        android:textColor="#000000"
+        android:text="€ ???"
+        android:id="@+id/moneyTV" />
 
 
 </FrameLayout>
