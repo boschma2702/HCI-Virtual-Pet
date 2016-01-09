@@ -29,6 +29,7 @@ public final class ResourceManager {
 
     public Bitmap flapdogBackground;
     public Bitmap flapdog_head;
+    public Bitmap cleaning_sponge, cleaning_stain;
 
     public SpriteSheet dogHappy;
     public static double SCALE;
@@ -55,6 +56,11 @@ public final class ResourceManager {
         flapdogBackground = getResizedBitmap(BitmapFactory.decodeResource(a.getResources(), R.drawable.flapdog_bg, options), screenWidth, screenHeight);
         int flapdog_width = (int)getPercentageLength(10, true);
         flapdog_head = getResizedBitmap(BitmapFactory.decodeResource(a.getResources(), R.drawable.flapdog_head, options), flapdog_width, flapdog_width);
+        int spongeDim = (int) getPercentageLength(10, false);
+        int stainDim = (int) getPercentageLength(10, false);
+        cleaning_sponge = getResizedBitmap(BitmapFactory.decodeResource(a.getResources(), R.drawable.cleaning_sponge, options), spongeDim, spongeDim);
+        cleaning_stain = getResizedBitmap(BitmapFactory.decodeResource(a.getResources(), R.drawable.cleaning_stain), stainDim, stainDim);
+
         printMemoryUsage();
         log();
         INSTANCE = this;

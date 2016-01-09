@@ -104,6 +104,14 @@ public class MainActivity extends Activity {
         intent.putExtra("money", money);
 
         startActivityForResult(intent, 1);
+//        view.setSprite(Dog.DogMood.SAD);
+
+    }
+
+    public void showerClicked(View v) {
+
+        view.setDirty();
+
     }
 
 

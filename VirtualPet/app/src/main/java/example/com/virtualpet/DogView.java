@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 import example.com.virtualpet.Util.ResourceManager;
 import example.com.virtualpet.Util.SpriteSheet;
+import example.com.virtualpet.cleaning.CleaningManger;
 
 
 /**
@@ -33,11 +34,12 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
     private Dog dog;
 
     private boolean drawDirty = false;
-    private Paint dirtyPaint = new Paint();
-    private int dirtyRadius = (int) ResourceManager.INSTANCE.getPercentageLength(5, false);
+    private CleaningManger cleaningManger;
+//    private Paint dirtyPaint = new Paint();
+//    private int dirtyRadius = (int) ResourceManager.INSTANCE.getPercentageLength(5, false);
 
-    private int[] dirtyPosition = new int[2];
-    private Rect dirtyHitbox = new Rect();
+//    private int[] dirtyPosition = new int[2];
+//    private Rect dirtyHitbox = new Rect();
 
 
     public DogView(Context context, AttributeSet attributeSet){
@@ -48,9 +50,9 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
         //test = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
         currentSheet = ResourceManager.INSTANCE.dogHappy;
         x = y = 0;
-        dirtyPaint.setColor(Color.BLACK);
 
         dog = new Dog(context, this);
+        cleaningManger = new CleaningManger(x, y, currentSheet.getBitmap().getWidth(), (int) ResourceManager.INSTANCE.dogHeight);
         //new Thread(this).start();
     }
 
@@ -67,7 +69,7 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
             c.drawARGB(255, 200, 200, 200);
             currentSheet.draw(c);
             if (drawDirty) {
-                c.drawCircle(dirtyPosition[0], dirtyPosition[1], dirtyRadius, dirtyPaint);
+                cleaningManger.onDraw(c);
             }
         }
     }
@@ -168,24 +170,15 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
 
     public void setDirty() {
         drawDirty = true;
-        dirtyPosition = currentSheet.getPosition();
-        dirtyPosition[1] -= ResourceManager.INSTANCE.dogHeight/3;
-        dirtyHitbox.set(dirtyPosition[0]-dirtyRadius, dirtyPosition[1]-dirtyRadius, dirtyPosition[0]+dirtyRadius, dirtyPosition[1]+dirtyRadius);
-        dirtyPaint.setAlpha(255);
-    }
-
-    public void decreaseDirtyAplpha(){
-        if(dirtyPaint.getAlpha()-5>0){
-            dirtyPaint.setAlpha(dirtyPaint.getAlpha()-5);
-        }else{
-            drawDirty = false;
-        }
+        cleaningManger.reset();
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if(drawDirty&&event.getAction()==MotionEvent.ACTION_MOVE&&dirtyHitbox.contains((int)event.getX(), (int)event.getY())){
-            decreaseDirtyAplpha();
+        if(drawDirty&&event.getAction()==MotionEvent.ACTION_MOVE){
+            if(cleaningManger.onTouch((int)event.getX(), (int)event.getY())){
+                drawDirty = false;
+            }
         }
         try {
             Thread.sleep(10);

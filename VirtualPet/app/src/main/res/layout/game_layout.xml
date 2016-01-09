@@ -54,6 +54,7 @@
                 android:adjustViewBounds="true"
                 android:background="@drawable/selectable_button"
                 android:padding="16dp"
+                android:onClick="showerClicked"
 
                 />
 
