@@ -24,11 +24,11 @@ public final class ResourceManager {
     private float dpscreenWidth, dpscreenHeight;
     private DisplayMetrics metrics;
 
-    public Bitmap testSheet;
+    public BitmapFactory.Options options = new BitmapFactory.Options();
+
     public Bitmap flapdogBackground;
     public Bitmap flapdog_head;
 
-    //public SpriteSheet dogBarking, dogHappy, dogPlayfull, dogSad;
     public SpriteSheet dogHappy;
     public double dogHeight;
 
@@ -43,15 +43,16 @@ public final class ResourceManager {
         dpscreenHeight = screenHeight/metrics.density;
         this.a = a;
 //        testSheet = BitmapFactory.decodeResource(a.getResources(), R.drawable.dead_normal);
-
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        options.inDither = true;
 
 
 
         initBitmaps(a.getResources());
 
-        flapdogBackground = getResizedBitmap(BitmapFactory.decodeResource(a.getResources(), R.drawable.flapdog_bg), screenWidth, screenHeight);
+        flapdogBackground = getResizedBitmap(BitmapFactory.decodeResource(a.getResources(), R.drawable.flapdog_bg, options), screenWidth, screenHeight);
         int flapdog_width = (int)getPercentageLength(10, true);
-        flapdog_head = getResizedBitmap(BitmapFactory.decodeResource(a.getResources(), R.drawable.flapdog_head), flapdog_width, flapdog_width);
+        flapdog_head = getResizedBitmap(BitmapFactory.decodeResource(a.getResources(), R.drawable.flapdog_head, options), flapdog_width, flapdog_width);
         log();
         INSTANCE = this;
     }
@@ -60,9 +61,6 @@ public final class ResourceManager {
         Bitmap b;
         dogHeight = getPercentageLength(50, true);
         Log.e("heihgt", "Height is: "+dogHeight);
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.RGB_565;
-        options.inDither = true;
 
         b = BitmapFactory.decodeResource(r, R.drawable.dog_happy_f30, options);
 //        addBitmapToMemoryCache("dogHappy", getResizedBitmap(b, (int) (b.getWidth() * (height * 30) / b.getHeight()), (int) (height * 30)));
