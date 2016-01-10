@@ -240,9 +240,7 @@ public class MainActivity extends Activity {
                     ll.addView(iv);
                 }
             }
-
     }
-
 
     public void statisfactionChanged(){
         if(inGame){
@@ -250,7 +248,7 @@ public class MainActivity extends Activity {
                 @Override
                 public void run() {
                     Log.e("Statisfactionn", "statisfaction is: "+DogService.INSTANCE.getSatisfaction());
-                    progressBar.setProgress(DogService.INSTANCE.getSatisfaction());
+                    progressBar.setProgress(DogService.INSTANCE.getSatisfaction()+100);
                 }
             });
         }

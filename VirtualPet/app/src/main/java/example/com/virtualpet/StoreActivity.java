@@ -1,6 +1,7 @@
 package example.com.virtualpet;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -97,6 +99,12 @@ public class StoreActivity extends Activity  {
 
                     } else {
                         //TODO show error that you don't have enough money
+                        Context context = getApplicationContext();
+                        CharSequence text = "Je hebt niet genoeg geld. Wacht tot je zakgeld krijgt, of verdien geld door met de hond te spelen.";
+                        int duration = Toast.LENGTH_LONG;
+
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
                     }
                 }
             }
