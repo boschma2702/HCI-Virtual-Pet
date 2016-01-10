@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#62bbff"
+    android:background="#dadada"
     tools:context="example.com.virtualpet.MainActivity">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
@@ -17,13 +17,46 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
+
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Speel"
-            android:id="@+id/main_playbutton"
+            android:id="@+id/imageView3"
+            android:src="@drawable/quicklogo"
             android:layout_gravity="center_horizontal"
+            android:layout_margin="20dp"
+            />
+
+        <ImageButton
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="fitStart"
+            android:src="@drawable/icon_play_game"
+            android:id="@+id/main_playbutton"
+            android:adjustViewBounds="true"
+            android:background="@drawable/selectable_button"
+            android:padding="16dp"
             android:onClick="mainPlayClicked"
-            android:nestedScrollingEnabled="false" />
+            />
+
+
+        <ImageButton
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="fitStart"
+            android:src="@drawable/icon_reset"
+            android:id="@+id/main_resetbutton"
+            android:adjustViewBounds="true"
+            android:background="@drawable/selectable_button"
+            android:padding="16dp"
+            android:layout_marginTop="30dp"
+            android:onClick="resetGame"
+            />
+
+
+
+
     </LinearLayout>
 </FrameLayout>

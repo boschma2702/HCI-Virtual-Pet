@@ -14,13 +14,25 @@ xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/storelayout"
     android:orientation="vertical">
 
-    <Button
-        android:layout_width="wrap_content"
+
+    <LinearLayout
         android:layout_height="wrap_content"
+        android:layout_width="wrap_content">
+
+    <ImageButton
+        android:layout_width="66dp"
+        android:layout_height="66dp"
+        android:layout_gravity="left"
+        android:scaleType="fitStart"
+        android:src="@drawable/icon_home"
         android:id="@+id/cancelbutton"
+        android:adjustViewBounds="true"
+        android:background="@drawable/selectable_button"
+        android:padding="16dp"
         android:onClick="onCancelClicked"
-        android:text="cancel"
-        android:layout_gravity="center_horizontal"/>
+
+        />
+    </LinearLayout>
 
 </TableLayout>
 

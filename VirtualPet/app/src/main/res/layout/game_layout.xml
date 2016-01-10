@@ -114,7 +114,8 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_gravity="center_horizontal|bottom">
+        android:layout_gravity="center_horizontal|bottom"
+        android:background="#99ffffff">
 
 
         <ImageView
