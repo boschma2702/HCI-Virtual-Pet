@@ -32,6 +32,8 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
 
     private Dog dog;
 
+    private MainActivity activity;
+
     private boolean drawDirty = false;
     private CleaningManger cleaningManger;
     private Bitmap background;
@@ -44,6 +46,9 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
     private Time midDay = ResourceManager.INSTANCE.midDay; // moet velste blauw zijn
     private Time currentTime = new Time();
 
+    private int secondCounter = 0;
+    private int second = 30;
+
 
     public DogView(Context context, AttributeSet attributeSet){
         super(context, attributeSet);
@@ -54,7 +59,7 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
         currentSheet = ResourceManager.INSTANCE.dogHappy;
         background = ResourceManager.INSTANCE.gameBackground;
         x = y = 0;
-
+        activity = (MainActivity) context;
         dog = new Dog(context, this);
         cleaningManger = new CleaningManger(x, y, currentSheet.getBitmap().getWidth(), (int) ResourceManager.INSTANCE.dogHeight);
         //new Thread(this).start();
@@ -66,6 +71,10 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
 
     public void resume(){
         new Thread(this).start();
+    }
+
+    private void updateSecond() {
+        activity.statisfactionChanged();
     }
 
     public void onDraw(Canvas c){
@@ -149,6 +158,10 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
                     framesSkipped = 0;    // resetting the frames skipped
                     // update game state
                     dog.update();
+                    secondCounter = (secondCounter+1)%second;
+                    if(secondCounter==0){
+                        updateSecond();
+                    }
 
                     //draw
                     onDraw(canvas);

@@ -15,6 +15,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Observable;
 
 /**
  * Created by reneb_000 on 30-12-2015.
@@ -25,8 +26,8 @@ public class DogService extends Service implements Runnable {
     public static DogService INSTANCE;
 
     private int satisfaction;
-    private static final int MAXSATISFACTION = 100;
-    private static final int MINSATISFACTION = 0;
+    public static final int MAXSATISFACTION = 100;
+    public static final int MINSATISFACTION = 0;
     public static final long THIRTYMINUTES = 1800000; // thirty minutes in milliseconds
     public static final long QUICKTIME = 1; // decrease to make time go faster
 
@@ -43,6 +44,7 @@ public class DogService extends Service implements Runnable {
     private boolean wantsToPlay;
 
     NotificationManager mNotificationManager;
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -61,7 +63,6 @@ public class DogService extends Service implements Runnable {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-
         return null;
     }
 
@@ -177,6 +178,7 @@ public class DogService extends Service implements Runnable {
             } else {
                 this.satisfaction += satisfaction;
             }
+            statisfactionChanged();
         }
     }
 
@@ -190,8 +192,13 @@ public class DogService extends Service implements Runnable {
                 } else {
                     this.satisfaction += satisfaction;
                 }
+                statisfactionChanged();
             }
         }
+    }
+
+    private void statisfactionChanged(){
+        //TODO observer pattern would be nice here, but hard to implement. Workaround is added
     }
 
 //    Getters

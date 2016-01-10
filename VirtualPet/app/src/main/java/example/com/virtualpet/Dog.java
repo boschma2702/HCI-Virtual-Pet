@@ -26,6 +26,7 @@ public class Dog {
     public static final long THIRTYMINUTES = 1800000; // thirty minutes in milliseconds
     private long lastRefreshed;
 
+
     public Dog(Context c, DogView view) {
         this.view = view;
 //        x = (int) ResourceManager.INSTANCE.convertPixelsToDp(500);
@@ -50,7 +51,11 @@ public class Dog {
 
         checkUpdates();
         randomBark();
+
+
     }
+
+
 
     public void checkUpdates() {
         if (DogService.INSTANCE.getDirty()) {

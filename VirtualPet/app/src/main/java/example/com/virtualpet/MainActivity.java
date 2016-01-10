@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -16,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 import example.com.virtualpet.Util.ResourceManager;
 import example.com.virtualpet.flapdog.FlapDogActivity;
@@ -35,6 +40,8 @@ public class MainActivity extends Activity {
     private int money = 20;
     TextView moneyTV;
 
+    private ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,13 +60,16 @@ public class MainActivity extends Activity {
         storeitemlist = new StoreItemList(this);
         all_items = storeitemlist.getAllItems();
 
-        // Get the Drawable custom_progressbar
-        ProgressBar progressBar= (ProgressBar) findViewById(R.id.progressBar);
 
         // set the drawable as progress drawable
-        progressBar.setProgressDrawable(ContextCompat.getDrawable(this, R.drawable.custom_progressbar));
+
 
         view = (DogView) findViewById(R.id.surfaceView);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setProgressDrawable(ContextCompat.getDrawable(this, R.drawable.custom_progressbar));
+        progressBar.setMax(DogService.MAXSATISFACTION);
+        progressBar.setProgress(DogService.INSTANCE.getSatisfaction());
+        Log.e("test", String.valueOf(progressBar));
         new Thread(view).start();
     }
 
@@ -186,5 +196,17 @@ public class MainActivity extends Activity {
 
     }
 
+
+    public void statisfactionChanged(){
+        if(inGame){
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    Log.e("Statisfactionn", "statisfaction is: "+DogService.INSTANCE.getSatisfaction());
+                    progressBar.setProgress(DogService.INSTANCE.getSatisfaction());
+                }
+            });
+        }
+    }
 }
 
