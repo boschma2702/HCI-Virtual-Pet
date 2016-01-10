@@ -23,11 +23,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:gravity="center"
+                android:gravity="center_horizontal"
                 android:textSize="35sp"
                 android:textStyle="bold"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Dag ..."
+                android:text="Dag ?"
                 android:id="@+id/game_dayField"
                 android:layout_span="2" />
         </TableRow>

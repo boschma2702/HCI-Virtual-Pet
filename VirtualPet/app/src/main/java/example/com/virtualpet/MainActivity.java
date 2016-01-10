@@ -3,6 +3,7 @@ package example.com.virtualpet;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -35,6 +36,8 @@ public class MainActivity extends Activity {
     private int money = 20;
     TextView moneyTV;
 
+    SharedPreferences sharedPref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +49,11 @@ public class MainActivity extends Activity {
     public void mainPlayClicked(View v){
         inGame = true;
         setContentView(R.layout.game_layout);
+
+        sharedPref = this.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+
+        money = sharedPref.getInt(getString(R.string.moneyString), 20);
 
         moneyTV = (TextView) findViewById(R.id.moneyTV);
         updateMoneyTextView();
@@ -125,6 +133,12 @@ public class MainActivity extends Activity {
                 StoreItem item =data.getParcelableExtra("item");
                 buyed_items.add(item);
                 money = money - item.getCost();
+
+                //sharedPref = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putInt(getString(R.string.moneyString), money);
+                editor.commit();
+
                 updateMoneyTextView();
                 updateItemsShowing(item);
             }
