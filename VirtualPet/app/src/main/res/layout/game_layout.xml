@@ -15,6 +15,23 @@
         android:padding="10dp"
         >
 
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="35sp"
+                android:textStyle="bold"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Dag ..."
+                android:id="@+id/game_dayField"
+                android:layout_span="2" />
+        </TableRow>
+
         <TableRow android:paddingBottom="20dp">
             <ImageButton
                 android:layout_width="66dp"
@@ -40,7 +57,8 @@
                 android:src="@drawable/icon_bowl"
                 android:background="@drawable/selectable_button"
                 android:padding="12dp"
-                android:onClick="FeedClicked"/>
+                android:onClick="FeedClicked"
+                android:layout_column="2" />
         </TableRow>
 
         <TableRow android:paddingBottom="20dp">
@@ -69,7 +87,8 @@
                 android:background="@drawable/selectable_button"
                 android:padding="12dp"
 
-                android:id="@+id/button4" />
+                android:id="@+id/button4"
+                android:layout_column="2" />
         </TableRow>
 
         <TableRow android:paddingBottom="20dp">

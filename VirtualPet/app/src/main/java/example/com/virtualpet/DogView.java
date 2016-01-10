@@ -1,8 +1,10 @@
 package example.com.virtualpet;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.text.format.Time;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -29,15 +31,15 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
 
     private boolean drawDirty = false;
     private CleaningManger cleaningManger;
-//    private Paint dirtyPaint = new Paint();
-//    private int dirtyRadius = (int) ResourceManager.INSTANCE.getPercentageLength(5, false);
+    private Bitmap background;
 
-
-//    private int[] dirtyPosition = new int[2];
-//    private Rect dirtyHitbox = new Rect();
-
-//    private int[] dirtyPosition = new int[2];
-//    private Rect dirtyHitbox = new Rect();
+    private int[] black = new int[]{255,255,255};
+    private int[] blue = new int[]{0, 190, 255};
+    private int[] currentBackgroundColor = new int[]{0,190,255};
+    private Time morning = ResourceManager.INSTANCE.morning; // moet weer lichter worden.
+    private Time night = ResourceManager.INSTANCE.night; // moet donker zijn
+    private Time midDay = ResourceManager.INSTANCE.midDay; // moet velste blauw zijn
+    private Time currentTime = new Time();
 
 
     public DogView(Context context, AttributeSet attributeSet){
@@ -47,6 +49,7 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
         holder.addCallback(this);
         //test = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
         currentSheet = ResourceManager.INSTANCE.dogHappy;
+        background = ResourceManager.INSTANCE.gameBackground;
         x = y = 0;
 
         dog = new Dog(context, this);
@@ -64,7 +67,9 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
 
     public void onDraw(Canvas c){
         if(c!=null) {
-            c.drawARGB(255, 200, 200, 200);
+//            c.drawARGB(255, 200, 200, 200);
+            c.drawARGB(255, currentBackgroundColor[0], currentBackgroundColor[1], currentBackgroundColor[2]);
+            c.drawBitmap(background, 0, 0, null);
             currentSheet.draw(c);
             if (drawDirty) {
                 cleaningManger.onDraw(c);
@@ -80,6 +85,31 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
 
     public void setSprite(Dog.DogMood mood){
         currentSheet.setSheet(mood);
+    }
+
+    public void setBackgroundColor(){
+        currentTime.setToNow();
+        if(currentTime.after(night)&&currentTime.before(morning)){
+            //moet zwart zijn;
+            currentBackgroundColor = black;
+        }
+        else if(currentTime.after(morning)&&currentTime.before(midDay)){
+            //moet lichter worden
+
+            int maxDif = midDay.hour - morning.hour;
+            int deltaHour = maxDif - (morning.hour - currentTime.hour);
+            double percentage = (double)deltaHour/maxDif;
+            currentBackgroundColor[0] = (int) ((black[0]-blue[0])*percentage-black[0]);
+            currentBackgroundColor[1] = (int) ((black[1]-blue[1])*percentage-black[1]);
+        }
+        else if(currentTime.after(midDay)&&currentTime.before(night)){
+            //moet donkerder worden
+            int maxDif = night.hour - midDay.hour;
+            int deltaHour = maxDif - (midDay.hour - currentTime.hour);
+            double percentage = (double)deltaHour/maxDif;
+            currentBackgroundColor[0] = (int) ((black[0]-blue[0])*percentage+blue[0]);
+            currentBackgroundColor[1] = (int) ((black[1]-blue[1])*percentage+blue[1]);
+        }
     }
 
     // desired fps

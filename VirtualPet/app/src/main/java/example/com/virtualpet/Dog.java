@@ -46,6 +46,7 @@ public class Dog {
 //        }
 //        x += speed;
         view.setXY(x, y);
+        view.setBackgroundColor();
 
         checkUpdates();
         randomBark();

@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.text.format.Time;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.LruCache;
@@ -31,9 +32,13 @@ public final class ResourceManager {
     public Bitmap flapdog_head;
     public Bitmap cleaning_sponge, cleaning_stain;
 
+    public Bitmap gameBackground;
+
     public SpriteSheet dogHappy;
     public static double SCALE;
     public double dogHeight;
+
+    public Time morning = new Time(), night = new Time(), midDay = new Time();
 
 
     public ResourceManager(Activity a){
@@ -49,6 +54,8 @@ public final class ResourceManager {
         options.inPreferredConfig = Bitmap.Config.RGB_565;
         options.inDither = true;
 
+        initTimes();
+
         printMemoryUsage();
         initBitmaps(a.getResources());
         printMemoryUsage();
@@ -60,10 +67,18 @@ public final class ResourceManager {
         int stainDim = (int) getPercentageLength(10, false);
         cleaning_sponge = getResizedBitmap(BitmapFactory.decodeResource(a.getResources(), R.drawable.cleaning_sponge, options), spongeDim, spongeDim);
         cleaning_stain = getResizedBitmap(BitmapFactory.decodeResource(a.getResources(), R.drawable.cleaning_stain), stainDim, stainDim);
+        gameBackground = getResizedBitmap(BitmapFactory.decodeResource(a.getResources(), R.drawable.game_background, options), screenWidth, screenHeight);
+
 
         printMemoryUsage();
         log();
         INSTANCE = this;
+    }
+
+    private void initTimes() {
+        morning.set(0,0,6,morning.monthDay, morning.month, morning.year);
+        midDay.set(0,0,12,midDay.monthDay, morning.month, morning.year);
+        night.set(0,59,23,night.monthDay, night.month, night.year);
     }
 
     private void initBitmaps(Resources r) {
