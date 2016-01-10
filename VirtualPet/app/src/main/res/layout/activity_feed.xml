@@ -7,18 +7,36 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="example.com.virtualpet.FeedActivity">
+    tools:context="example.com.virtualpet.FeedActivity"
+    android:background="@drawable/game_background">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="SHAKE IT BABY"
+        android:text="Shud de telefoon om de brokken in de hondenbak te doen"
         android:id="@+id/textView3"
-        android:layout_centerVertical="true"
+        android:textSize="20dp"
+        android:textStyle="bold|italic"
+        android:textColor="#000000"
+        android:layout_marginBottom="31dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="#a5a6aa"
+        android:paddingLeft="8dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        android:paddingRight="8dp"
+        android:autoText="false" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView4"
+        android:src="@drawable/item_food"
+        android:layout_above="@+id/textView3"
         android:layout_centerHorizontal="true"
-        android:textSize="40dp"
-        android:textStyle="bold"
-        android:textColor="#FF1493"/>
+        android:layout_marginBottom="36dp" />
 
 </RelativeLayout>

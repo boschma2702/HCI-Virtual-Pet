@@ -2,9 +2,11 @@ package example.com.virtualpet;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 public class FeedActivity extends Activity {
@@ -37,6 +39,8 @@ public class FeedActivity extends Activity {
             }
         });
 
+
+
     }
 
     @Override
@@ -54,11 +58,19 @@ public class FeedActivity extends Activity {
     }
 
     void handleShakeEvent(int count) {
+        int maxShakes = 2;
         Context context = getApplicationContext();
-        CharSequence text = "shake! " + String.valueOf(count);
+        CharSequence text = "" + String.valueOf(count) + " keer geschud van de " + maxShakes + "keer";
         int duration = Toast.LENGTH_LONG;
 
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
+
+        if (count > maxShakes) {
+            toast.cancel();
+            Intent returnIntent = new Intent();
+            setResult(Activity.RESULT_CANCELED, returnIntent);
+            finish();
+        }
     }
 }
