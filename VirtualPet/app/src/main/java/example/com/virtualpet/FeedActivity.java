@@ -60,7 +60,7 @@ public class FeedActivity extends Activity {
     void handleShakeEvent(int count) {
         int maxShakes = 2;
         Context context = getApplicationContext();
-        CharSequence text = "" + String.valueOf(count) + " keer geschud van de " + maxShakes + "keer";
+        CharSequence text = "" + String.valueOf(count) + " keer geschud van de " + maxShakes + " keer";
         int duration = Toast.LENGTH_LONG;
 
         Toast toast = Toast.makeText(context, text, duration);
@@ -68,8 +68,6 @@ public class FeedActivity extends Activity {
 
         if (count > maxShakes) {
             toast.cancel();
-            Intent returnIntent = new Intent();
-            setResult(Activity.RESULT_CANCELED, returnIntent);
             finish();
         }
     }
