@@ -33,7 +33,7 @@ public class StoreActivity extends Activity  {
 
         //the layout on which you are working
         TableLayout layout = (TableLayout) findViewById(R.id.storelayout);
-        layout.setBackground(getResources().getDrawable(R.drawable.alternative_background));
+        layout.setBackground(getResources().getDrawable(R.drawable.store_background));
 
         //put the items in the layout!
         for (StoreItem item : all_items) {

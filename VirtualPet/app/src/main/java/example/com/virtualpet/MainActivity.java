@@ -219,5 +219,16 @@ public class MainActivity extends Activity {
             });
         }
     }
+
+    public void resetGame(View view) {
+
+        //this function is to revert all variables back for the next tester.
+
+        sharedPref = this.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(getString(R.string.moneyString), 20);
+        editor.commit();
+    }
 }
 
