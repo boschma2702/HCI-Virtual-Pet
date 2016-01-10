@@ -6,10 +6,13 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.text.format.Time;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+
+import java.util.Arrays;
 
 import example.com.virtualpet.Util.ResourceManager;
 import example.com.virtualpet.Util.SpriteSheet;
@@ -33,9 +36,9 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
     private CleaningManger cleaningManger;
     private Bitmap background;
 
-    private int[] black = new int[]{255,255,255};
-    private int[] blue = new int[]{0, 190, 255};
-    private int[] currentBackgroundColor = new int[]{0,190,255};
+    private int[] black = new int[]{0,0,0};
+    private int[] blue = new int[]{122, 222, 240};
+    private int[] currentBackgroundColor = new int[]{112,222,240};
     private Time morning = ResourceManager.INSTANCE.morning; // moet weer lichter worden.
     private Time night = ResourceManager.INSTANCE.night; // moet donker zijn
     private Time midDay = ResourceManager.INSTANCE.midDay; // moet velste blauw zijn
@@ -89,27 +92,30 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
 
     public void setBackgroundColor(){
         currentTime.setToNow();
-        if(currentTime.after(night)&&currentTime.before(morning)){
+        if(currentTime.after(night)||currentTime.before(morning)){
             //moet zwart zijn;
             currentBackgroundColor = black;
-        }
-        else if(currentTime.after(morning)&&currentTime.before(midDay)){
+        } else if(currentTime.after(morning)&&currentTime.before(midDay)){
             //moet lichter worden
 
             int maxDif = midDay.hour - morning.hour;
-            int deltaHour = maxDif - (morning.hour - currentTime.hour);
+            int deltaHour = maxDif - (currentTime.hour-morning.hour);
             double percentage = (double)deltaHour/maxDif;
-            currentBackgroundColor[0] = (int) ((black[0]-blue[0])*percentage-black[0]);
-            currentBackgroundColor[1] = (int) ((black[1]-blue[1])*percentage-black[1]);
-        }
-        else if(currentTime.after(midDay)&&currentTime.before(night)){
+//            currentBackgroundColor[0] = (int) ((black[0]-blue[0])*percentage-black[0]);
+            currentBackgroundColor[0] = (int) ((blue[0]-black[0])*percentage);
+            currentBackgroundColor[1] = (int) ((blue[1]-black[1])*percentage);
+//            currentBackgroundColor[2] = (int) ((blue[2]-black[2])*percentage);
+        } else if(currentTime.after(midDay)&&currentTime.before(night)){
             //moet donkerder worden
             int maxDif = night.hour - midDay.hour;
-            int deltaHour = maxDif - (midDay.hour - currentTime.hour);
+            int deltaHour = maxDif - (currentTime.hour-midDay.hour);
             double percentage = (double)deltaHour/maxDif;
-            currentBackgroundColor[0] = (int) ((black[0]-blue[0])*percentage+blue[0]);
-            currentBackgroundColor[1] = (int) ((black[1]-blue[1])*percentage+blue[1]);
+//            currentBackgroundColor[0] = (int) ((black[0]-blue[0])*percentage+blue[0]);
+            currentBackgroundColor[0] = (int) (blue[0]-(blue[0]-black[0])*percentage);
+            currentBackgroundColor[1] = (int) (blue[1]-(blue[1]-black[1])*percentage);
+//            currentBackgroundColor[2] = (int) (blue[2]-(blue[2]-black[2])*percentage);
         }
+//        Log.e("color", currentBackgroundColor[0] +" "+currentBackgroundColor[1]+" "+currentBackgroundColor[2]);
     }
 
     // desired fps
