@@ -24,8 +24,7 @@ public class Dog {
     private int satisfaction;
     private long lastUpdate;
     public static final long THIRTYMINUTES = 1800000; // thirty minutes in milliseconds
-
-
+    private long lastRefreshed;
 
     public Dog(Context c, DogView view) {
         this.view = view;
@@ -36,6 +35,7 @@ public class Dog {
         x = screenwidth/2;
         y = (int) (ResourceManager.INSTANCE.getScreenHeight()-ResourceManager.INSTANCE.getPercentageLength(20, true));
         view.setXY(x, y);
+        setLastRefreshed(getTime());
     }
 
     public void update() {
@@ -150,6 +150,10 @@ public class Dog {
         return view;
     }
 
+    public void setLastRefreshed(long time) {
+        lastRefreshed = time;
+    }
+
     public enum DogMood {
         BARKING, HAPPY, PLAYFULL, SAD, DEAD, DIRTY, HUNGRY;
 
@@ -199,8 +203,14 @@ public class Dog {
     }
 
     public void setView(DogMood mood) {
-        //view.setSprite(mood);
-        //TODO niet elke loop nieuwe sprite zetten Gijs. Kan telefoontje niet aan.
+        if (getTime() - getTimeLastRefreshed() > (THIRTYMINUTES/30)) {
+            view.setSprite(mood);
+            setLastRefreshed(getTime());
+        }
+    }
+
+    public long getTimeLastRefreshed() {
+        return lastRefreshed;
     }
 
 
