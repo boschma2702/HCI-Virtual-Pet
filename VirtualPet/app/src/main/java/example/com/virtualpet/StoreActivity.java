@@ -104,11 +104,9 @@ public class StoreActivity extends Activity  {
         }
     };
 
-    void onCancelClicked(View v) {
+    public void onCancelClicked(View v) {
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_CANCELED, returnIntent);
         finish();
     }
-
-
 }
