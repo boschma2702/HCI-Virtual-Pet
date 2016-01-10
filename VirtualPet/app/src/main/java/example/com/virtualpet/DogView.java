@@ -220,6 +220,14 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
         cleaningManger.reset();
     }
 
+    public boolean isDogDirty(){
+        return drawDirty;
+    }
+
+    public CleaningManger getCleaningManger(){
+        return cleaningManger;
+    }
+
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if(drawDirty&&event.getAction()==MotionEvent.ACTION_MOVE){

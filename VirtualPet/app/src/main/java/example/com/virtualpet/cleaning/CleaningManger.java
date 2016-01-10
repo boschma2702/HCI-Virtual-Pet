@@ -15,6 +15,8 @@ public class CleaningManger {
     private List<Stain> stains = new ArrayList<>();
     private int dogx, dogy, dogWidth, dogHeight;
 
+    private boolean drawSponge = false;
+
     public CleaningManger(int dogx, int dogy, int dogWidth, int dogHeight){
         sponge = new Sponge();
         int h = (int) (dogHeight*0.1);
@@ -22,6 +24,10 @@ public class CleaningManger {
         toDrawList.add(new Stain(dogx, dogy-dogHeight/2+h));
         toDrawList.add(new Stain(dogx+dogWidth/3, dogy-dogHeight/3+h));
         stains.addAll(toDrawList);
+    }
+
+    public void activate(){
+        drawSponge = false;
     }
 
     public void reset(){
@@ -35,7 +41,9 @@ public class CleaningManger {
         for(Stain s:toDrawList){
             s.onDraw(c);
         }
-        sponge.onDraw(c);
+        if(drawSponge) {
+            sponge.onDraw(c);
+        }
     }
 
     public boolean onTouch(int x, int y){
@@ -48,6 +56,7 @@ public class CleaningManger {
         }
         toDrawList.removeAll(toDelete);
         if(toDrawList.size()==0){
+            drawSponge = false;
             return true;
         }
         return false;

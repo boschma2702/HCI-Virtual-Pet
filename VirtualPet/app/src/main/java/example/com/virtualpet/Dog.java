@@ -166,21 +166,19 @@ public class Dog {
         public int getRes(){
             switch (this){
                 case BARKING:
-                    return R.drawable.dog_barking_f30;
+                    return R.drawable.dog_barking_30frames;
                 case HAPPY:
-                    return R.drawable.dog_happy_f30;
+                    return R.drawable.dog_happy30frames;
                 case PLAYFULL:
-                    return R.drawable.dog_playfull_f30;
+                    return R.drawable.dog_playful30frames;
                 case SAD:
-                    return R.drawable.dog_sad_f30;
+                    return R.drawable.sad_dog30frames;
                 case DEAD:
-                    return -1;
+                    return R.drawable.dog_died30frames;
                 case HUNGRY:
-                    return -1; // TODO, remove "return -1"
-//                  TODO return R.drawable.dog.
+                    return R.drawable.dog_hungry30frames;
                 case DIRTY:
-                    return -1; // TODO, remove "return -1"
-//                  TODO return R.drawable.dog.
+                    return -1;
                 default:
                     return -1;
             }
@@ -210,7 +208,11 @@ public class Dog {
 
     public void setView(DogMood mood) {
         if (getTime() - getTimeLastRefreshed() > (THIRTYMINUTES/30)) {
-            view.setSprite(mood);
+            if(mood.equals(DogMood.DIRTY)){
+                view.setDirty();
+            }else {
+                view.setSprite(mood);
+            }
             setLastRefreshed(getTime());
         }
     }

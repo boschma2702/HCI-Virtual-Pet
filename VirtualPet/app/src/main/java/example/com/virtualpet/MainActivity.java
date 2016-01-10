@@ -152,9 +152,11 @@ public class MainActivity extends Activity {
         StoreItem spons = storeitemlist.getItemByName(getString(R.string.sponge));
 
         if (ItemisBought(spons)) {
-
-            view.setDirty();
-
+            if(view.isDogDirty()) {
+                view.getCleaningManger().activate();
+            }else{
+                //TODO show notification that dog is not dirty.
+            }
         }
     }
 

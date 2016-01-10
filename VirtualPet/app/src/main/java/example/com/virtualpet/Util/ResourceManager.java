@@ -92,7 +92,7 @@ public final class ResourceManager {
     private void initBitmaps(Resources r) {
         Bitmap b;
         dogHeight = getPercentageLength(50, true);
-        b = BitmapFactory.decodeResource(r, R.drawable.dog_happy_f30, options);
+        b = BitmapFactory.decodeResource(r, R.drawable.dog_happy30frames, options);
         SCALE = (double)((dogHeight*30)/b.getHeight());
         Log.e("Scale", "Scale is: "+SCALE);
 //        dogHappy = new SpriteSheet(getResizedBitmap(b, (int)(b.getWidth()*(dogHeight*30)/b.getHeight()), (int) (dogHeight*30)), 30, false);
