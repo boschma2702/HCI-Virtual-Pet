@@ -1,7 +1,9 @@
 package example.com.virtualpet;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
@@ -42,6 +44,7 @@ public class MainActivity extends Activity {
     SharedPreferences sharedPref;
     private ProgressBar progressBar;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,16 +57,31 @@ public class MainActivity extends Activity {
         inGame = true;
         setContentView(R.layout.game_layout);
 
+        storeitemlist = new StoreItemList(this);
+        all_items = storeitemlist.getAllItems();
+
         sharedPref = this.getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
         money = sharedPref.getInt(getString(R.string.moneyString), 20);
 
+        //if we lost the contents of buyed_items then refill it using shared preferences.
+        if (buyed_items.isEmpty()) {
+            int buyed_items_size = sharedPref.getInt("buyed_items_size", 0);
+            for (int i = 0; i < buyed_items_size; i++) {
+                int id = sharedPref.getInt("buyed_items_" + i, 0);
+
+                StoreItem item = storeitemlist.getItemById(id);
+                buyed_items.add(item);
+                updateItemsShowing(item);
+            }
+        }
+
+
         moneyTV = (TextView) findViewById(R.id.moneyTV);
         updateMoneyTextView();
 
-        storeitemlist = new StoreItemList(this);
-        all_items = storeitemlist.getAllItems();
+
 
 
         // set the drawable as progress drawable
@@ -102,33 +120,42 @@ public class MainActivity extends Activity {
     }
 
     public void playClicked(View v){
-        Intent intent = new Intent(this, FlapDogActivity.class);
-        startActivity(intent);
+
+        StoreItem bal = storeitemlist.getItemByName(getString(R.string.ball));
+
+        if (ItemisBought(bal)) {
+            Intent intent = new Intent(this, FlapDogActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void FeedClicked(View v){
-        Intent intent = new Intent(this, FeedActivity.class);
-        startActivity(intent);
+        //check for 'hondenvoer'.
+        StoreItem hondenvoer = storeitemlist.getItemByName(getString(R.string.food));
+        StoreItem voerbak = storeitemlist.getItemByName(getString(R.string.bowl));
+
+        if (ItemisBought(hondenvoer) && ItemisBought(voerbak)) {
+            Intent intent = new Intent(this, FeedActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void shopClicked(View v){
-        //view.setSprite(Dog.DogMood.SAD);
-        //now lets do something useful with this button!
-
         Intent intent = new Intent(this, StoreActivity.class);
         intent.putExtra("money", money);
 
         startActivityForResult(intent, 1);
-//        view.setSprite(Dog.DogMood.SAD);
-
-//        view.setSprite(Dog.DogMood.SAD);
-      //  view.setDirty();
     }
 
     public void showerClicked(View v) {
 
-        view.setDirty();
+        StoreItem spons = storeitemlist.getItemByName(getString(R.string.sponge));
 
+        if (ItemisBought(spons)) {
+
+            view.setDirty();
+
+        }
     }
 
 
@@ -144,6 +171,15 @@ public class MainActivity extends Activity {
                 //sharedPref = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putInt(getString(R.string.moneyString), money);
+
+
+                editor.putInt("buyed_items_size", buyed_items.size());
+
+                //store the items in shared preferences
+                for(int i = 0; i<buyed_items.size(); i++) {
+                    editor.putInt("buyed_items_" + i, buyed_items.get(i).getId());
+                }
+
                 editor.commit();
 
                 updateMoneyTextView();
@@ -221,14 +257,45 @@ public class MainActivity extends Activity {
     }
 
     public void resetGame(View view) {
-
-        //this function is to revert all variables back for the next tester.
-
         sharedPref = this.getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt(getString(R.string.moneyString), 20);
-        editor.commit();
+        sharedPref.edit().clear().commit();
+    }
+    
+    public void showGoToShopDialog(String message_text, String positive_text, String negative_text) {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setMessage(message_text);
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                positive_text,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        shopClicked(null);
+                    }
+                });
+
+        builder1.setNegativeButton(
+                negative_text,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+    }
+
+    public boolean ItemisBought(StoreItem item) {
+        for (StoreItem buyed_item : buyed_items) {
+            if (buyed_item.getId() == item.getId()) {
+                return true;
+            }
+        }
+        showGoToShopDialog("Je hebt nog geen " + item.getName() + ". Je moet het kopen in de winkel.", "nu kopen", "terug");
+
+        return false;
     }
 }
 

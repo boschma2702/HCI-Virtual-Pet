@@ -6,4 +6,9 @@
     <string name="title_activity_maps">Map</string>
     <string name="preference_file_key">virtual_pet_pref_file_key</string>
     <string name="moneyString">money</string>
+    <string name="ball">Bal</string>
+    <string name="bowl">voerbak</string>
+    <string name="food">hondenvoer</string>
+    <string name="bone">bot</string>
+    <string name="sponge">spons</string>
 </resources>
