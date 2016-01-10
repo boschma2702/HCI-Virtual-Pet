@@ -76,9 +76,17 @@ public final class ResourceManager {
     }
 
     private void initTimes() {
+        morning.setToNow();
+        midDay.setToNow();
+        night.setToNow();
         morning.set(0,0,6,morning.monthDay, morning.month, morning.year);
-        midDay.set(0,0,12,midDay.monthDay, morning.month, morning.year);
-        night.set(0,59,23,night.monthDay, night.month, night.year);
+        midDay.set(0, 0, 12, midDay.monthDay, morning.month, morning.year);
+        night.set(0, 0, 18, night.monthDay, night.month, night.year);
+        Time now = new Time();
+        now.setToNow();
+        Log.e("day", String.valueOf(now.before(morning)));
+        Log.e("day", String.valueOf(now.after(midDay)));
+        Log.e("day", String.valueOf(now.before(night)));
     }
 
     private void initBitmaps(Resources r) {
