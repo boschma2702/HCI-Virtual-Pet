@@ -124,6 +124,7 @@ public class MainActivity extends Activity {
         StoreItem bal = storeitemlist.getItemByName(getString(R.string.ball));
 
         if (ItemisBought(bal)) {
+            view.updateDogHappiness();
             Intent intent = new Intent(this, FlapDogActivity.class);
             startActivity(intent);
         }
@@ -250,7 +251,7 @@ public class MainActivity extends Activity {
                 @Override
                 public void run() {
                     Log.e("Statisfactionn", "statisfaction is: "+DogService.INSTANCE.getSatisfaction());
-                    progressBar.setProgress(DogService.INSTANCE.getSatisfaction()+100);
+                    progressBar.setProgress(DogService.INSTANCE.getSatisfaction());
                 }
             });
         }
