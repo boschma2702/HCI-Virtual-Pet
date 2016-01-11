@@ -10,12 +10,10 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Observable;
 
 /**
  * Created by reneb_000 on 30-12-2015.
@@ -172,9 +170,12 @@ public class DogService extends Service implements Runnable {
     // Satisfaction
     public void updateSatisfaction(int satisfaction) {
         synchronized (this) {
-            if (this.satisfaction + satisfaction > MAXSATISFACTION) {
+            //if satisfaction is larger than max satisfaction
+            // satisfaction = max
+            // else if satisfaaction
+            if (this.satisfaction + satisfaction > MAXSATISFACTION ) {
                 this.satisfaction = MAXSATISFACTION;
-            } else if (this.satisfaction - satisfaction < MINSATISFACTION) {
+            } else if (this.satisfaction + satisfaction < MINSATISFACTION) {
                 this.satisfaction = MINSATISFACTION;
             } else {
                 this.satisfaction += satisfaction;
@@ -188,7 +189,7 @@ public class DogService extends Service implements Runnable {
             synchronized (this) {
                 if (this.satisfaction + satisfaction > MAXSATISFACTION) {
                     this.satisfaction = MAXSATISFACTION;
-                } else if (this.satisfaction - satisfaction < MINSATISFACTION) {
+                } else if (this.satisfaction + satisfaction < MINSATISFACTION) {
                     this.satisfaction = MINSATISFACTION;
                 } else {
                     this.satisfaction += satisfaction;
