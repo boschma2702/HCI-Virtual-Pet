@@ -100,11 +100,15 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
     }
 
     public void setBackgroundColor(){
-        currentTime.setToNow();
-        if(currentTime.after(night)||currentTime.before(morning)){
+//        currentTime.setToNow();
+        currentTime.set(DogService.INSTANCE.getTime());
+        //Log.e("Date", "current day: "+currentTime.monthDay+"-"+currentTime.month+"-"+currentTime.year+" time: "+currentTime.hour+":"+currentTime.minute);
+//        if(currentTime.after(night)||currentTime.before(morning)){
+        if(timeAafterB(currentTime, night)&&timeAbeforeB(currentTime, morning)){
             //moet zwart zijn;
             currentBackgroundColor = black;
-        } else if(currentTime.after(morning)&&currentTime.before(midDay)){
+//        } else if(currentTime.after(morning)&&currentTime.before(midDay)){
+        } else if(timeAafterB(currentTime, morning)&&timeAbeforeB(currentTime, midDay)){
             //moet lichter worden
 
             int maxDif = midDay.hour - morning.hour;
@@ -114,7 +118,8 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
             currentBackgroundColor[0] = (int) ((blue[0]-black[0])*percentage);
             currentBackgroundColor[1] = (int) ((blue[1]-black[1])*percentage);
 //            currentBackgroundColor[2] = (int) ((blue[2]-black[2])*percentage);
-        } else if(currentTime.after(midDay)&&currentTime.before(night)){
+//        } else if(currentTime.after(midDay)&&currentTime.before(night)){
+        } else if(timeAafterB(currentTime, midDay)&&timeAbeforeB(currentTime, night)){
             //moet donkerder worden
             int maxDif = night.hour - midDay.hour;
             int deltaHour = maxDif - (currentTime.hour-midDay.hour);
@@ -125,6 +130,19 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
 //            currentBackgroundColor[2] = (int) (blue[2]-(blue[2]-black[2])*percentage);
         }
 //        Log.e("color", currentBackgroundColor[0] +" "+currentBackgroundColor[1]+" "+currentBackgroundColor[2]);
+    }
+
+    private boolean timeAbeforeB(Time a, Time b){
+        if(a.hour<b.hour){
+            return true;
+        }else if(a.minute<b.minute){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean timeAafterB(Time a, Time b){
+        return !timeAbeforeB(a, b);
     }
 
     // desired fps

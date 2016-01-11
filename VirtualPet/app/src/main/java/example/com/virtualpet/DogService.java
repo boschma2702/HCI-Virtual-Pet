@@ -243,7 +243,7 @@ public class DogService extends Service implements Runnable {
     public long getTime(){
         synchronized (this) {
             long time = System.currentTimeMillis() * GetTimeFASTER;
-            Log.e("Application Time:", new Date(time).toString());
+            //Log.e("Application Time:", new Date(time).toString());
             return time;
         }
     }
