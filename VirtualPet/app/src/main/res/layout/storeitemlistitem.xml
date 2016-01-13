@@ -32,8 +32,7 @@
             android:text="test"
             android:id="@+id/storeitemli_title"
             android:textColor="#000"
-            android:textSize="24dp"
-            android:textStyle="bold"
+            android:textSize="20dp"
             />
 
         <TextView
@@ -43,7 +42,7 @@
             android:id="@+id/storeitemli_cost"
             android:textColor="#000"
             android:textStyle="italic"
-            android:textSize="20dp"
+            android:textSize="16dp"
 
             />
     </LinearLayout>

@@ -33,7 +33,6 @@ public class StoreActivity extends Activity  {
 
         //the layout on which you are working
         TableLayout table = (TableLayout) findViewById(R.id.storelayout);
-        table.setBackground(getResources().getDrawable(R.drawable.store_background));
 
         //put the items in the layout!
         for (StoreItem item : all_items) {
@@ -74,7 +73,7 @@ public class StoreActivity extends Activity  {
                         finish();
 
                     } else {
-                        //TODO show error that you don't have enough money
+
                         Context context = getApplicationContext();
                         CharSequence text = "Je hebt niet genoeg geld. Wacht tot je zakgeld krijgt, of verdien geld door met de hond te spelen.";
                         int duration = Toast.LENGTH_LONG;
