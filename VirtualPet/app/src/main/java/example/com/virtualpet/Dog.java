@@ -29,8 +29,6 @@ public class Dog {
 
     public Dog(Context c, DogView view) {
         this.view = view;
-//        x = (int) ResourceManager.INSTANCE.convertPixelsToDp(500);
-//        y = (int) ResourceManager.INSTANCE.convertPixelsToDp(2000);
         speed = 5;
         screenwidth = ResourceManager.INSTANCE.getScreenWidth();
         x = screenwidth/2;
@@ -40,19 +38,11 @@ public class Dog {
     }
 
     public void update() {
-//        if(x>screenwidth){
-//            speed = -speed;
-//        }else if(x<0){
-//            speed = -speed;
-//        }
-//        x += speed;
         view.setXY(x, y);
         view.setBackgroundColor();
 
         checkUpdates();
         randomBark();
-
-
     }
 
 

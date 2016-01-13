@@ -102,36 +102,30 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
     public void setBackgroundColor(){
 //        currentTime.setToNow();
         currentTime.set(DogService.INSTANCE.getTime());
-//        Log.e("Date", "current day: "+currentTime.monthDay+"-"+currentTime.month+"-"+currentTime.year+" time: "+currentTime.hour+":"+currentTime.minute);
-//        if(currentTime.after(night)||currentTime.before(morning)){
+//        Log.e("Date", "current day: "+currentTime.monthDay+"-"+currentTime.month+"-"+currentTime.year+" time: "+currentTime.hour+":"+currentTime.minute+" color: ["+currentBackgroundColor[0]+", "+
+//        currentBackgroundColor[1]+", "+currentBackgroundColor[2]+"]");
 
-//        } else if(currentTime.after(morning)&&currentTime.before(midDay)){
-         if(timeAafterB(currentTime, morning)&&timeAbeforeB(currentTime, midDay)){
+        if(timeAafterB(currentTime, morning)&&timeAbeforeB(currentTime, midDay)){
             //moet lichter worden
-
             int maxDif = midDay.hour - morning.hour;
             int deltaHour = maxDif - (currentTime.hour-morning.hour);
             double percentage = (double)deltaHour/maxDif;
-//            currentBackgroundColor[0] = (int) ((black[0]-blue[0])*percentage-black[0]);
-            currentBackgroundColor[0] = (int) ((blue[0]-black[0])*percentage);
-            currentBackgroundColor[1] = (int) ((blue[1]-black[1])*percentage);
-//            currentBackgroundColor[2] = (int) ((blue[2]-black[2])*percentage);
-//        } else if(currentTime.after(midDay)&&currentTime.before(night)){
+            currentBackgroundColor[0] = (int) (blue[0]-(double)(blue[0])*percentage);
+            currentBackgroundColor[1] = (int) (blue[1]-(double)(blue[1])*percentage);
+            currentBackgroundColor[2] = 255;
         } else if(timeAafterB(currentTime, midDay)&&timeAbeforeB(currentTime, night)){
             //moet donkerder worden
             int maxDif = night.hour - midDay.hour;
             int deltaHour = maxDif - (currentTime.hour-midDay.hour);
             double percentage = (double)deltaHour/maxDif;
-//            currentBackgroundColor[0] = (int) ((black[0]-blue[0])*percentage+blue[0]);
-            currentBackgroundColor[0] = (int) (blue[0]-(blue[0]-black[0])*percentage);
-            currentBackgroundColor[1] = (int) (blue[1]-(blue[1]-black[1])*percentage);
-//            currentBackgroundColor[2] = (int) (blue[2]-(blue[2]-black[2])*percentage);
+            currentBackgroundColor[0] = (int) ((double)(blue[0])*percentage);
+            currentBackgroundColor[1] = (int) ((double)(blue[1])*percentage);
+            currentBackgroundColor[2] = 255;
         }
         if(timeAafterB(currentTime, night)||timeAbeforeB(currentTime, morning)){
             //moet zwart zijn;
             currentBackgroundColor = black;
         }
-//        Log.e("color", currentBackgroundColor[0] +" "+currentBackgroundColor[1]+" "+currentBackgroundColor[2]);
     }
 
     private boolean timeAbeforeB(Time a, Time b){
