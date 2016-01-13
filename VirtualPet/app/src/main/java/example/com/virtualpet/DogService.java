@@ -28,7 +28,7 @@ public class DogService extends Service implements Runnable {
     public static final int MINSATISFACTION = 0;
     public static final long THIRTYMINUTES = 1800000; // thirty minutes in milliseconds
     public static final long QUICKTIME = 1/8; // decrease to make time go faster
-    public static final long GetTimeFASTER = 60; // increase to make getTime(), which is used in DogService.java & Dog.java, return higher values.
+    public static final long GetTimeFASTER = 3600; // increase to make getTime(), which is used in DogService.java & Dog.java, return higher values.
 
     protected ArrayList<Calendar> eatTimes = new ArrayList<Calendar>();
     protected ArrayList<Calendar> walkTimes = new ArrayList<Calendar>();
