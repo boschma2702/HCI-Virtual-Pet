@@ -5,8 +5,10 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 import example.com.virtualpet.Util.ResourceManager;
@@ -26,6 +28,8 @@ public class Dog {
     public static final long THIRTYMINUTES = 1800000; // thirty minutes in milliseconds
     private long lastRefreshed;
 
+    private final ArrayList<DogMood> moodOrder = new ArrayList(Arrays.asList(new DogMood[]{DogMood.DEAD, DogMood.HUNGRY, DogMood.PLAYFULL, DogMood.SAD, DogMood.DIRTY, DogMood.BARKING, DogMood.HAPPY}));
+    private DogMood currentMood = DogMood.HAPPY;
 
     public Dog(Context c, DogView view) {
         this.view = view;
@@ -42,24 +46,42 @@ public class Dog {
         view.setBackgroundColor();
 
         checkUpdates();
-        randomBark();
+        //randomBark();
     }
 
 
 
     public void checkUpdates() {
-        if (DogService.INSTANCE.getDirty()) {
-            setView(DogMood.DIRTY);
-            DogService.INSTANCE.updateSatisfaction(-5, 40);
+        DogService service = DogService.INSTANCE;
+        for(DogMood m:moodOrder){
+            if(m.equals(DogMood.DIRTY)){
+                if(!view.isDogDirty()){
+                    setView(DogMood.DIRTY);
+                }
+            }else{
+                if(service.getMood(m)){
+                    if(currentMood!=m) {
+                        currentMood = m;
+                        setView(m);
+                    }
+                    return;
+                }
+            }
         }
-        if (DogService.INSTANCE.getWantsToWalk() || DogService.INSTANCE.getWantsToPlay()) {
-            setView(DogMood.PLAYFULL);
-            DogService.INSTANCE.updateSatisfaction(-10);
-        }
-        if (DogService.INSTANCE.getHungry()) {
-            setView(DogMood.HUNGRY);
-            DogService.INSTANCE.updateSatisfaction(-20);
-        }
+
+//
+//        if (DogService.INSTANCE.getDirty()) {
+//            setView(DogMood.DIRTY);
+//            DogService.INSTANCE.updateSatisfaction(-5, 40);
+//        }
+//        if (DogService.INSTANCE.getWantsToWalk() || DogService.INSTANCE.getWantsToPlay()) {
+//            setView(DogMood.PLAYFULL);
+//            DogService.INSTANCE.updateSatisfaction(-10);
+//        }
+//        if (DogService.INSTANCE.getHungry()) {
+//            setView(DogMood.HUNGRY);
+//            DogService.INSTANCE.updateSatisfaction(-20);
+//        }
     }
 
     public void randomBark() {
@@ -150,8 +172,38 @@ public class Dog {
         lastRefreshed = time;
     }
 
+    public void setView(DogMood mood) {
+//        if (getTime() - getTimeLastRefreshed() > (THIRTYMINUTES/30)) {
+//            if(mood.equals(DogMood.DIRTY)){
+//                view.setDirty();
+//            }else {
+//                view.setSprite(mood);
+//            }
+//            setLastRefreshed(getTime());
+//        }
+        if(mood.equals(DogMood.DIRTY)){
+            view.setDirty();
+        }else {
+            view.setSprite(mood);
+        }
+    }
+
+    public long getTimeLastRefreshed() {
+        return lastRefreshed;
+    }
+
+
+    public void setDirty(){
+        view.setDirty();
+    }
+
+
+
+
+
+
     public enum DogMood {
-        BARKING, HAPPY, PLAYFULL, SAD, DEAD, DIRTY, HUNGRY;
+        BARKING, HAPPY, PLAYFULL, SAD, DEAD, DIRTY, HUNGRY, WALKFULL;
 
         public int getRes(){
             switch (this){
@@ -169,6 +221,8 @@ public class Dog {
                     return R.drawable.dog_hungry30frames;
                 case DIRTY:
                     return -1;
+                case WALKFULL:
+                    return -1;//TODO implement animation
                 default:
                     return -1;
             }
@@ -190,29 +244,13 @@ public class Dog {
                     return 30;
                 case DEAD:
                     return -1;
+                case WALKFULL:
+                    return -1; //TODO
                 default:
                     return -1;
             }
         }
     }
 
-    public void setView(DogMood mood) {
-        if (getTime() - getTimeLastRefreshed() > (THIRTYMINUTES/30)) {
-            if(mood.equals(DogMood.DIRTY)){
-                view.setDirty();
-            }else {
-                view.setSprite(mood);
-            }
-            setLastRefreshed(getTime());
-        }
-    }
 
-    public long getTimeLastRefreshed() {
-        return lastRefreshed;
-    }
-
-
-    public void setDirty(){
-        view.setDirty();
-    }
 }

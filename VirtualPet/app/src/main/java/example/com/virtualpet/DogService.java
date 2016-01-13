@@ -41,6 +41,7 @@ public class DogService extends Service implements Runnable {
     private boolean hungry;
     private boolean wantsToWalk;
     private boolean wantsToPlay;
+    private boolean dead = false; //TODO implement dead
 
     NotificationManager mNotificationManager;
 
@@ -309,6 +310,29 @@ public class DogService extends Service implements Runnable {
         synchronized (this) {
             this.wantsToPlay = wantsToPlay;
         }
+    }
+
+    public boolean getMood(Dog.DogMood m){
+        synchronized (this){
+            switch (m){
+                case DIRTY:
+                    return dirty;
+                case HUNGRY:
+                    return hungry;
+                case PLAYFULL:
+                    return wantsToPlay;
+                case WALKFULL:
+                    return wantsToWalk;
+                case DEAD:
+                    return dead;
+                case HAPPY:
+                    return satisfaction>=80;
+                case SAD:
+                    return satisfaction<=20;
+
+            }
+        }
+        return false;
     }
 
     private void showNotification(String title, String content){
