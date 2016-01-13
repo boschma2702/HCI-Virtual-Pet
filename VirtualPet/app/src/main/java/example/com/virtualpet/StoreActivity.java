@@ -45,7 +45,7 @@ public class StoreActivity extends Activity  {
             title_tv.setText(item.getName());
 
             TextView cost_tv = (TextView) row.findViewById(R.id.storeitemli_cost);
-            cost_tv.setText(Integer.toString(item.getCost()));
+            cost_tv.setText("Prijs: € " + Integer.toString(item.getCost()) +",-");
 
             ImageButton imgbtn = (ImageButton) row.findViewById(R.id.storeitemli_img);
             imgbtn.setImageDrawable(item.getDrawable());

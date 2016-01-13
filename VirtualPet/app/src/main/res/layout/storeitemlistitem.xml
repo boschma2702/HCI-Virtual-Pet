@@ -43,7 +43,6 @@
             android:textColor="#000"
             android:textStyle="italic"
             android:textSize="16dp"
-
             />
     </LinearLayout>
 

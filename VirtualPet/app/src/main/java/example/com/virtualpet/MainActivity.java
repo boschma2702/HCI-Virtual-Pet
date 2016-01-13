@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -275,7 +274,7 @@ public class MainActivity extends Activity {
 
         builder1.setMessage(message_text);
         builder1.setCancelable(true);
-        builder1.setView(R.layout.custom_dialog);
+        //builder1.setView(R.layout.custom_dialog);
 
         builder1.setPositiveButton(
                 positive_text,
@@ -304,7 +303,7 @@ public class MainActivity extends Activity {
             title_tv.setText(item.getName());
 
             TextView cost_tv = (TextView) row.findViewById(R.id.storeitemli_cost);
-            cost_tv.setText(Integer.toString(item.getCost()));
+            cost_tv.setText("Prijs: € " + Integer.toString(item.getCost()) +",-");
 
             ImageButton imgbtn = (ImageButton) row.findViewById(R.id.storeitemli_img);
             imgbtn.setImageDrawable(item.getDrawable());
@@ -313,8 +312,6 @@ public class MainActivity extends Activity {
         }
 
         builder1.setView(table);
-
-
 
         AlertDialog alert11 = builder1.create();
         alert11.show();
@@ -327,17 +324,28 @@ public class MainActivity extends Activity {
     // if false, return
     public boolean ItemisBought(ArrayList<StoreItem> items) {
         //check for all passed items if there is a buyed item which equals it
-        for(StoreItem item : items) {
+
+        ArrayList<StoreItem> items_to_delete = new ArrayList<>();
+
             for (StoreItem buyed_item : buyed_items) {
-                 if (buyed_item.getId() == item.getId()) {
+                for(StoreItem item : items) {
+                    if (buyed_item.getId() == item.getId()) {
                      //if we have a item already bought remove it from the arraylist
-                     items.remove(item);
-                     if (items.isEmpty()) {
+                        items_to_delete.add(item);
+
+                        //if all items are to be deleted already return true
+                     if (items.size() <= items_to_delete.size()) {
                          return true;
                      }
                }
            }
         }
+
+        for(StoreItem item : items_to_delete) {
+            items.remove(item);
+        }
+
+        //the (remaining) items should be bought
         showGoToShopDialog("Je moet nog het volgende kopen in de winkel:", "nu kopen", "terug", items);
         return false;
     }
