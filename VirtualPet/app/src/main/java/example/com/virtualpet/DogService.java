@@ -107,13 +107,13 @@ public class DogService extends Service implements Runnable {
     public void checkStatus() {
         if ((getTime() - getTimeLastPlayed()) > (5*THIRTYMINUTES * QUICKTIME)) {
             showNotification("Bark bark!", "I am bored!");
-            updateSatisfaction(50);
+            updateSatisfaction(-5);
             setWantsToPlay(true);
             setWantsToWalk(false);
         }
         if ((getTime() - getTimeLastWalked()) > (5*THIRTYMINUTES * QUICKTIME)) {
             showNotification("Bark bark!", "I want to walk!");
-            updateSatisfaction(40);
+            updateSatisfaction(-10);
             setWantsToWalk(true);
             setWantsToPlay(true);
         }
@@ -170,17 +170,16 @@ public class DogService extends Service implements Runnable {
     // Satisfaction
     public void updateSatisfaction(int satisfaction) {
         synchronized (this) {
-
-            /* if (this.satisfaction + satisfaction > MAXSATISFACTION ) {
+            //if satisfaction is larger than max satisfaction
+            // satisfaction = max
+            // else if satisfaaction
+            if (this.satisfaction + satisfaction > MAXSATISFACTION ) {
                 this.satisfaction = MAXSATISFACTION;
             } else if (this.satisfaction + satisfaction < MINSATISFACTION) {
                 this.satisfaction = MINSATISFACTION;
             } else {
                 this.satisfaction += satisfaction;
-            } /*
-
-            this.satisfaction = satisfaction;
-
+            }
             statisfactionChanged();
         }
     }
@@ -188,18 +187,15 @@ public class DogService extends Service implements Runnable {
     public void updateSatisfaction(int satisfaction, long chance) {
         if (Math.random() * 100 <= chance) {
             synchronized (this) {
-
-               /* if (this.satisfaction + satisfaction > MAXSATISFACTION) {
+                if (this.satisfaction + satisfaction > MAXSATISFACTION) {
                     this.satisfaction = MAXSATISFACTION;
                 } else if (this.satisfaction + satisfaction < MINSATISFACTION) {
                     this.satisfaction = MINSATISFACTION;
                 } else {
                     this.satisfaction += satisfaction;
                 }
-                */
-                this.satisfaction = satisfaction;
                 statisfactionChanged();
-          //  }
+            }
         }
     }
 

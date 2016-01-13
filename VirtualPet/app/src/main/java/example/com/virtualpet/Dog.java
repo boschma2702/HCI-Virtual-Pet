@@ -1,9 +1,13 @@
 package example.com.virtualpet;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
-
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import example.com.virtualpet.Util.ResourceManager;
 
@@ -54,18 +58,17 @@ public class Dog {
 
 
     public void checkUpdates() {
-        Log.e("LUKAS_DEBUG", "checkupdates" );
         if (DogService.INSTANCE.getDirty()) {
             setView(DogMood.DIRTY);
-            DogService.INSTANCE.updateSatisfaction(50);
+            DogService.INSTANCE.updateSatisfaction(-5, 40);
         }
         if (DogService.INSTANCE.getWantsToWalk() || DogService.INSTANCE.getWantsToPlay()) {
             setView(DogMood.PLAYFULL);
-            DogService.INSTANCE.updateSatisfaction(50);
+            DogService.INSTANCE.updateSatisfaction(-10);
         }
         if (DogService.INSTANCE.getHungry()) {
             setView(DogMood.HUNGRY);
-            DogService.INSTANCE.updateSatisfaction(30);
+            DogService.INSTANCE.updateSatisfaction(-20);
         }
     }
 
@@ -86,10 +89,10 @@ public class Dog {
 
     public void playedWithDog(boolean gettingDirty) {
         if((getTime() - getTimeLastEaten()) > (THIRTYMINUTES * DogService.QUICKTIME)) {
-            DogService.INSTANCE.updateSatisfaction(90);
+            DogService.INSTANCE.updateSatisfaction(15, 80);
             setView(DogMood.HAPPY);
         } else {
-            DogService.INSTANCE.updateSatisfaction(40);
+            DogService.INSTANCE.updateSatisfaction(-5, 60);
             setView(DogMood.SAD);
         }
         if(Math.random() < 0.75 && gettingDirty) {
@@ -99,17 +102,17 @@ public class Dog {
     }
 
     public void cleanedDog() {
-        DogService.INSTANCE.updateSatisfaction(80);
+        DogService.INSTANCE.updateSatisfaction(10);
         DogService.INSTANCE.setDirty(false);
         setView(DogMood.HAPPY);
     }
 
     public void walkedWithDog(boolean gettingDirty) {
         if((getTime() - DogService.INSTANCE.getTimeLastWalked()) > (THIRTYMINUTES * DogService.QUICKTIME)) {
-            DogService.INSTANCE.updateSatisfaction(90);
+            DogService.INSTANCE.updateSatisfaction(10, 75);
             setView(DogMood.HAPPY);
         } else {
-            DogService.INSTANCE.updateSatisfaction(30);
+            DogService.INSTANCE.updateSatisfaction(-5, 60);
             setView(DogMood.SAD);
         }
         if(Math.random() < 0.75 && gettingDirty) {

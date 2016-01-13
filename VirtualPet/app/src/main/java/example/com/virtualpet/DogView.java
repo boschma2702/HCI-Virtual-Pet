@@ -6,10 +6,13 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.text.format.Time;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+
+import java.util.Arrays;
 
 import example.com.virtualpet.Util.ResourceManager;
 import example.com.virtualpet.Util.SpriteSheet;
@@ -249,7 +252,6 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
     public boolean onTouch(View v, MotionEvent event) {
         if(drawDirty&&event.getAction()==MotionEvent.ACTION_MOVE){
             if(cleaningManger.onTouch((int)event.getX(), (int)event.getY())){
-                dog.cleanedDog();
                 drawDirty = false;
             }
         }
@@ -261,17 +263,6 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
         return true;
     }
 
-
-    public void updateDogHappiness() {
-        dog.playedWithDog(false);
-        setDirty();
-    }
-
-    public void walkedWithDog() {
-//        dog.walkedWithDog(false);
-  //      setDirty();
-
-    }
 
 
 
