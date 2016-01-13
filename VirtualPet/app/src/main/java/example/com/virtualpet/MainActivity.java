@@ -132,6 +132,7 @@ public class MainActivity extends Activity {
         if (ItemisBought(new ArrayList<>(Arrays.asList(bal)))) {
             Intent intent = new Intent(this, FlapDogActivity.class);
             startActivity(intent);
+            view.getDog().playedWithDog(true);
         }
     }
 

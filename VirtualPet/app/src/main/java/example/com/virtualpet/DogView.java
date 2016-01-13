@@ -213,6 +213,10 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
         }
     }
 
+    public Dog getDog(){
+        return dog;
+    }
+
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
