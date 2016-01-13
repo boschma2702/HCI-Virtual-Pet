@@ -7,11 +7,27 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="right">
+
+    <ImageButton
+        android:layout_width="66dp"
+        android:layout_height="66dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/icon_home"
+        android:id="@+id/cancelbutton"
+        android:adjustViewBounds="true"
+        android:background="@drawable/selectable_button"
+        android:padding="16dp"
+        android:onClick="onCancelClicked"
+        android:layout_gravity="right" />
 
 <TableLayout
 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -21,25 +37,9 @@
     android:orientation="vertical">
 
 
-    <LinearLayout
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content">
-
-    <ImageButton
-        android:layout_width="66dp"
-        android:layout_height="66dp"
-        android:layout_gravity="left"
-        android:scaleType="fitStart"
-        android:src="@drawable/icon_home"
-        android:id="@+id/cancelbutton"
-        android:adjustViewBounds="true"
-        android:background="@drawable/selectable_button"
-        android:padding="16dp"
-        android:onClick="onCancelClicked"
-
-        />
-    </LinearLayout>
 
 </TableLayout>
+
+    </LinearLayout>
 
 </ScrollView>

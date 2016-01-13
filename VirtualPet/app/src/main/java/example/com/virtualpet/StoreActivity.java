@@ -3,13 +3,10 @@ package example.com.virtualpet;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -33,54 +30,33 @@ public class StoreActivity extends Activity  {
 
         all_items = storeitemlist.getAllItems();
 
+
         //the layout on which you are working
-        TableLayout layout = (TableLayout) findViewById(R.id.storelayout);
-        layout.setBackground(getResources().getDrawable(R.drawable.store_background));
+        TableLayout table = (TableLayout) findViewById(R.id.storelayout);
+        table.setBackground(getResources().getDrawable(R.drawable.store_background));
 
         //put the items in the layout!
         for (StoreItem item : all_items) {
-            //set the properties for button
 
-            TableRow tr = new TableRow(this);
-            tr.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+            //get the custom layout from xml
+            LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            TableRow row = (TableRow) vi.inflate(R.layout.storeitemlistitem, null);
 
-            LinearLayout ll = new LinearLayout(this);
-            ll.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-            ll.setOrientation(LinearLayout.VERTICAL);
-            ll.setGravity(Gravity.CENTER_VERTICAL);
+            TextView title_tv = (TextView) row.findViewById(R.id.storeitemli_title);
+            title_tv.setText(item.getName());
 
-            ImageButton imgbtn = new ImageButton(this);
+            TextView cost_tv = (TextView) row.findViewById(R.id.storeitemli_cost);
+            cost_tv.setText(Integer.toString(item.getCost()));
+
+            ImageButton imgbtn = (ImageButton) row.findViewById(R.id.storeitemli_img);
             imgbtn.setImageDrawable(item.getDrawable());
             imgbtn.setId(item.getId());
-            TableRow.LayoutParams params = new TableRow.LayoutParams(400, 400);
-            params.gravity=Gravity.CENTER_HORIZONTAL;
-            imgbtn.setLayoutParams(params);
-            imgbtn.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            imgbtn.setBackground(null);
             imgbtn.setOnClickListener(itemClicked);
 
-            TextView name_tv = new TextView(this);
-            name_tv.setText(item.getName());
-      //      name_tv.setGravity(Gravity.CENTER);
-            name_tv.setTextColor(Color.BLACK);
-            name_tv.setTextSize(20);
+            table.addView(row);
 
-            TextView cost_tv = new TextView(this);
-            cost_tv.setText("€ " + item.getCost());
-            cost_tv.setTextColor(Color.BLACK);
-        //    cost_tv.setGravity(Gravity.CENTER);
-            cost_tv.setTextSize(20);
-
-
-            //add elements to the layout
-            tr.addView(imgbtn);
-            ll.addView(name_tv);
-            ll.addView(cost_tv);
-            tr.addView(ll);
-
-            layout.addView(tr);
         }
-
+        table.requestLayout();
     }
 
     View.OnClickListener itemClicked = new View.OnClickListener() {

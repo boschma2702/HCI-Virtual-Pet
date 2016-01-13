@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
 android:orientation="vertical"
 android:layout_width="wrap_content"
-android:layout_height="wrap_content">
+android:layout_height="wrap_content"
+    android:id="@+id/custom_dialog_layout"
+    android:background="#ffffff">
 
 <ImageView
     android:src="@drawable/icon_food"
-    android:layout_width="match_parent"
-    android:layout_height="64dp"
+    android:layout_width="66dp"
+    android:layout_height="66dp"
     android:scaleType="center"
-    android:background="#FFFFBB33"
     android:contentDescription="@string/app_name" />
 
-</LinearLayout>
+    <ImageView
+        android:src="@drawable/icon_play"
+        android:layout_width="66dp"
+        android:layout_height="66dp"
+        android:scaleType="center"
+        android:contentDescription="@string/app_name" />
+
+</TableLayout>

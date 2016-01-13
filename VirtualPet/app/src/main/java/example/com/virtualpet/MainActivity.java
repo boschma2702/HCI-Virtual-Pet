@@ -6,22 +6,28 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import example.com.virtualpet.Util.ResourceManager;
 import example.com.virtualpet.flapdog.FlapDogActivity;
@@ -123,7 +129,7 @@ public class MainActivity extends Activity {
 
         StoreItem bal = storeitemlist.getItemByName(getString(R.string.ball));
 
-        if (ItemisBought(bal)) {
+        if (ItemisBought(new ArrayList<>(Arrays.asList(bal)))) {
             Intent intent = new Intent(this, FlapDogActivity.class);
             startActivity(intent);
         }
@@ -134,7 +140,7 @@ public class MainActivity extends Activity {
         StoreItem hondenvoer = storeitemlist.getItemByName(getString(R.string.food));
         StoreItem voerbak = storeitemlist.getItemByName(getString(R.string.bowl));
 
-        if (ItemisBought(hondenvoer) && ItemisBought(voerbak)) {
+        if (ItemisBought(new ArrayList<>(Arrays.asList(hondenvoer, voerbak)))) {
             Intent intent = new Intent(this, FeedActivity.class);
             startActivity(intent);
         }
@@ -151,7 +157,7 @@ public class MainActivity extends Activity {
 
         StoreItem spons = storeitemlist.getItemByName(getString(R.string.sponge));
 
-        if (ItemisBought(spons)) {
+        if (ItemisBought(new ArrayList<>(Arrays.asList(spons)))) {
             if(view.isDogDirty()) {
                 view.getCleaningManger().activate();
             }else{
@@ -261,11 +267,14 @@ public class MainActivity extends Activity {
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         sharedPref.edit().clear().commit();
     }
-    
-    public void showGoToShopDialog(String message_text, String positive_text, String negative_text) {
+
+    public void showGoToShopDialog(String message_text, String positive_text, String negative_text, ArrayList<StoreItem> items) {
+
         AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+
         builder1.setMessage(message_text);
         builder1.setCancelable(true);
+        builder1.setView(R.layout.custom_dialog);
 
         builder1.setPositiveButton(
                 positive_text,
@@ -283,18 +292,53 @@ public class MainActivity extends Activity {
                     }
                 });
 
+        TableLayout table = new TableLayout(this);
+        table.setBackgroundColor(Color.WHITE);
+
+        for (StoreItem item : items) {
+
+            LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            TableRow row = (TableRow) vi.inflate(R.layout.storeitemlistitem, null);
+
+            TextView title_tv = (TextView) row.findViewById(R.id.storeitemli_title);
+            title_tv.setText(item.getName());
+
+            TextView cost_tv = (TextView) row.findViewById(R.id.storeitemli_cost);
+            cost_tv.setText(Integer.toString(item.getCost()));
+
+            ImageButton imgbtn = (ImageButton) row.findViewById(R.id.storeitemli_img);
+            imgbtn.setImageDrawable(item.getDrawable());
+
+            table.addView(row);
+        }
+
+        builder1.setView(table);
+
+
+
         AlertDialog alert11 = builder1.create();
         alert11.show();
+
+
     }
 
-    public boolean ItemisBought(StoreItem item) {
-        for (StoreItem buyed_item : buyed_items) {
-            if (buyed_item.getId() == item.getId()) {
-                return true;
-            }
-        }
-        showGoToShopDialog("Je hebt nog geen " + item.getName() + ". Je moet het kopen in de winkel.", "nu kopen", "terug");
 
+// check if one or more items are bought.
+    // if false, return
+    public boolean ItemisBought(ArrayList<StoreItem> items) {
+        //check for all passed items if there is a buyed item which equals it
+        for(StoreItem item : items) {
+            for (StoreItem buyed_item : buyed_items) {
+                 if (buyed_item.getId() == item.getId()) {
+                     //if we have a item already bought remove it from the arraylist
+                     items.remove(item);
+                     if (items.isEmpty()) {
+                         return true;
+                     }
+               }
+           }
+        }
+        showGoToShopDialog("Je moet nog het volgende kopen in de winkel:", "nu kopen", "terug", items);
         return false;
     }
 }
