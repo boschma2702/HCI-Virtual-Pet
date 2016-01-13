@@ -28,7 +28,7 @@ public class DogService extends Service implements Runnable {
     public static final int MINSATISFACTION = 0;
     public static final long THIRTYMINUTES = 1800000; // thirty minutes in milliseconds
     public static final long QUICKTIME = 1/8; // decrease to make time go faster
-    public static final long GetTimeFASTER = 3600; // increase to make getTime(), which is used in DogService.java & Dog.java, return higher values.
+    public static final long GetTimeFASTER = 60; // increase to make getTime(), which is used in DogService.java & Dog.java, return higher values.
 
     protected ArrayList<Calendar> eatTimes = new ArrayList<Calendar>();
     protected ArrayList<Calendar> walkTimes = new ArrayList<Calendar>();
@@ -107,13 +107,13 @@ public class DogService extends Service implements Runnable {
     public void checkStatus() {
         if ((getTime() - getTimeLastPlayed()) > (5*THIRTYMINUTES * QUICKTIME)) {
             showNotification("Bark bark!", "I am bored!");
-            updateSatisfaction(-5);
+            updateSatisfaction(50);
             setWantsToPlay(true);
             setWantsToWalk(false);
         }
         if ((getTime() - getTimeLastWalked()) > (5*THIRTYMINUTES * QUICKTIME)) {
             showNotification("Bark bark!", "I want to walk!");
-            updateSatisfaction(-10);
+            updateSatisfaction(40);
             setWantsToWalk(true);
             setWantsToPlay(true);
         }
@@ -170,16 +170,17 @@ public class DogService extends Service implements Runnable {
     // Satisfaction
     public void updateSatisfaction(int satisfaction) {
         synchronized (this) {
-            //if satisfaction is larger than max satisfaction
-            // satisfaction = max
-            // else if satisfaaction
-            if (this.satisfaction + satisfaction > MAXSATISFACTION ) {
+
+            /* if (this.satisfaction + satisfaction > MAXSATISFACTION ) {
                 this.satisfaction = MAXSATISFACTION;
             } else if (this.satisfaction + satisfaction < MINSATISFACTION) {
                 this.satisfaction = MINSATISFACTION;
             } else {
                 this.satisfaction += satisfaction;
-            }
+            } /*
+
+            this.satisfaction = satisfaction;
+
             statisfactionChanged();
         }
     }
@@ -187,15 +188,18 @@ public class DogService extends Service implements Runnable {
     public void updateSatisfaction(int satisfaction, long chance) {
         if (Math.random() * 100 <= chance) {
             synchronized (this) {
-                if (this.satisfaction + satisfaction > MAXSATISFACTION) {
+
+               /* if (this.satisfaction + satisfaction > MAXSATISFACTION) {
                     this.satisfaction = MAXSATISFACTION;
                 } else if (this.satisfaction + satisfaction < MINSATISFACTION) {
                     this.satisfaction = MINSATISFACTION;
                 } else {
                     this.satisfaction += satisfaction;
                 }
+                */
+                this.satisfaction = satisfaction;
                 statisfactionChanged();
-            }
+          //  }
         }
     }
 
