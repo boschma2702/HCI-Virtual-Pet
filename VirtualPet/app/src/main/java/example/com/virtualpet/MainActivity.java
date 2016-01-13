@@ -293,7 +293,6 @@ public class MainActivity extends Activity {
                 });
 
         TableLayout table = new TableLayout(this);
-        table.setBackgroundColor(Color.WHITE);
 
         for (StoreItem item : items) {
 
