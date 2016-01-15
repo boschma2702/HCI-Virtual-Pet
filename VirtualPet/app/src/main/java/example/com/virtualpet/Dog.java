@@ -131,6 +131,11 @@ public class Dog {
         }
     }
 
+    public void hasEaten() {
+        DogService.INSTANCE.setHungry(false);
+        setView(DogMood.HAPPY);
+    }
+
 
 
     // Getters & Setters
