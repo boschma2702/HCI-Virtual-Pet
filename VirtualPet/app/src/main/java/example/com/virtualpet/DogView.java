@@ -43,7 +43,7 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
     private int[] currentBackgroundColor = new int[]{112,222,240};
     private Time morning = ResourceManager.INSTANCE.morning; // moet weer lichter worden.
     private Time night = ResourceManager.INSTANCE.night; // moet donker zijn
-    private Time midDay = ResourceManager.INSTANCE.midDay; // moet velste blauw zijn
+    private Time midDay = ResourceManager.INSTANCE.midDay; // moet felste blauw zijn
     private Time currentTime = new Time();
 
     private int secondCounter = 0;
@@ -75,6 +75,7 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
 
     private void updateSecond() {
         activity.statisfactionChanged();
+        activity.setDayField(DogService.INSTANCE.getDaysAlive());
     }
 
     public void onDraw(Canvas c){

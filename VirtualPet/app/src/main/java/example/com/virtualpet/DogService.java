@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.text.format.Time;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -42,6 +43,8 @@ public class DogService extends Service implements Runnable {
     private boolean wantsToWalk;
     private boolean wantsToPlay;
     private boolean dead = false; //TODO implement dead
+
+    private Date startDay;
 
     NotificationManager mNotificationManager;
 
@@ -88,6 +91,7 @@ public class DogService extends Service implements Runnable {
     }
 
     public void initialize() {
+        startDay = new Date(getTime());
         setTimeLastEaten(new Date(getTime()));
         setTimeLastPlayed(new Date(getTime()));
         setTimeLastWalked(new Date(getTime()));
@@ -333,6 +337,18 @@ public class DogService extends Service implements Runnable {
             }
         }
         return false;
+    }
+
+    public int getDaysAlive(){
+        Date now = new Date(getTime());
+        return get_days_between_dates(now, startDay);
+    }
+
+    private int get_days_between_dates(Date date1, Date date2) {
+        //if date2 is more in the future than date1 then the result will be negative
+        //if date1 is more in the future than date2 then the result will be positive.
+
+        return (int)((date2.getTime() - date1.getTime()) / (1000*60*60*24l));
     }
 
     private void showNotification(String title, String content){

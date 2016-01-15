@@ -48,6 +48,7 @@ public class MainActivity extends Activity {
 
     SharedPreferences sharedPref;
     private ProgressBar progressBar;
+    private TextView dateField;
 
     public static final int FLAPDOGACTIVITY = 1;
     public static final int STOREACTIVITY = 2;
@@ -103,6 +104,8 @@ public class MainActivity extends Activity {
         progressBar.setMax(DogService.MAXSATISFACTION);
         progressBar.setProgress(DogService.INSTANCE.getSatisfaction());
         Log.e("test", String.valueOf(progressBar));
+        dateField = (TextView) findViewById(R.id.game_dayField);
+        setDayField(DogService.INSTANCE.getDaysAlive());
         new Thread(view).start();
     }
 
@@ -375,6 +378,17 @@ public class MainActivity extends Activity {
         //the (remaining) items should be bought
         showGoToShopDialog("Je moet nog het volgende kopen in de winkel:", "nu kopen", "terug", items);
         return false;
+    }
+
+    public void setDayField(final int days) {
+        if(inGame){
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    dateField.setText("Dag: "+days);
+                }
+            });
+        }
     }
 }
 
