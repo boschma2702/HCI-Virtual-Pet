@@ -227,7 +227,7 @@ public class MainActivity extends Activity {
     }
 
     private void processFeedClosed(Intent data) {
-        //TODO call feeded in dog.
+        view.getDog().hasEaten();
     }
 
     @Override

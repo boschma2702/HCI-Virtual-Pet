@@ -43,6 +43,21 @@ public class FeedActivity extends Activity {
 
     }
 
+
+    @Override
+    protected void onStop() {
+        close();
+        super.onStop();
+    }
+
+    private void close(){
+        Intent returnIntent = new Intent();
+        //TODO maybe extra check if feeded
+        setResult(Activity.RESULT_OK,returnIntent);
+        finish();
+    }
+
+
     @Override
     public void onResume() {
         super.onResume();

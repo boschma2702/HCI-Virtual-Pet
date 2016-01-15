@@ -51,35 +51,15 @@ public class Dog {
 
     public void checkUpdates() {
         DogService service = DogService.INSTANCE;
-        for(DogMood m:moodOrder){
-            if(m.equals(DogMood.DIRTY)){
-                if(!view.isDogDirty()){
-                    setView(DogMood.DIRTY);
+        for(DogMood m:moodOrder) {
+            if(service.getMood(m)){
+                if(currentMood!=m){
+                    setView(m);
+                    currentMood = m;
                 }
-            }else{
-                if(service.getMood(m)){
-                    if(currentMood!=m) {
-                        currentMood = m;
-                        setView(m);
-                    }
-                    return;
-                }
+                return;
             }
         }
-
-//
-//        if (DogService.INSTANCE.getDirty()) {
-//            setView(DogMood.DIRTY);
-//            DogService.INSTANCE.updateSatisfaction(-5, 40);
-//        }
-//        if (DogService.INSTANCE.getWantsToWalk() || DogService.INSTANCE.getWantsToPlay()) {
-//            setView(DogMood.PLAYFULL);
-//            DogService.INSTANCE.updateSatisfaction(-10);
-//        }
-//        if (DogService.INSTANCE.getHungry()) {
-//            setView(DogMood.HUNGRY);
-//            DogService.INSTANCE.updateSatisfaction(-20);
-//        }
     }
 
     public void randomBark() {
@@ -109,12 +89,14 @@ public class Dog {
             setDirty(true);
             setView(DogMood.DIRTY);
         }
+        //TODO set played propperly
+        DogService.INSTANCE.setWantsToPlay(false);
     }
 
     public void cleanedDog() {
         DogService.INSTANCE.updateSatisfaction(10);
         DogService.INSTANCE.setDirty(false);
-        setView(DogMood.HAPPY);
+//        setView(DogMood.HAPPY);
     }
 
     public void walkedWithDog(boolean gettingDirty) {
@@ -129,6 +111,8 @@ public class Dog {
             setDirty(true);
             setView(DogMood.DIRTY);
         }
+        //TODO set has walked propperly
+        DogService.INSTANCE.setWantsToWalk(false);
     }
 
     public void hasEaten() {

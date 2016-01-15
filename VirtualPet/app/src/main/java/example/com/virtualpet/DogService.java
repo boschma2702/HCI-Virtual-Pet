@@ -185,7 +185,7 @@ public class DogService extends Service implements Runnable {
             } else {
                 this.satisfaction += satisfaction;
             }
-            statisfactionChanged();
+            satisfactionChanged();
         }
     }
 
@@ -199,12 +199,12 @@ public class DogService extends Service implements Runnable {
                 } else {
                     this.satisfaction += satisfaction;
                 }
-                statisfactionChanged();
+                satisfactionChanged();
             }
         }
     }
 
-    private void statisfactionChanged(){
+    private void satisfactionChanged(){
         //TODO observer pattern would be nice here, but hard to implement. Workaround is added
     }
 
@@ -341,7 +341,7 @@ public class DogService extends Service implements Runnable {
 
     public int getDaysAlive(){
         Date now = new Date(getTime());
-        return get_days_between_dates(now, startDay);
+        return get_days_between_dates(startDay, now);
     }
 
     private int get_days_between_dates(Date date1, Date date2) {
@@ -349,6 +349,10 @@ public class DogService extends Service implements Runnable {
         //if date1 is more in the future than date2 then the result will be positive.
 
         return (int)((date2.getTime() - date1.getTime()) / (1000*60*60*24l));
+    }
+
+    public void printState(){
+        Log.e("Dogstate", "Hungry: "+hungry+" WantstoPlay: "+wantsToPlay+" Sad: "+(satisfaction<=20)+" Dirty: "+dirty);
     }
 
     private void showNotification(String title, String content){

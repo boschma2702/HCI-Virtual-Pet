@@ -76,6 +76,7 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
     private void updateSecond() {
         activity.statisfactionChanged();
         activity.setDayField(DogService.INSTANCE.getDaysAlive());
+        DogService.INSTANCE.printState();
     }
 
     public void onDraw(Canvas c){
@@ -252,6 +253,7 @@ public class DogView extends SurfaceView implements SurfaceHolder.Callback, Runn
         if(drawDirty&&event.getAction()==MotionEvent.ACTION_MOVE){
             if(cleaningManger.onTouch((int)event.getX(), (int)event.getY())){
                 drawDirty = false;
+                dog.cleanedDog();
             }
         }
         try {
