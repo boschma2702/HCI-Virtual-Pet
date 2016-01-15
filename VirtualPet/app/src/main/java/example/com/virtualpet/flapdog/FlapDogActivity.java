@@ -2,6 +2,7 @@ package example.com.virtualpet.flapdog;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +22,7 @@ public class FlapDogActivity extends Activity {
     private View gameoverScreen;
     private TextView scoreField;
     private TextView bestField;
+    private int currentScore = 0;
 
 
     @Override
@@ -40,18 +42,19 @@ public class FlapDogActivity extends Activity {
 
 
     public void gameOver(final int score) {
+        currentScore = score;
         final SharedPreferences sp = getPreferences(Context.MODE_PRIVATE);
         final int prevHighscore = sp.getInt("flapdog_highscore", 0);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 scoreField.setText(String.valueOf(score));
-                if(prevHighscore<score){
+                if (prevHighscore < score) {
                     bestField.setText(String.valueOf(score));
                     SharedPreferences.Editor editor = sp.edit();
                     editor.putInt("flapdog_highscore", score);
                     editor.apply();
-                }else{
+                } else {
                     bestField.setText(String.valueOf(prevHighscore));
                 }
                 gameoverScreen.setVisibility(View.VISIBLE);
@@ -60,7 +63,22 @@ public class FlapDogActivity extends Activity {
 
     }
 
+
     public void exitButtonClicked(View v){
+        close();
+    }
+
+    @Override
+    protected void onStop() {
+        close();
+        super.onStop();
+    }
+
+    private void close(){
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("played",true);
+        returnIntent.putExtra("score",currentScore);
+        setResult(Activity.RESULT_OK,returnIntent);
         finish();
     }
 

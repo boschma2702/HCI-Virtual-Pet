@@ -27,7 +27,7 @@ public class CleaningManger {
     }
 
     public void activate(){
-        drawSponge = false;
+        drawSponge = true;
     }
 
     public void reset(){
@@ -38,8 +38,10 @@ public class CleaningManger {
     }
 
     public void onDraw(Canvas c){
-        for(Stain s:toDrawList){
-            s.onDraw(c);
+        synchronized (this) {
+            for (Stain s : toDrawList) {
+                s.onDraw(c);
+            }
         }
         if(drawSponge) {
             sponge.onDraw(c);
@@ -47,17 +49,21 @@ public class CleaningManger {
     }
 
     public boolean onTouch(int x, int y){
-        List<Stain> toDelete = new ArrayList<>();
-        sponge.setXY(x, y);
-        for(Stain s:toDrawList){
-            if(s.clean(x, y)){
-                toDelete.add(s);
+        if(drawSponge) {
+            List<Stain> toDelete = new ArrayList<>();
+            sponge.setXY(x, y);
+            for (Stain s : toDrawList) {
+                if (s.clean(x, y)) {
+                    toDelete.add(s);
+                }
             }
-        }
-        toDrawList.removeAll(toDelete);
-        if(toDrawList.size()==0){
-            drawSponge = false;
-            return true;
+            synchronized (this) {
+                toDrawList.removeAll(toDelete);
+            }
+            if (toDrawList.size() == 0) {
+                drawSponge = false;
+                return true;
+            }
         }
         return false;
     }

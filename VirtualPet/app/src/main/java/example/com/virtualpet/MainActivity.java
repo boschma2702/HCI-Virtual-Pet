@@ -49,6 +49,11 @@ public class MainActivity extends Activity {
     SharedPreferences sharedPref;
     private ProgressBar progressBar;
 
+    public static final int FLAPDOGACTIVITY = 1;
+    public static final int STOREACTIVITY = 2;
+    public static final int FEEDACTIVITY = 3;
+    public static final int MAPSACTIVITY = 4;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +124,7 @@ public class MainActivity extends Activity {
             startActivity(gpsOptionsIntent);
         } else {
             Intent maps = new Intent(this, MapsActivity.class);
-            startActivity(maps);
+            startActivityForResult(maps, MAPSACTIVITY);
         }
 
     }
@@ -130,8 +135,8 @@ public class MainActivity extends Activity {
 
         if (ItemisBought(new ArrayList<>(Arrays.asList(bal)))) {
             Intent intent = new Intent(this, FlapDogActivity.class);
-            startActivity(intent);
-            view.getDog().playedWithDog(true);
+            startActivityForResult(intent, FLAPDOGACTIVITY);
+//            view.getDog().playedWithDog(true);
         }
     }
 
@@ -142,7 +147,7 @@ public class MainActivity extends Activity {
 
         if (ItemisBought(new ArrayList<>(Arrays.asList(hondenvoer, voerbak)))) {
             Intent intent = new Intent(this, FeedActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, FEEDACTIVITY);
         }
     }
 
@@ -150,7 +155,7 @@ public class MainActivity extends Activity {
         Intent intent = new Intent(this, StoreActivity.class);
         intent.putExtra("money", money);
 
-        startActivityForResult(intent, 1);
+        startActivityForResult(intent, STOREACTIVITY);
     }
 
     public void showerClicked(View v) {
@@ -161,7 +166,7 @@ public class MainActivity extends Activity {
             if(view.isDogDirty()) {
                 view.getCleaningManger().activate();
             }else{
-                //TODO show notification that dog is not dirty.
+                Toast.makeText(this, "Hond is niet vies", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -169,36 +174,58 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (requestCode == 1) {
-            if(resultCode == Activity.RESULT_OK){
-                StoreItem item =data.getParcelableExtra("item");
-                buyed_items.add(item);
-                money = money - item.getCost();
-
-                //sharedPref = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putInt(getString(R.string.moneyString), money);
-
-
-                editor.putInt("buyed_items_size", buyed_items.size());
-
-                //store the items in shared preferences
-                for(int i = 0; i<buyed_items.size(); i++) {
-                    editor.putInt("buyed_items_" + i, buyed_items.get(i).getId());
-                }
-
-                editor.commit();
-
-                updateMoneyTextView();
-                updateItemsShowing(item);
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
-                //Write your code if there's no result
-                // we are very sad to hear you did not buy anything :(
+        if(resultCode == Activity.RESULT_OK){
+            switch (requestCode){
+                case STOREACTIVITY:
+                    processStoreClosed(data);
+                    break;
+                case FEEDACTIVITY:
+                    processFeedClosed(data);
+                    break;
+                case FLAPDOGACTIVITY:
+                    processFlapdogClosed(data);
+                    break;
+                case MAPSACTIVITY:
+                    processMapsClosed(data);
+                    break;
             }
         }
-    }//onActivityResult
+    }
+
+    private void processMapsClosed(Intent data) {
+        view.getDog().walkedWithDog(true);
+        //TODO check if actual distance is walked
+    }
+
+    private void processFlapdogClosed(Intent data) {
+        view.getDog().playedWithDog(true);
+    }
+
+    private void processStoreClosed(Intent data) {
+        StoreItem item =data.getParcelableExtra("item");
+        buyed_items.add(item);
+        money = money - item.getCost();
+
+        //sharedPref = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(getString(R.string.moneyString), money);
+
+        editor.putInt("buyed_items_size", buyed_items.size());
+
+        //store the items in shared preferences
+        for(int i = 0; i<buyed_items.size(); i++) {
+            editor.putInt("buyed_items_" + i, buyed_items.get(i).getId());
+        }
+
+        editor.apply();
+
+        updateMoneyTextView();
+        updateItemsShowing(item);
+    }
+
+    private void processFeedClosed(Intent data) {
+        //TODO call feeded in dog.
+    }
 
     @Override
     protected void onResume() {

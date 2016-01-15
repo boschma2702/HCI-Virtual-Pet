@@ -1,6 +1,8 @@
 package example.com.virtualpet.maps;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.Color;
 import android.location.Location;
@@ -138,6 +140,19 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
          //   LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
           //  mGoogleApiClient.disconnect();
       //  }
+    }
+
+    @Override
+    protected void onStop() {
+        close();
+        super.onStop();
+    }
+
+    private void close(){
+        Intent returnIntent = new Intent();
+        //TODO fill in if distance is walked
+        setResult(Activity.RESULT_OK,returnIntent);
+        finish();
     }
 
     /**

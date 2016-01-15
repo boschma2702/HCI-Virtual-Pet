@@ -21,7 +21,7 @@ import example.com.virtualpet.Util.ResourceManager;
 public class Dog {
 
     private DogView view;
-    private int x, y, screenwidth, speed;
+    private int x, y;
 
     private int satisfaction;
     private long lastUpdate;
@@ -33,9 +33,7 @@ public class Dog {
 
     public Dog(Context c, DogView view) {
         this.view = view;
-        speed = 5;
-        screenwidth = ResourceManager.INSTANCE.getScreenWidth();
-        x = screenwidth/2;
+        x = ResourceManager.INSTANCE.getScreenWidth()/2;
         y = (int) (ResourceManager.INSTANCE.getScreenHeight()-ResourceManager.INSTANCE.getPercentageLength(20, true));
         view.setXY(x, y);
         setLastRefreshed(getTime());
@@ -173,14 +171,6 @@ public class Dog {
     }
 
     public void setView(DogMood mood) {
-//        if (getTime() - getTimeLastRefreshed() > (THIRTYMINUTES/30)) {
-//            if(mood.equals(DogMood.DIRTY)){
-//                view.setDirty();
-//            }else {
-//                view.setSprite(mood);
-//            }
-//            setLastRefreshed(getTime());
-//        }
         if(mood.equals(DogMood.DIRTY)){
             view.setDirty();
         }else {
