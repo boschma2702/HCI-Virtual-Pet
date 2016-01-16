@@ -40,7 +40,7 @@ public class DogService extends Service implements Runnable {
     private boolean hungry;
     private boolean wantsToWalk;
     private boolean wantsToPlay;
-    private boolean dead;
+    private boolean dead = false;
 
     private Date startDay;
 
