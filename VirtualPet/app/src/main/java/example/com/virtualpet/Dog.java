@@ -214,7 +214,7 @@ public class Dog {
                 case HUNGRY:
                     return 30;
                 case DEAD:
-                    return -1;
+                    return 30;
                 case WALKFULL:
                     return -1; //TODO
                 default:

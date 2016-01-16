@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/flapdog_bg">
 
     <example.com.virtualpet.flapdog.FlapDogView
         android:layout_width="match_parent"
@@ -82,5 +82,32 @@
 
         </RelativeLayout>
     </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="50dp"
+        android:id="@+id/flapdogMenuScreen">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Spelen"
+            android:onClick="flapdogStart"
+            android:layout_margin="10dp"
+            android:id="@+id/button9" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Uitleg"
+            android:onClick="flapdogUitleg"
+            android:layout_margin="10dp"
+            android:id="@+id/button6" />
+    </LinearLayout>
 
 </RelativeLayout>

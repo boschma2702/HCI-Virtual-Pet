@@ -20,6 +20,7 @@ public class FlapDogActivity extends Activity {
 
     private FlapDogView view;
     private View gameoverScreen;
+    private View mainMenuScreen;
     private TextView scoreField;
     private TextView bestField;
     private int currentScore = 0;
@@ -36,8 +37,11 @@ public class FlapDogActivity extends Activity {
         bestField = (TextView) findViewById(R.id.flapdogbestscoreField);
         gameoverScreen = findViewById(R.id.flapdogGameoverScreen);
         gameoverScreen.setVisibility(View.INVISIBLE);
+        mainMenuScreen = findViewById(R.id.flapdogMenuScreen);
+
         view.start(this);
-        new Thread(view).start();
+        view.setVisibility(View.INVISIBLE);
+//        new Thread(view).start();
     }
 
 
@@ -78,7 +82,7 @@ public class FlapDogActivity extends Activity {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("played",true);
         returnIntent.putExtra("score",currentScore);
-        setResult(Activity.RESULT_OK,returnIntent);
+        setResult(Activity.RESULT_OK, returnIntent);
         finish();
     }
 
@@ -91,5 +95,20 @@ public class FlapDogActivity extends Activity {
                 new Thread(view).start();
             }
         });
+    }
+
+    public void flapdogStart(View v){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mainMenuScreen.setVisibility(View.INVISIBLE);
+                view.setVisibility(View.VISIBLE);
+                new Thread(view).start();
+            }
+        });
+    }
+
+    public void flapdogUitleg(View v){
+        //TODO add uitleg
     }
 }
