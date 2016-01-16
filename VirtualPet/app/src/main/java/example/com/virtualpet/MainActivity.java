@@ -286,7 +286,7 @@ public class MainActivity extends Activity {
                 @Override
                 public void run() {
                     Log.e("Statisfactionn", "statisfaction is: "+DogService.INSTANCE.getSatisfaction());
-                    progressBar.setProgress(DogService.INSTANCE.getSatisfaction()+100);
+                    progressBar.setProgress(DogService.INSTANCE.getSatisfaction());
                 }
             });
         }

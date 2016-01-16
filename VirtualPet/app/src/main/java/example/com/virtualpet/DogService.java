@@ -28,8 +28,7 @@ public class DogService extends Service implements Runnable {
     public static final int MAXSATISFACTION = 100;
     public static final int MINSATISFACTION = 0;
     public static final long THIRTYMINUTES = 1800000; // thirty minutes in milliseconds
-    public static final long QUICKTIME = 1/8; // decrease to make time go faster
-    public static final long GetTimeFASTER = 60; // increase to make getTime(), which is used in DogService.java & Dog.java, return higher values.
+    public static final long GetTimeFASTER = 1; // increase to make getTime(), which is used in DogService.java & Dog.java, return higher values.
 
     protected ArrayList<Calendar> eatTimes = new ArrayList<Calendar>();
     protected ArrayList<Calendar> walkTimes = new ArrayList<Calendar>();
@@ -37,7 +36,6 @@ public class DogService extends Service implements Runnable {
     private long lastPlayed;
     private long lastWalked;
     private long lastEaten;
-    private Intent intent;
     private boolean dirty;
     private boolean hungry;
     private boolean wantsToWalk;
@@ -99,6 +97,7 @@ public class DogService extends Service implements Runnable {
         setHungry(false);
         setWantsToPlay(true);
         setWantsToWalk(false);
+        setSatisfaction(60);
         setEatTimes();
         setWalkTimes();
     }
@@ -110,13 +109,13 @@ public class DogService extends Service implements Runnable {
     }
 
     public void checkStatus() {
-        if ((getTime() - getTimeLastPlayed()) > (5*THIRTYMINUTES * QUICKTIME)) {
+        if ((getTime() - getTimeLastPlayed()) > (5*THIRTYMINUTES)) {
             showNotification("Bark bark!", "I am bored!");
             updateSatisfaction(-5);
             setWantsToPlay(true);
             setWantsToWalk(false);
         }
-        if ((getTime() - getTimeLastWalked()) > (5*THIRTYMINUTES * QUICKTIME)) {
+        if ((getTime() - getTimeLastWalked()) > (5*THIRTYMINUTES)) {
             showNotification("Bark bark!", "I want to walk!");
             updateSatisfaction(-10);
             setWantsToWalk(true);
@@ -139,7 +138,7 @@ public class DogService extends Service implements Runnable {
 
     public void checkForEatTime() {
         for (int i = 0; i < eatTimes.size(); i++) {
-            if (eatTimes.get(i).get(Calendar.HOUR_OF_DAY) == now.get(Calendar.HOUR_OF_DAY)) {
+            if (eatTimes.get(i).get(Calendar.HOUR_OF_DAY) == now.get(Calendar.HOUR_OF_DAY) && getTime() - getTimeLastEaten() > 2 * THIRTYMINUTES) {
                 showNotification("Bark bark!", "I am hungry!");
                 updateSatisfaction(-5);
                 setHungry(true);
@@ -165,7 +164,7 @@ public class DogService extends Service implements Runnable {
 
     public void checkForWalkTime() {
         for (int i = 0; i < walkTimes.size(); i++) {
-            if (walkTimes.get(i).get(Calendar.HOUR_OF_DAY) == now.get(Calendar.HOUR_OF_DAY) && getTime() - getTimeLastWalked() > THIRTYMINUTES * QUICKTIME) {
+            if (walkTimes.get(i).get(Calendar.HOUR_OF_DAY) == now.get(Calendar.HOUR_OF_DAY) && getTime() - getTimeLastWalked() > 2 * THIRTYMINUTES) {
                 showNotification("Bark bark!", "I want to go outside for a walk!");
                 setWantsToWalk(true);
             }
@@ -352,7 +351,7 @@ public class DogService extends Service implements Runnable {
     }
 
     public void printState(){
-        Log.e("Dogstate", "Hungry: "+hungry+" WantstoPlay: "+wantsToPlay+" Sad: "+(satisfaction<=20)+" Dirty: "+dirty);
+        Log.e("Dogstate", "Hungry: " + hungry + " WantstoPlay: " + wantsToPlay + " Sad: " + (satisfaction<=20) + " Dirty: " + dirty);
     }
 
     private void showNotification(String title, String content){

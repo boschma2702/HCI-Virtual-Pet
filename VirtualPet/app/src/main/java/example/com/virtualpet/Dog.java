@@ -23,8 +23,6 @@ public class Dog {
     private DogView view;
     private int x, y;
 
-    private int satisfaction;
-    private long lastUpdate;
     public static final long THIRTYMINUTES = 1800000; // thirty minutes in milliseconds
     private long lastRefreshed;
 
@@ -44,7 +42,7 @@ public class Dog {
         view.setBackgroundColor();
 
         checkUpdates();
-        //randomBark();
+//        randomBark();
     }
 
 
@@ -63,7 +61,7 @@ public class Dog {
     }
 
     public void randomBark() {
-        if (Math.random() >= 0.7) {
+        if (Math.random() >= 0.99) {
             setView(DogMood.BARKING);
         }
     }
@@ -78,29 +76,28 @@ public class Dog {
 //      Actions from other activities:
 
     public void playedWithDog(boolean gettingDirty) {
-        if((getTime() - getTimeLastEaten()) > (THIRTYMINUTES * DogService.QUICKTIME)) {
+        if((getTime() - getTimeLastEaten()) > THIRTYMINUTES) {
             DogService.INSTANCE.updateSatisfaction(15, 80);
-            setView(DogMood.HAPPY);
         } else {
             DogService.INSTANCE.updateSatisfaction(-5, 60);
-            setView(DogMood.SAD);
         }
         if(Math.random() < 0.75 && gettingDirty) {
             setDirty(true);
             setView(DogMood.DIRTY);
         }
-        //TODO set played propperly
+        setView(DogMood.HAPPY);
         DogService.INSTANCE.setWantsToPlay(false);
+        setTimeLastPlayed(new Date(getTime()));
     }
 
     public void cleanedDog() {
         DogService.INSTANCE.updateSatisfaction(10);
         DogService.INSTANCE.setDirty(false);
-//        setView(DogMood.HAPPY);
+        setDirty(false);
     }
 
     public void walkedWithDog(boolean gettingDirty) {
-        if((getTime() - DogService.INSTANCE.getTimeLastWalked()) > (THIRTYMINUTES * DogService.QUICKTIME)) {
+        if((getTime() - DogService.INSTANCE.getTimeLastWalked()) > THIRTYMINUTES) {
             DogService.INSTANCE.updateSatisfaction(10, 75);
             setView(DogMood.HAPPY);
         } else {
@@ -111,16 +108,14 @@ public class Dog {
             setDirty(true);
             setView(DogMood.DIRTY);
         }
-        //TODO set has walked propperly
         DogService.INSTANCE.setWantsToWalk(false);
     }
 
     public void hasEaten() {
         DogService.INSTANCE.setHungry(false);
         setView(DogMood.HAPPY);
+        setTimeLastEaten(new Date(getTime()));
     }
-
-
 
     // Getters & Setters
     public long getTimeLastPlayed() {
@@ -171,15 +166,9 @@ public class Dog {
         return lastRefreshed;
     }
 
-
     public void setDirty(){
         view.setDirty();
     }
-
-
-
-
-
 
     public enum DogMood {
         BARKING, HAPPY, PLAYFULL, SAD, DEAD, DIRTY, HUNGRY, WALKFULL;
