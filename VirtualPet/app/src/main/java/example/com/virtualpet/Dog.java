@@ -40,8 +40,11 @@ public class Dog {
     public void update() {
         view.setXY(x, y);
         view.setBackgroundColor();
-
-        checkUpdates();
+        if (DogService.INSTANCE.getDead()) {
+            setView(DogMood.DEAD);
+        } else {
+            checkUpdates();
+        }
 //        randomBark();
     }
 

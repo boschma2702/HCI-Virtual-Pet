@@ -40,7 +40,7 @@ public class DogService extends Service implements Runnable {
     private boolean hungry;
     private boolean wantsToWalk;
     private boolean wantsToPlay;
-    private boolean dead = false; //TODO implement dead
+    private boolean dead;
 
     private Date startDay;
 
@@ -100,12 +100,21 @@ public class DogService extends Service implements Runnable {
         setSatisfaction(60);
         setEatTimes();
         setWalkTimes();
+        setDead(false);
     }
 
     public void update() {
         checkForEatTime();
         checkForWalkTime();
         checkStatus();
+        checkForDead();
+    }
+
+    public void checkForDead() {
+        if (getSatisfaction() < 10) {
+            setDead(true);
+            Log.e("Dog", "Dog has died with satisfaction of " + getSatisfaction());
+        }
     }
 
     public void checkStatus() {
@@ -315,6 +324,14 @@ public class DogService extends Service implements Runnable {
         }
     }
 
+    public void setDead(boolean dead) {
+        this.dead = dead;
+    }
+
+    public boolean getDead() {
+        return dead;
+    }
+
     public boolean getMood(Dog.DogMood m){
         synchronized (this){
             switch (m){
@@ -351,7 +368,7 @@ public class DogService extends Service implements Runnable {
     }
 
     public void printState(){
-        Log.e("Dogstate", "Hungry: " + hungry + " WantstoPlay: " + wantsToPlay + " Sad: " + (satisfaction<=20) + " Dirty: " + dirty);
+        Log.e("Dogstate", "Hungry: " + hungry + " WantstoPlay: " + wantsToPlay + " Sad: " + (satisfaction<=20) + " Dirty: " + dirty + " Dead: " + dead);
     }
 
     private void showNotification(String title, String content){
