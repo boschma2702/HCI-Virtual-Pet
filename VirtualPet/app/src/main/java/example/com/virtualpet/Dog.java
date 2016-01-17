@@ -40,11 +40,7 @@ public class Dog {
     public void update() {
         view.setXY(x, y);
         view.setBackgroundColor();
-        if (DogService.INSTANCE.getDead()) {
-            setView(DogMood.DEAD);
-        } else {
-            checkUpdates();
-        }
+        checkUpdates();
 //        randomBark();
     }
 
@@ -65,7 +61,7 @@ public class Dog {
 
     public void randomBark() {
         if (Math.random() >= 0.99) {
-            setView(DogMood.BARKING);
+//            setView(DogMood.BARKING);
         }
     }
 
@@ -80,15 +76,15 @@ public class Dog {
 
     public void playedWithDog(boolean gettingDirty) {
         if((getTime() - getTimeLastEaten()) > THIRTYMINUTES) {
-            DogService.INSTANCE.updateSatisfaction(15, 80);
+            DogService.INSTANCE.updateSatisfaction(15);
         } else {
             DogService.INSTANCE.updateSatisfaction(-5, 60);
         }
         if(Math.random() < 0.75 && gettingDirty) {
             setDirty(true);
-            setView(DogMood.DIRTY);
+//            setView(DogMood.DIRTY);
         }
-        setView(DogMood.HAPPY);
+//        setView(DogMood.HAPPY);
         DogService.INSTANCE.setWantsToPlay(false);
         setTimeLastPlayed(new Date(getTime()));
     }
@@ -102,21 +98,21 @@ public class Dog {
     public void walkedWithDog(boolean gettingDirty) {
         if((getTime() - DogService.INSTANCE.getTimeLastWalked()) > THIRTYMINUTES) {
             DogService.INSTANCE.updateSatisfaction(10, 75);
-            setView(DogMood.HAPPY);
+//            setView(DogMood.HAPPY);
         } else {
             DogService.INSTANCE.updateSatisfaction(-5, 60);
-            setView(DogMood.SAD);
+//            setView(DogMood.SAD);
         }
         if(Math.random() < 0.75 && gettingDirty) {
             setDirty(true);
-            setView(DogMood.DIRTY);
+//            setView(DogMood.DIRTY);
         }
         DogService.INSTANCE.setWantsToWalk(false);
     }
 
     public void hasEaten() {
         DogService.INSTANCE.setHungry(false);
-        setView(DogMood.HAPPY);
+//        setView(DogMood.HAPPY);
         setTimeLastEaten(new Date(getTime()));
     }
 
