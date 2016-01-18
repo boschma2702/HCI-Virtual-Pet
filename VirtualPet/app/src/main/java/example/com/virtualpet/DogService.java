@@ -41,6 +41,7 @@ public class DogService extends Service implements Runnable {
     private boolean wantsToWalk;
     private boolean wantsToPlay;
     private boolean dead = false;
+    private boolean barking;
 
     private Date startDay;
 
@@ -349,6 +350,8 @@ public class DogService extends Service implements Runnable {
                     return true;
                 case SAD:
                     return satisfaction<=30;
+                case BARKING:
+                    return barking;
 
             }
         }
@@ -389,5 +392,9 @@ public class DogService extends Service implements Runnable {
                 .setContentIntent(resultPendingIntent)
                 .build();
         mNotificationManager.notify(0, noti);
+    }
+
+    public void setBarking(boolean barking) {
+        this.barking = barking;
     }
 }

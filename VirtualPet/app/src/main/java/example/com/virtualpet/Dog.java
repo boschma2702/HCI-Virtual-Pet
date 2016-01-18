@@ -41,7 +41,7 @@ public class Dog {
         view.setXY(x, y);
         view.setBackgroundColor();
         checkUpdates();
-//        randomBark();
+        randomBark();
     }
 
 
@@ -61,7 +61,7 @@ public class Dog {
 
     public void randomBark() {
         if (Math.random() >= 0.99) {
-//            setView(DogMood.BARKING);
+            DogService.INSTANCE.setBarking(true);
         }
     }
 
