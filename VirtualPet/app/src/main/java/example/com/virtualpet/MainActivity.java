@@ -111,46 +111,66 @@ public class MainActivity extends Activity {
 
     public void mapsClicked(View v){
 
-        // if gps is disabled
-        if (!((LocationManager) this.getSystemService(Context.LOCATION_SERVICE))
-                .isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (!DogService.INSTANCE.getDead()) {
 
-            Context context = getApplicationContext();
-            CharSequence text = "Je moet locatie op 'zeer nauwkeurig' instellen.";
-            int duration = Toast.LENGTH_LONG;
+            // if gps is disabled
+            if (!((LocationManager) this.getSystemService(Context.LOCATION_SERVICE))
+                    .isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 
-            Toast toast = Toast.makeText(context, text, duration);
-            toast.show();
+                Context context = getApplicationContext();
+                CharSequence text = "Je moet locatie op 'zeer nauwkeurig' instellen.";
+                int duration = Toast.LENGTH_LONG;
 
-            Intent gpsOptionsIntent = new Intent(
-                    android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            startActivity(gpsOptionsIntent);
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+
+                Intent gpsOptionsIntent = new Intent(
+                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(gpsOptionsIntent);
+            } else {
+                Intent maps = new Intent(this, MapsActivity.class);
+                startActivityForResult(maps, MAPSACTIVITY);
+            }
         } else {
-            Intent maps = new Intent(this, MapsActivity.class);
-            startActivityForResult(maps, MAPSACTIVITY);
+//            TODO show notification dog is dead;
+            Log.e("Dog", "You cannot do this activity with the dog, the dog is dead... ");
+            Toast.makeText(this, "Dog is dead", Toast.LENGTH_SHORT).show();
         }
 
     }
 
     public void playClicked(View v){
 
-        StoreItem bal = storeitemlist.getItemByName(getString(R.string.ball));
+        if (!DogService.INSTANCE.getDead()) {
 
-        if (ItemisBought(new ArrayList<>(Arrays.asList(bal)))) {
-            Intent intent = new Intent(this, FlapDogActivity.class);
-            startActivityForResult(intent, FLAPDOGACTIVITY);
+            StoreItem bal = storeitemlist.getItemByName(getString(R.string.ball));
+
+            if (ItemisBought(new ArrayList<>(Arrays.asList(bal)))) {
+                Intent intent = new Intent(this, FlapDogActivity.class);
+                startActivityForResult(intent, FLAPDOGACTIVITY);
 //            view.getDog().playedWithDog(true);
+            }
+        } else {
+//            TODO show notification dog is dead;
+            Log.e("Dog", "You cannot do this activity with the dog, the dog is dead... ");
+            Toast.makeText(this, "Dog is dead", Toast.LENGTH_SHORT).show();
         }
     }
 
     public void FeedClicked(View v){
-        //check for 'hondenvoer'.
-        StoreItem hondenvoer = storeitemlist.getItemByName(getString(R.string.food));
-        StoreItem voerbak = storeitemlist.getItemByName(getString(R.string.bowl));
+        if (!DogService.INSTANCE.getDead()) {
+            //check for 'hondenvoer'.
+            StoreItem hondenvoer = storeitemlist.getItemByName(getString(R.string.food));
+            StoreItem voerbak = storeitemlist.getItemByName(getString(R.string.bowl));
 
-        if (ItemisBought(new ArrayList<>(Arrays.asList(hondenvoer, voerbak)))) {
-            Intent intent = new Intent(this, FeedActivity.class);
-            startActivityForResult(intent, FEEDACTIVITY);
+            if (ItemisBought(new ArrayList<>(Arrays.asList(hondenvoer, voerbak)))) {
+                Intent intent = new Intent(this, FeedActivity.class);
+                startActivityForResult(intent, FEEDACTIVITY);
+            }
+        } else {
+//            TODO show notification dog is dead;
+            Log.e("Dog", "You cannot do this activity with the dog, the dog is dead... ");
+            Toast.makeText(this, "Dog is dead", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -162,15 +182,21 @@ public class MainActivity extends Activity {
     }
 
     public void showerClicked(View v) {
+        if (!DogService.INSTANCE.getDead()) {
 
-        StoreItem spons = storeitemlist.getItemByName(getString(R.string.sponge));
+            StoreItem spons = storeitemlist.getItemByName(getString(R.string.sponge));
 
-        if (ItemisBought(new ArrayList<>(Arrays.asList(spons)))) {
-            if(view.isDogDirty()) {
-                view.getCleaningManger().activate();
-            }else{
-                Toast.makeText(this, "Hond is niet vies", Toast.LENGTH_SHORT).show();
+            if (ItemisBought(new ArrayList<>(Arrays.asList(spons)))) {
+                if (view.isDogDirty()) {
+                    view.getCleaningManger().activate();
+                } else {
+                    Toast.makeText(this, "Hond is niet vies", Toast.LENGTH_SHORT).show();
+                }
             }
+        } else {
+//            TODO show notification dog is dead;
+            Log.e("Dog", "You cannot do this activity with the dog, the dog is dead... ");
+            Toast.makeText(this, "Dog is dead", Toast.LENGTH_SHORT).show();
         }
     }
 

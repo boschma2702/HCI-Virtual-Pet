@@ -110,4 +110,29 @@
             android:id="@+id/button6" />
     </LinearLayout>
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/flapdogExplainScreen"
+        android:layout_margin="25dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/flapdog_explained"
+            android:id="@+id/flapdog_uitleg"
+            android:textColor="#ffffff" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Spelen"
+            android:onClick="flapdogStart"
+            android:id="@+id/button10"
+            android:layout_marginTop="50dp" />
+    </LinearLayout>
+
 </RelativeLayout>

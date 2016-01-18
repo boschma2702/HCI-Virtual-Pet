@@ -7,6 +7,8 @@ import android.app.Service;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -14,6 +16,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimerTask;
 
 /**
  * Created by reneb_000 on 30-12-2015.
@@ -40,6 +43,9 @@ public class DogService extends Service implements Runnable {
     private boolean wantsToWalk;
     private boolean wantsToPlay;
     private boolean dead = false;
+    private boolean barking;
+    MediaPlayer mMediaPlayer = new MediaPlayer();
+
 
     private Date startDay;
 
@@ -58,6 +64,7 @@ public class DogService extends Service implements Runnable {
         new Thread(this).start();
         initialize();
         super.onCreate();
+//        playMusic(R.raw.who_let_the_dogs_out_mp3cutnet, false);
     }
 
     @Nullable
@@ -96,7 +103,7 @@ public class DogService extends Service implements Runnable {
         setHungry(false);
         setWantsToPlay(true);
         setWantsToWalk(false);
-        setSatisfaction(60);
+        setSatisfaction(65);
         setEatTimes();
         setWalkTimes();
         setDead(false);
@@ -345,9 +352,11 @@ public class DogService extends Service implements Runnable {
                 case DEAD:
                     return dead;
                 case HAPPY:
-                    return satisfaction>=80;
+                    return true;
                 case SAD:
-                    return satisfaction<=20;
+                    return satisfaction<=30;
+                case BARKING:
+                    return barking;
 
             }
         }
@@ -367,7 +376,7 @@ public class DogService extends Service implements Runnable {
     }
 
     public void printState(){
-        Log.e("Dogstate", "Hungry: " + hungry + " WantstoPlay: " + wantsToPlay + " Sad: " + (satisfaction<=20) + " Dirty: " + dirty + " Dead: " + dead);
+        Log.e("Dogstate", "Hungry: " + hungry + "\nWantstoPlay: " + wantsToPlay + "\nSad: " + (satisfaction <= 20) + "\nDirty: " + dirty + "\nDead: " + dead + "\nBarking: " + barking);
     }
 
     private void showNotification(String title, String content){
@@ -388,5 +397,26 @@ public class DogService extends Service implements Runnable {
                 .setContentIntent(resultPendingIntent)
                 .build();
         mNotificationManager.notify(0, noti);
+    }
+
+    public void setBarking(boolean barking) {
+        this.barking = barking;
+
+    }
+
+    public void playMusic(int uri, boolean looping) {
+        mMediaPlayer = MediaPlayer.create(this, uri);
+        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mMediaPlayer.setVolume(100,100);
+        mMediaPlayer.setLooping(looping);
+        mMediaPlayer.start();
+    }
+
+    public void stopMusic() {
+        mMediaPlayer.stop();
+    }
+
+    public boolean getBarking() {
+        return barking;
     }
 }
