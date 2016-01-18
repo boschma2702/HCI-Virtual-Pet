@@ -60,7 +60,7 @@ public class Dog {
     }
 
     public void randomBark() {
-        if (Math.random() >= 0.995 && !DogService.INSTANCE.getBarking()) {
+        if (Math.random() >= 0.9955 && !DogService.INSTANCE.getBarking()) {
             DogService.INSTANCE.setBarking(true);
         }
     }

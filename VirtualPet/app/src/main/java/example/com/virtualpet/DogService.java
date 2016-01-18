@@ -7,9 +7,10 @@ import android.app.Service;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.text.format.Time;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -43,6 +44,8 @@ public class DogService extends Service implements Runnable {
     private boolean wantsToPlay;
     private boolean dead = false;
     private boolean barking;
+    MediaPlayer mMediaPlayer = new MediaPlayer();
+
 
     private Date startDay;
 
@@ -61,6 +64,7 @@ public class DogService extends Service implements Runnable {
         new Thread(this).start();
         initialize();
         super.onCreate();
+//        playMusic(R.raw.who_let_the_dogs_out_mp3cutnet, false);
     }
 
     @Nullable
@@ -403,14 +407,28 @@ public class DogService extends Service implements Runnable {
                 @Override
                 public void run() {
                     try {
+                        playMusic(R.raw.hondschors, true);
                         Thread.sleep(2500);
                     } catch (InterruptedException e) {
                         Log.e("InterruptedException", "setBarking innerclass TimerTask has thrown an InterruptedException: " + e.getMessage());
                     }
                     setBarking(false);
+                    stopMusic();
                 }
             }).start();
         }
+    }
+
+    public void playMusic(int uri, boolean looping) {
+        mMediaPlayer = MediaPlayer.create(this, uri);
+        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mMediaPlayer.setVolume(100,100);
+        mMediaPlayer.setLooping(looping);
+        mMediaPlayer.start();
+    }
+
+    public void stopMusic() {
+        mMediaPlayer.stop();
     }
 
     public boolean getBarking() {
