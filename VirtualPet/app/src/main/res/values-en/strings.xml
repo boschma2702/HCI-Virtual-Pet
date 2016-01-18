@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Virtual Pet</string>
+    <string name="ball">ball</string>
+    <string name="bone">bone</string>
+    <string name="bowl">bowl</string>
+    <string name="food">food</string>
+    <string name="schud_de_telefoon_om_de_brokken_in_de_hondenbak_te_doen">Shake to phone to put the dogfood in the bowl</string>
+    <string name="sponge">sponge</string>
+    <string name="title_activity_maps">map</string>
+    <string name="afstand_die_je_nog_moet_lopen">Distance to walk yet</string>
+    <string name="best_score">best score:</string>
+    <string name="currency">$</string>
+    <string name="opnieuw">repeat</string>
+    <string name="player_score">your score:</string>
+    <string name="preference_file_key" translatable="false"></string>
+    <string name="score">score</string>
+    <string name="spelen">play</string>
+    <string name="terug">back</string>
+    <string name="uitleg">explanation</string>
+    <string name="dummy_button" translatable="false"></string>
+</resources>

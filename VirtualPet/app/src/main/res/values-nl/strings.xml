@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Virtuele hond</string>
+    <string name="ball">bal</string>
+    <string name="bone">bot</string>
+    <string name="bowl">voerbak</string>
+    <string name="dummy_button" translatable="false"></string>
+    <string name="food">eten</string>
+    <string name="schud_de_telefoon_om_de_brokken_in_de_hondenbak_te_doen">schud de telefoon om de brokken in de voerbak te doen.</string>
+    <string name="sponge">spons</string>
+    <string name="title_activity_maps">kaart</string>
+    <string name="afstand_die_je_nog_moet_lopen">afstand die je nog moet lopen</string>
+    <string name="best_score">de hoogste score:</string>
+    <string name="currency">€</string>
+    <string name="uitleg">uitleg</string>
+    <string name="terug">terug</string>
+    <string name="spelen">spelen</string>
+    <string name="score">score</string>
+    <string name="player_score">jouw score:</string>
+    <string name="opnieuw">opnieuw</string>
+</resources>

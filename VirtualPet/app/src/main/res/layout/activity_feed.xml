@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Shud de telefoon om de brokken in de hondenbak te doen"
+        android:text="@string/schud_de_telefoon_om_de_brokken_in_de_hondenbak_te_doen"
         android:id="@+id/textView3"
         android:textSize="20dp"
         android:textStyle="bold|italic"

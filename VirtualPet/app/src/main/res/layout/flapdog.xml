@@ -23,28 +23,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Je score:"
+                android:text="@string/player_score"
                 android:id="@+id/textView" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="score"
+                android:text="@string/score"
                 android:id="@+id/flapdogScoreField" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Best:"
+                android:text="@string/best_score"
                 android:id="@+id/textView2" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="best score"
+                android:text="@string/best_score"
                 android:id="@+id/flapdogbestscoreField" />
         </LinearLayout>
 
@@ -64,7 +64,7 @@
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Opnieuw"
+                        android:text="@string/opnieuw"
                         android:onClick="replayButtonClicked"
                         android:id="@+id/button7"
                         android:layout_gravity="left"/>
@@ -72,7 +72,7 @@
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Terug"
+                        android:text="@string/terug"
                         android:id="@+id/button8"
                         android:onClick="exitButtonClicked"
                         android:layout_gravity="right"/>
@@ -96,7 +96,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Spelen"
+            android:text="@string/spelen"
             android:onClick="flapdogStart"
             android:layout_margin="10dp"
             android:id="@+id/button9" />
@@ -104,7 +104,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Uitleg"
+            android:text="@string/uitleg"
             android:onClick="flapdogUitleg"
             android:layout_margin="10dp"
             android:id="@+id/button6" />

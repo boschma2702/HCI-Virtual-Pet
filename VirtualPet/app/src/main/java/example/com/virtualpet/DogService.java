@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.text.format.Time;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -119,13 +118,13 @@ public class DogService extends Service implements Runnable {
 
     public void checkStatus() {
         if ((getTime() - getTimeLastPlayed()) > (5*THIRTYMINUTES)) {
-            showNotification("Bark bark!", "I am bored!");
+            showNotification("Woef, Waf!", "Ik verveel me!");
             updateSatisfaction(-5);
             setWantsToPlay(true);
             setWantsToWalk(false);
         }
         if ((getTime() - getTimeLastWalked()) > (5*THIRTYMINUTES)) {
-            showNotification("Bark bark!", "I want to walk!");
+            showNotification("Woef, Waf!", "I wil een rondje lopen!");
             updateSatisfaction(-10);
             setWantsToWalk(true);
             setWantsToPlay(true);
@@ -148,7 +147,7 @@ public class DogService extends Service implements Runnable {
     public void checkForEatTime() {
         for (int i = 0; i < eatTimes.size(); i++) {
             if (eatTimes.get(i).get(Calendar.HOUR_OF_DAY) == now.get(Calendar.HOUR_OF_DAY) && getTime() - getTimeLastEaten() > 2 * THIRTYMINUTES) {
-                showNotification("Bark bark!", "I am hungry!");
+                showNotification("Woef, Waf!", "Ik heb honger!");
                 updateSatisfaction(-5);
                 setHungry(true);
             }
@@ -174,7 +173,7 @@ public class DogService extends Service implements Runnable {
     public void checkForWalkTime() {
         for (int i = 0; i < walkTimes.size(); i++) {
             if (walkTimes.get(i).get(Calendar.HOUR_OF_DAY) == now.get(Calendar.HOUR_OF_DAY) && getTime() - getTimeLastWalked() > 2 * THIRTYMINUTES) {
-                showNotification("Bark bark!", "I want to go outside for a walk!");
+                showNotification("Woef Waf!", "Ik wil buiten een rondje lopen!");
                 setWantsToWalk(true);
             }
         }

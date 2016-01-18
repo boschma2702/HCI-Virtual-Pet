@@ -1,14 +1,24 @@
 <resources>
     <string name="app_name">Virtual Pet</string>
 
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="dummy_button" translatable="false">Dummy Button</string>
+    <string name="dummy_content" translatable="false">DUMMY\nCONTENT</string>
     <string name="title_activity_maps">Map</string>
-    <string name="preference_file_key">virtual_pet_pref_file_key</string>
-    <string name="moneyString">money</string>
+    <string name="preference_file_key" translatable="false">virtual_pet_pref_file_key</string>
+    <string name="moneyString" translatable="false">money</string>
     <string name="ball">Bal</string>
     <string name="bowl">voerbak</string>
     <string name="food">hondenvoer</string>
     <string name="bone">bot</string>
     <string name="sponge">spons</string>
+    <string name="schud_de_telefoon_om_de_brokken_in_de_hondenbak_te_doen">Schud de telefoon om de brokken in de hondenbak te doen</string>
+    <string name="afstand_die_je_nog_moet_lopen">Afstand die je nog moet lopen</string>
+    <string name="currency">€</string>
+    <string name="player_score">Je score:</string>
+    <string name="score">score</string>
+    <string name="best_score">Best:</string>
+    <string name="opnieuw">Opnieuw</string>
+    <string name="terug">Terug</string>
+    <string name="spelen">Spelen</string>
+    <string name="uitleg">Uitleg</string>
 </resources>

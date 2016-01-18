@@ -28,7 +28,7 @@
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:textSize="30dp"
-            android:text="€ 20,-"
+            android:text="@string/currency"
             android:layout_gravity="center_vertical"
             android:layout_margin="16dp"/>
 
