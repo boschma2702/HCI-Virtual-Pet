@@ -101,7 +101,7 @@ public class DogService extends Service implements Runnable {
         setHungry(false);
         setWantsToPlay(true);
         setWantsToWalk(false);
-        setSatisfaction(5);
+        setSatisfaction(65);
         setEatTimes();
         setWalkTimes();
         setDead(false);
