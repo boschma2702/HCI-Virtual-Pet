@@ -74,6 +74,10 @@ public class DogService extends Service implements Runnable {
 
         //onBind(intent);
 
+
+        //MusicService mService = new MusicService();
+        //mService.onCreate();
+
         while (true){
             try {
                 Thread.sleep(5000);
@@ -97,7 +101,7 @@ public class DogService extends Service implements Runnable {
         setHungry(false);
         setWantsToPlay(true);
         setWantsToWalk(false);
-        setSatisfaction(60);
+        setSatisfaction(5);
         setEatTimes();
         setWalkTimes();
         setDead(false);
