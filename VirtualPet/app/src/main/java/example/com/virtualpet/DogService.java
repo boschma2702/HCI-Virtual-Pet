@@ -15,6 +15,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimerTask;
 
 /**
  * Created by reneb_000 on 30-12-2015.
@@ -371,7 +372,7 @@ public class DogService extends Service implements Runnable {
     }
 
     public void printState(){
-        Log.e("Dogstate", "Hungry: " + hungry + " WantstoPlay: " + wantsToPlay + " Sad: " + (satisfaction<=20) + " Dirty: " + dirty + " Dead: " + dead);
+        Log.e("Dogstate", "Hungry: " + hungry + "\nWantstoPlay: " + wantsToPlay + "\nSad: " + (satisfaction <= 20) + "\nDirty: " + dirty + "\nDead: " + dead + "\nBarking: " + barking);
     }
 
     private void showNotification(String title, String content){
@@ -396,5 +397,19 @@ public class DogService extends Service implements Runnable {
 
     public void setBarking(boolean barking) {
         this.barking = barking;
+        Log.e("BARKING", "IS NOW " + this.barking);
+        if (barking && !this.barking) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        Log.e("InterruptedException", "setBarking innerclass TimerTask has thrown an InterruptedException: " + e.getMessage());
+                    }
+                    setBarking(false);
+                }
+            }).start();
+        }
     }
 }
