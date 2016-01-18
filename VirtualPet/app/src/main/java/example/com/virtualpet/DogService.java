@@ -401,22 +401,7 @@ public class DogService extends Service implements Runnable {
 
     public void setBarking(boolean barking) {
         this.barking = barking;
-        Log.e("BARKING", "IS NOW " + this.barking);
-        if (this.barking) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        playMusic(R.raw.hondschors, true);
-                        Thread.sleep(2500);
-                    } catch (InterruptedException e) {
-                        Log.e("InterruptedException", "setBarking innerclass TimerTask has thrown an InterruptedException: " + e.getMessage());
-                    }
-                    setBarking(false);
-                    stopMusic();
-                }
-            }).start();
-        }
+
     }
 
     public void playMusic(int uri, boolean looping) {

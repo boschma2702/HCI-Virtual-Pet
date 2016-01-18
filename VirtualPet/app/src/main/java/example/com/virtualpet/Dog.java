@@ -154,10 +154,26 @@ public class Dog {
     }
 
     public void setView(DogMood mood) {
-                if (mood.equals(DogMood.DIRTY)){
+        if (mood.equals(DogMood.DIRTY)) {
             view.setDirty();
             view.setSprite(DogMood.HAPPY);
-        }else {
+        } else if (mood.equals(DogMood.BARKING)) {
+            view.setSprite(mood);
+            Log.e("BARKING", "IS NOW " + DogService.INSTANCE.getBarking());
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            DogService.INSTANCE.playMusic(R.raw.hondschors, true);
+                            Thread.sleep(2500);
+                        } catch (InterruptedException e) {
+                            Log.e("InterruptedException", "setBarking innerclass has thrown an InterruptedException: " + e.getMessage());
+                        }
+                        DogService.INSTANCE.setBarking(false);
+                        DogService.INSTANCE.stopMusic();
+                    }
+                }).start();
+        } else {
             view.setSprite(mood);
         }
     }
