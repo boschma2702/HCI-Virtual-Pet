@@ -60,7 +60,7 @@ public class Dog {
     }
 
     public void randomBark() {
-        if (Math.random() >= 0.99999) {
+        if (Math.random() >= 0.995 && !DogService.INSTANCE.getBarking()) {
             DogService.INSTANCE.setBarking(true);
         }
     }
@@ -156,6 +156,7 @@ public class Dog {
     public void setView(DogMood mood) {
         if(mood.equals(DogMood.DIRTY)){
             view.setDirty();
+            view.setSprite(DogMood.HAPPY);
         }else {
             view.setSprite(mood);
         }
