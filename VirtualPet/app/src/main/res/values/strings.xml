@@ -11,4 +11,8 @@
     <string name="food">hondenvoer</string>
     <string name="bone">bot</string>
     <string name="sponge">spons</string>
+    <string name="flapdog_explained">Het hondje valt! Het is de bedoeling om het hondje niet buiten
+    het beeldscherm te laten gaan. Dit doe je door het hondje te laten springen door te drukken op
+    het beeldscherm. Om het nog moeilijker te maken moet het hondje ook nog door de gaten in de groene
+    buizen die op het hondje afkomen.</string>
 </resources>
