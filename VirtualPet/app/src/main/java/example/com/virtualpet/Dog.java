@@ -26,7 +26,7 @@ public class Dog {
     public static final long THIRTYMINUTES = 1800000; // thirty minutes in milliseconds
     private long lastRefreshed;
 
-    private final ArrayList<DogMood> moodOrder = new ArrayList(Arrays.asList(new DogMood[]{DogMood.DEAD, DogMood.HUNGRY, DogMood.PLAYFULL, DogMood.SAD, DogMood.DIRTY, DogMood.BARKING, DogMood.HAPPY}));
+    private final ArrayList<DogMood> moodOrder = new ArrayList(Arrays.asList(new DogMood[]{DogMood.DEAD, DogMood.HUNGRY, DogMood.WALKFULL, DogMood.PLAYFULL, DogMood.SAD, DogMood.DIRTY, DogMood.BARKING, DogMood.HAPPY}));
     private DogMood currentMood = DogMood.HAPPY;
 
     public Dog(Context c, DogView view) {
@@ -206,7 +206,7 @@ public class Dog {
                 case DIRTY:
                     return -1;
                 case WALKFULL:
-                    return -1;//TODO implement animation
+                    return R.drawable.dog_wanttowalk30frames;
                 default:
                     return -1;
             }
@@ -229,7 +229,7 @@ public class Dog {
                 case DEAD:
                     return 30;
                 case WALKFULL:
-                    return -1; //TODO
+                    return 30; //TODO
                 default:
                     return -1;
             }
