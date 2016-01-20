@@ -12,7 +12,9 @@ import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -131,7 +133,7 @@ public class DogService extends Service implements Runnable {
             setWantsToWalk(false);
         }
         if ((getTime() - getTimeLastWalked()) > (5*THIRTYMINUTES)) {
-            showNotification("Woef, Waf!", "I wil een rondje lopen!");
+            showNotification("Woef, Waf!", "Ik wil een rondje lopen!");
             updateSatisfaction(-10);
             setWantsToWalk(true);
             setWantsToPlay(true);
@@ -292,7 +294,7 @@ public class DogService extends Service implements Runnable {
         synchronized (this) {
           this.dirty = dirty;
         }
-}
+    }
 
     public void setSatisfaction(int satisfaction) {
         synchronized (this) {
@@ -401,7 +403,6 @@ public class DogService extends Service implements Runnable {
 
     public void setBarking(boolean barking) {
         this.barking = barking;
-
     }
 
     public void playMusic(int uri, boolean looping) {
@@ -413,6 +414,18 @@ public class DogService extends Service implements Runnable {
     }
 
     public void stopMusic() {
+        mMediaPlayer.stop();
+    }
+
+    public void playVideo(int uri, boolean looping) {
+        mMediaPlayer = MediaPlayer.create(this, uri);
+        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mMediaPlayer.setVolume(100, 100);
+        mMediaPlayer.setLooping(looping);
+        mMediaPlayer.start();
+    }
+
+    public void stopVideo() {
         mMediaPlayer.stop();
     }
 
