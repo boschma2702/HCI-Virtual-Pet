@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
 
     //init a list of items we already have
     private ArrayList<StoreItem> buyed_items = new ArrayList<StoreItem>();
-    private int money = 20;
+    private int money;
     TextView moneyTV;
 
     SharedPreferences sharedPref;

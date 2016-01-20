@@ -7,6 +7,7 @@ import android.app.Service;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.IBinder;
@@ -32,7 +33,7 @@ public class DogService extends Service implements Runnable {
     public static final int MAXSATISFACTION = 100;
     public static final int MINSATISFACTION = 0;
     public static final long THIRTYMINUTES = 1800000; // thirty minutes in milliseconds
-    public static final long GetTimeFASTER = 1; // increase to make getTime(), which is used in DogService.java & Dog.java, return higher values.
+    public static final long GetTimeFASTER = 120; // increase to make getTime(), which is used in DogService.java & Dog.java, return higher values.
 
     protected ArrayList<Calendar> eatTimes = new ArrayList<Calendar>();
     protected ArrayList<Calendar> walkTimes = new ArrayList<Calendar>();
@@ -44,6 +45,7 @@ public class DogService extends Service implements Runnable {
     private boolean hungry;
     private boolean wantsToWalk;
     private boolean wantsToPlay;
+    private int daysAlive;
     private boolean dead = false;
     private boolean barking;
     MediaPlayer mMediaPlayer = new MediaPlayer();
@@ -116,6 +118,7 @@ public class DogService extends Service implements Runnable {
         checkForWalkTime();
         checkStatus();
         checkForDead();
+        updateMoney();
     }
 
     public void checkForDead() {
@@ -222,6 +225,16 @@ public class DogService extends Service implements Runnable {
 
     private void satisfactionChanged(){
         //TODO observer pattern would be nice here, but hard to implement. Workaround is added
+    }
+
+    public void updateMoney() {
+        if (daysAlive < getDaysAlive()) {
+            SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+            int currentMoney = sharedPref.getInt("money", 0);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putInt("money", (currentMoney + 1));
+            editor.apply();
+        }
     }
 
 //    Getters
