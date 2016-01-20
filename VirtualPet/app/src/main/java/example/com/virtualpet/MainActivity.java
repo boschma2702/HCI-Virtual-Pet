@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -71,8 +72,7 @@ public class MainActivity extends Activity {
         storeitemlist = new StoreItemList(this);
         all_items = storeitemlist.getAllItems();
 
-        sharedPref = this.getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
         money = sharedPref.getInt(getString(R.string.moneyString), 20);
 
@@ -91,6 +91,7 @@ public class MainActivity extends Activity {
 
         moneyTV = (TextView) findViewById(R.id.moneyTV);
         updateMoneyTextView();
+        money = sharedPref.getInt(getString(R.string.moneyString), 20);
 
 
 
