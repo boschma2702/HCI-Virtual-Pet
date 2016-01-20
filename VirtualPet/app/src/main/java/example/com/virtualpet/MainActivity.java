@@ -320,8 +320,8 @@ public class MainActivity extends Activity {
     }
 
     public void resetGame(View view) {
-        sharedPref = this.getSharedPreferences(
-                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+
         sharedPref.edit().clear().commit();
     }
 
@@ -348,41 +348,13 @@ public class MainActivity extends Activity {
                         dialog.cancel();
                     }
                 });
-
-
         ListView listView = new ListView(this);
-
-        CustomList adapter = new CustomList(this, 1, items);
-
+        CustomList adapter = new CustomList(this, 1, items, false);
         // Assign adapter to ListView
         listView.setAdapter(adapter);
-
-/*
-        TableLayout table = new TableLayout(this);
-
-        for (StoreItem item : items) {
-
-            LayoutInflater vi = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            TableRow row = (TableRow) vi.inflate(R.layout.storeitemlistitem, null);
-
-            TextView title_tv = (TextView) row.findViewById(R.id.storeitemli_title);
-            title_tv.setText(item.getName());
-
-            TextView cost_tv = (TextView) row.findViewById(R.id.storeitemli_cost);
-            cost_tv.setText("Prijs: € " + Integer.toString(item.getCost()) +",-");
-
-            ImageButton imgbtn = (ImageButton) row.findViewById(R.id.storeitemli_img);
-            imgbtn.setImageDrawable(item.getDrawable());
-
-            table.addView(row);
-        }*/
-
         builder1.setView(listView);
-
         AlertDialog alert11 = builder1.create();
         alert11.show();
-
-
     }
 
 

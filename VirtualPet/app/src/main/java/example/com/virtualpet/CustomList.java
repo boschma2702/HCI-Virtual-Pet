@@ -17,11 +17,13 @@ public class CustomList extends ArrayAdapter<StoreItem>{
 
     private final Activity context;
     private final ArrayList<StoreItem> items;
+    private boolean showCheckBox;
 
-    public CustomList(Activity context,  int id, ArrayList<StoreItem> items) {
+    public CustomList(Activity context,  int id, ArrayList<StoreItem> items, boolean showCheckBox) {
         super(context, id, items);
         this.context = context;
         this.items = items;
+        this.showCheckBox = showCheckBox;
         Log.e("lukas", "init customlist");
 
     }
@@ -30,8 +32,18 @@ public class CustomList extends ArrayAdapter<StoreItem>{
 
         Log.e("lukas", "getview");
 
+
+
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView= inflater.inflate(R.layout.storeitemlistitem, null, true);
+
+        ImageView checkbox = (ImageView) rowView.findViewById(R.id.item_select_checkbox);
+
+        if (showCheckBox) {
+            checkbox.setVisibility(View.VISIBLE);
+        } else {
+            checkbox.setVisibility(View.GONE);
+        }
 
         TextView txtTitle = (TextView) rowView.findViewById(R.id.storeitemli_title);
         txtTitle.setText(items.get(position).getName());

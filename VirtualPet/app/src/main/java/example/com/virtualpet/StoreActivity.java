@@ -29,9 +29,7 @@ public class StoreActivity extends Activity  {
         all_items = storeitemlist.getAllItems();
         listView = (ListView) findViewById(R.id.listview);
 
-
-
-        CustomList adapter = new CustomList(this, 1, all_items);
+        CustomList adapter = new CustomList(this, 1, all_items, true);
 
         // Assign adapter to ListView
         listView.setAdapter(adapter);
@@ -39,37 +37,35 @@ public class StoreActivity extends Activity  {
 
     }
 
-
-
     public void buy_selected_items(View v) {
-            SparseBooleanArray positions = listView.getCheckedItemPositions();
-            int size = positions.size();
-
-        ArrayList<StoreItem> items = new ArrayList<StoreItem>();
+        SparseBooleanArray positions = listView.getCheckedItemPositions();
+        int size = positions.size();
         int total_cost = 0;
+
+        ArrayList<StoreItem> try_buy_items = new ArrayList<StoreItem>();
         for(int index = 0; index < size; index++) {
-            StoreItem item = all_items.get(positions.keyAt(index));
-            items.add(item);
-            total_cost += item.getCost();
+            if (positions.valueAt(index)) {
+                StoreItem item = all_items.get(positions.keyAt(index));
+                try_buy_items.add(item);
+                total_cost += item.getCost();
+            }
         }
 
-                //check if enough money is available.
-                if (money > total_cost) {
-                    Intent returnIntent = new Intent();
-                    returnIntent.putParcelableArrayListExtra("items", items);
-                    setResult(Activity.RESULT_OK, returnIntent);
-                    finish();
-                } else {
-                    Context context = getApplicationContext();
-                    CharSequence text = "Je hebt niet genoeg geld. Wacht tot je zakgeld krijgt.";
-                    int duration = Toast.LENGTH_LONG;
-                    items.clear();
-
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
-                }
-
+        //check if enough money is available.
+        if (money >= total_cost) {
+            Intent returnIntent = new Intent();
+            returnIntent.putParcelableArrayListExtra("items", try_buy_items);
+            setResult(Activity.RESULT_OK, returnIntent);
+            finish();
+        } else {
+            Context context = getApplicationContext();
+            CharSequence text = "Je hebt niet genoeg geld. Wacht tot je zakgeld krijgt.";
+            int duration = Toast.LENGTH_LONG;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
         }
+
+    }
 
 
 
