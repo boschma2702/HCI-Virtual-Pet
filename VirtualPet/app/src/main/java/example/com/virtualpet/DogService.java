@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.IBinder;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -106,7 +105,7 @@ public class DogService extends Service implements Runnable {
         setTimeLastWalked(new Date(getTime()));
         setDirty(false);
         setHungry(false);
-        setWantsToPlay(true);
+        setWantsToPlay(false);
         setWantsToWalk(false);
         setSatisfaction(65);
         setEatTimes();
@@ -130,7 +129,7 @@ public class DogService extends Service implements Runnable {
     }
 
     public void checkStatus() {
-        if ((getTime() - getTimeLastPlayed()) > (5*THIRTYMINUTES)) {
+        if ((getTime() - getTimeLastPlayed()) > (5*THIRTYMINUTES) && (getTime() - getTimeLastEaten()) > THIRTYMINUTES) {
             showNotification("Woef, Waf!", "Ik verveel me!");
             updateSatisfaction(-5);
             setWantsToPlay(true);

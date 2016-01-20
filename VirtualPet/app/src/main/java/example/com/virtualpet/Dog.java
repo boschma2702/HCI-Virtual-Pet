@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -79,6 +81,7 @@ public class Dog {
             DogService.INSTANCE.updateSatisfaction(15);
         } else {
             DogService.INSTANCE.updateSatisfaction(-5, 60);
+            Toast.makeText(view.getContext(), "Pas op! Wacht met spelen tot 30 minuten nadat je hond gegeten heeft!", Toast.LENGTH_LONG).show();
         }
         if(Math.random() <= 0.75 && gettingDirty) {
             setDirty(true);
@@ -97,7 +100,7 @@ public class Dog {
 
     public void walkedWithDog(boolean gettingDirty) {
         if((getTime() - DogService.INSTANCE.getTimeLastWalked()) > THIRTYMINUTES) {
-            DogService.INSTANCE.updateSatisfaction(10, 75);
+            DogService.INSTANCE.updateSatisfaction(10, 85);
 //            setView(DogMood.HAPPY);
         } else {
             DogService.INSTANCE.updateSatisfaction(-5, 60);

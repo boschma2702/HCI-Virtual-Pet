@@ -83,7 +83,7 @@ public class FeedActivity extends Activity {
 
         if (count > maxShakes) {
             toast.cancel();
-            finish();
+            close();
         }
     }
 }
