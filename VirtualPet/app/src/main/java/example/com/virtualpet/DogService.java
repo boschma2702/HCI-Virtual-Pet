@@ -230,7 +230,7 @@ public class DogService extends Service implements Runnable {
     }
 
     public void updateMoney() {
-        if (daysAlive < getDaysAlive()) {
+        if (daysAlive < getDaysAlive() && !dead) {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
             int currentMoney = sharedPref.getInt(getString(R.string.moneyString), 20);
             SharedPreferences.Editor editor = sharedPref.edit();
