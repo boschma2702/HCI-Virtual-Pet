@@ -60,7 +60,7 @@ public class Dog {
     }
 
     public void randomBark() {
-        if (Math.random() >= 0.9955 && !DogService.INSTANCE.getBarking()) {
+        if (Math.random() >= 0.9975 && !DogService.INSTANCE.getBarking()) {
             DogService.INSTANCE.setBarking(true);
         }
     }
@@ -80,7 +80,7 @@ public class Dog {
         } else {
             DogService.INSTANCE.updateSatisfaction(-5, 60);
         }
-        if(Math.random() < 0.75 && gettingDirty) {
+        if(Math.random() <= 0.75 && gettingDirty) {
             setDirty(true);
 //            setView(DogMood.DIRTY);
         }
@@ -159,7 +159,6 @@ public class Dog {
             view.setSprite(DogMood.HAPPY);
         } else if (mood.equals(DogMood.BARKING)) {
             view.setSprite(mood);
-            Log.e("BARKING", "IS NOW " + DogService.INSTANCE.getBarking());
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
