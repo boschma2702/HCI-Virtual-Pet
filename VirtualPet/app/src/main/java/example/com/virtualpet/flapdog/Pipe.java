@@ -25,7 +25,8 @@ public class Pipe {
 
     private FlapDogView controller;
 
-    private Rect bottom, top;
+    private Paint strokePaint = new Paint();
+    private Rect bottom, top, bottomStroke, topStroke;
 
     public Pipe(FlapDogView controller){
         this(ResourceManager.INSTANCE.getScreenWidth()+widht/2, controller);
@@ -36,8 +37,15 @@ public class Pipe {
         screenWidth = ResourceManager.INSTANCE.getScreenWidth();
         this.x = x;
         paint.setColor(Color.GREEN);
+        strokePaint.setColor(Color.BLACK);
+        strokePaint.setStyle(Paint.Style.STROKE);
+        strokePaint.setStrokeWidth(0);
+
         top = new Rect(this.x-widht/2, 0, this.x+widht/2, screenHeight/2-gapHalfWidth);
         bottom = new Rect(this.x-widht/2, screenHeight/2+gapHalfWidth, this.x+widht/2, screenHeight);
+        topStroke = new Rect(this.x-widht/2, 0, this.x+widht/2, screenHeight/2-gapHalfWidth);
+        bottomStroke = new Rect(this.x-widht/2, screenHeight/2+gapHalfWidth, this.x+widht/2, screenHeight);
+
         this.controller = controller;
         Random random = new Random();
         type = random.nextInt(3);
@@ -51,6 +59,8 @@ public class Pipe {
         this.x -= speed;
         top.set(x - widht / 2, 0, x + widht / 2, screenHeight / 2 - gapHalfWidth*type);
         bottom.set(x - widht / 2, screenHeight / 2 + gapHalfWidth*(2-type), x + widht / 2, screenHeight);
+        topStroke.set(x - widht / 2, 0, x + widht / 2, screenHeight / 2 - gapHalfWidth*type);
+        bottomStroke.set(x - widht / 2, screenHeight / 2 + gapHalfWidth*(2-type), x + widht / 2, screenHeight);
 
         if(!added&&this.x<flapx){
             controller.addScore();
@@ -78,6 +88,9 @@ public class Pipe {
     public void draw(Canvas c){
         c.drawRect(top, paint);
         c.drawRect(bottom, paint);
+        c.drawRect(topStroke, strokePaint);
+        c.drawRect(bottomStroke, strokePaint);
+
     }
 
     public void setX(int x){

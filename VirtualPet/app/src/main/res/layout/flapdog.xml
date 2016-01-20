@@ -10,9 +10,13 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#6c3600"
-        android:layout_margin="25dp"
-        android:id="@+id/flapdogGameoverScreen">
+        android:background="@drawable/flapdog_gameover_bg"
+        android:id="@+id/flapdogGameoverScreen"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="75dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="325dp"
+        android:padding="25dp">
 
         <LinearLayout
             android:orientation="vertical"
@@ -22,29 +26,29 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/player_score"
+                android:text="score:"
+                style="@style/flapdogGameoverText"
                 android:id="@+id/textView" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/score"
+                android:text="best"
+                style="@style/flapdogGameoverText"
                 android:id="@+id/flapdogScoreField" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/best_score"
+                android:text="beste:"
+                style="@style/flapdogGameoverText"
                 android:id="@+id/textView2" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/best_score"
+                android:text="beste"
+                style="@style/flapdogGameoverText"
                 android:id="@+id/flapdogbestscoreField" />
         </LinearLayout>
 
@@ -115,6 +119,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/flapdogExplainScreen"
+        android:visibility="invisible"
         android:layout_margin="25dp">
 
         <TextView
