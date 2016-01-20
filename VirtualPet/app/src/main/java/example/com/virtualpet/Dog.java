@@ -206,7 +206,7 @@ public class Dog {
                 case DIRTY:
                     return -1;
                 case WALKFULL:
-                    return R.drawable.dog_wanttowalk30frames;
+                    return R.drawable.dog_wantstowalk30frames;
                 default:
                     return -1;
             }
