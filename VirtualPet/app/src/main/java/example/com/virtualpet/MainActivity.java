@@ -13,16 +13,13 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -232,25 +229,28 @@ public class MainActivity extends Activity {
     }
 
     private void processStoreClosed(Intent data) {
-        StoreItem item =data.getParcelableExtra("item");
-        buyed_items.add(item);
-        money = money - item.getCost();
+        ArrayList<StoreItem> items = data.getParcelableArrayListExtra("items");
 
-        //sharedPref = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt(getString(R.string.moneyString), money);
+        for (StoreItem item : items) {
+            buyed_items.add(item);
+            money = money - item.getCost();
 
-        editor.putInt("buyed_items_size", buyed_items.size());
+            //sharedPref = this.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putInt(getString(R.string.moneyString), money);
 
-        //store the items in shared preferences
-        for(int i = 0; i<buyed_items.size(); i++) {
-            editor.putInt("buyed_items_" + i, buyed_items.get(i).getId());
+            editor.putInt("buyed_items_size", buyed_items.size());
+
+            //store the items in shared preferences
+            for (int i = 0; i < buyed_items.size(); i++) {
+                editor.putInt("buyed_items_" + i, buyed_items.get(i).getId());
+            }
+
+            editor.apply();
+
+            updateMoneyTextView();
+            updateItemsShowing(item);
         }
-
-        editor.apply();
-
-        updateMoneyTextView();
-        updateItemsShowing(item);
     }
 
     private void processFeedClosed(Intent data) {
@@ -349,6 +349,15 @@ public class MainActivity extends Activity {
                     }
                 });
 
+
+        ListView listView = new ListView(this);
+
+        CustomList adapter = new CustomList(this, 1, items);
+
+        // Assign adapter to ListView
+        listView.setAdapter(adapter);
+
+/*
         TableLayout table = new TableLayout(this);
 
         for (StoreItem item : items) {
@@ -366,9 +375,9 @@ public class MainActivity extends Activity {
             imgbtn.setImageDrawable(item.getDrawable());
 
             table.addView(row);
-        }
+        }*/
 
-        builder1.setView(table);
+        builder1.setView(listView);
 
         AlertDialog alert11 = builder1.create();
         alert11.show();

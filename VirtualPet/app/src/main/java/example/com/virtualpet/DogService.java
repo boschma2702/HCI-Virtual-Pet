@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.TimerTask;
 
 /**
  * Created by reneb_000 on 30-12-2015.

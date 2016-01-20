@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-
-<TableRow
+<example.com.virtualpet.CheckableLinearLayout android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-<LinearLayout
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    <ImageView android:src="?android:attr/listChoiceIndicatorMultiple"
+        android:duplicateParentState="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 
-    <ImageButton
+    <ImageView
         android:layout_width="66dp"
         android:layout_height="66dp"
         android:id="@+id/storeitemli_img"
@@ -46,6 +47,5 @@
             />
     </LinearLayout>
 
-</LinearLayout>
-</TableRow>
+</example.com.virtualpet.CheckableLinearLayout>
 
