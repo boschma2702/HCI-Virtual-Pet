@@ -3,13 +3,18 @@ package example.com.virtualpet;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import example.com.virtualpet.Util.ResourceManager;
 
 public class StoreActivity extends Activity  {
 
@@ -34,6 +39,9 @@ public class StoreActivity extends Activity  {
         // Assign adapter to ListView
         listView.setAdapter(adapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        Bitmap background = ResourceManager.INSTANCE.storeBackground;
+        LinearLayout ll = (LinearLayout) findViewById(R.id.linearlayout_id);
+        ll.setBackground(new BitmapDrawable(getResources(),background));
 
     }
 

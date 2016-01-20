@@ -52,7 +52,7 @@ public class CustomList extends ArrayAdapter<StoreItem>{
         imageView.setImageDrawable(items.get(position).getDrawable());
 
         TextView txtCost = (TextView) rowView.findViewById(R.id.storeitemli_cost);
-        txtCost.setText(Integer.toString(items.get(position).getCost()));
+        txtCost.setText("€ " + Integer.toString(items.get(position).getCost()));
 
         return rowView;
     }

@@ -9,10 +9,8 @@ import android.graphics.Matrix;
 import android.text.format.Time;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.LruCache;
 
 import example.com.virtualpet.R;
-import example.com.virtualpet.flapdog.FlapDog;
 
 /**
  * Created by reneb_000 on 3-12-2015.
@@ -33,6 +31,7 @@ public final class ResourceManager {
     public Bitmap cleaning_sponge, cleaning_stain;
 
     public Bitmap gameBackground;
+    public Bitmap storeBackground;
 
     public SpriteSheet dogHappy;
     public static double SCALE;
@@ -69,6 +68,7 @@ public final class ResourceManager {
         cleaning_stain = getResizedBitmap(BitmapFactory.decodeResource(a.getResources(), R.drawable.cleaning_stain), stainDim, stainDim);
         gameBackground = getResizedBitmap(BitmapFactory.decodeResource(a.getResources(), R.drawable.game_background, options), screenWidth, screenHeight);
 
+        storeBackground = getResizedBitmap(BitmapFactory.decodeResource(a.getResources(), R.drawable.backgroundstore3, options), screenWidth, screenHeight);
 
         printMemoryUsage();
         log();
